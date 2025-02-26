@@ -1,0 +1,12 @@
+specVersion: "v1beta"
+serviceId: "bcl-front"
+location: "us-central1"
+schema:
+  source: "./schema"
+  datasource:
+    postgresql:
+      database: "fdcdb"
+      cloudSql:
+        instanceId: "bcl-front-fdc"
+      # schemaValidation: "COMPATIBLE"
+connectorDirs: ["./connector"]
