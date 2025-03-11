@@ -1,0 +1,7 @@
+.main-content {
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 50px);
+    padding: 24px;
+    box-sizing: border-box;
+}

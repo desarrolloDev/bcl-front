@@ -1,0 +1,33 @@
+@if (type === 'raised') {
+    <button mat-raised-button [type]="buttonType" [style.width]="width" [style.color]="fontColor" [disabled]="disabled" [class]="{'disabled-button': disabled}" (click)="onClick()">
+        @if (icon) {
+            <mat-icon>{{ icon }}</mat-icon>
+        }
+        {{ label }}
+    </button>
+} @else if (type === 'flat') {
+    <button mat-flat-button [type]="buttonType" [style.width]="width" [style.color]="fontColor" [style.background]="backgroundColor" [disabled]="disabled" [class]="{'disabled-button': disabled}" (click)="onClick()">
+        @if (icon) {
+            <mat-icon>{{ icon }}</mat-icon>
+        }
+        {{ label }}
+    </button>
+} @else if (type === 'stroked') {
+    <button mat-stroked-button [type]="buttonType" [style.width]="width" [style.color]="fontColor" [style.borderColor]="borderColor" [disabled]="disabled" [class]="{'disabled-button': disabled}" (click)="onClick()">
+        @if (icon) {
+            <mat-icon>{{ icon }}</mat-icon>
+        }
+        {{ label }}
+    </button>
+} @else if (type === 'icon') {
+    <button mat-icon-button [title]="label" [type]="buttonType" [style.width]="width" [style.color]="fontColor" [style.borderColor]="borderColor" [style.background]="backgroundColor" [disabled]="disabled" [class]="{'disabled-button': disabled}" (click)="onClick()">
+        <mat-icon>{{ icon }}</mat-icon>
+    </button>
+} @else {
+    <button mat-button [type]="buttonType" [style.width]="width" [style.color]="fontColor" [disabled]="disabled" [class]="{'disabled-button': disabled}" (click)="onClick()">
+        @if (icon) {
+            <mat-icon>{{ icon }}</mat-icon>
+        }
+        {{ label }}
+    </button>
+}
