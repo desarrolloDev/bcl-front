@@ -1,7 +1,9 @@
 .container {
+    background: #002B3E;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    padding: 8px;
 
     .collapse {
         display: flex;

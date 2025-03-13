@@ -2,3 +2,62 @@
 .container {
     width: 100%;
 }
+.menu-item {
+    border-left: 3px solid !important;
+    border-left-color: rgba(0, 0, 0, 0) !important;
+
+    span {
+        color: rgba($color: #FFFFFF, $alpha: 0.5);
+        font-weight: 200;
+        transition: color .4s !important;
+    }
+    mat-icon {
+        transition: all 300ms ease !important;
+    }
+}
+
+.menu-item:hover {
+    background: rgba($color: #FFFFFF, $alpha: 0.3) !important;
+    transition: all 300ms ease !important;
+
+    span {
+        color: white !important;
+    }
+    mat-icon {
+        color: white !important;
+    }
+}
+
+.active {
+    border-left-color: white !important;
+    background: rgba($color: #FFFFFF, $alpha: 0.3) !important;
+    transition: all 500ms ease-in-out !important;
+    
+    span {
+        color: white !important;
+    }
+    mat-icon {
+        color: white !important;
+    }
+}
+
+.tab-active {
+    color: #009A3F !important;
+}
+
+mat-sidenav-container {
+    height: calc(100vh - 64px);
+
+    .mat-drawer-side {
+        background-color: #009A3F !important;
+    }
+
+    mat-sidenav,
+    mat-sidenav-content {
+        transition: all 500ms ease-in-out;
+    }
+}
+
+.mat-drawer-content {
+    position: static !important;
+}

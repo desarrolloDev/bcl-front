@@ -4,7 +4,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-  selector: 'app-button',
+  selector: 'custom-button',
   standalone: true,
   imports: [
     MatIconModule,
@@ -21,7 +21,7 @@ export class ButtonComponent {
   @Input() buttonType: 'submit' | 'button' = 'button';
   @Input() backgroundColor: string = '';
   @Input() borderColor: string = '';
-  @Input() fontColor: string = '';
+  @Input() fontColor: string = '#FFFFFF';
   @Input() icon: string | undefined;
   @Input() disabled: boolean = false;
   @Output() onClickEvent = new EventEmitter<void>();

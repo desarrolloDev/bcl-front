@@ -8,12 +8,11 @@ import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatListModule } from "@angular/material/list";
 import { MatIconModule } from "@angular/material/icon";
 import { SidenavService } from '../../services/sidenav.service';
-import { CarouselSlideComponent } from '../../shared/ui/carousel/carousel.component';
 
 const MOBILE_BREAKPOINT = '(min-width: 769px)';
 
 @Component({
-  selector: 'app-home',
+  selector: 'app-layout',
   standalone: true,
   imports: [
     RouterModule,
@@ -22,36 +21,22 @@ const MOBILE_BREAKPOINT = '(min-width: 769px)';
     CommonModule,
     MatSidenavModule,
     MatListModule,
-    MatIconModule,
-    CarouselSlideComponent
+    MatIconModule
   ],
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.scss',
+  templateUrl: './layout.component.html',
+  styleUrl: './layout.component.scss',
   host: {
     class: 'app-layout',
     '[class.app-layout--collapsed]': 'sidenavService.state() === "collapsed"',
     '[class.app-layout--hidden]': 'sidenavService.state() === "hidden"',
     '[class.app-layout--visible]': 'sidenavService.state() === "visible"',
   },
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
-export class HomeComponent {
+export class LayoutComponent {
   sidenavService = inject(SidenavService);
-  
+
   private _breakpointObserver = inject(BreakpointObserver);
-
-  arrayImage: any = [
-    {
-      src: '../../../../assets/images/BANNER_01_home.png'
-    },
-    {
-      src: '../../../../assets/images/BANNER_02_home.png'
-    },
-    {
-      src: '../../../../assets/images/BANNER_03_home.png'
-    }
-  ];
-
 
   sidenavWidth = computed(() => {
     const state = this.sidenavService.state();
@@ -59,7 +44,7 @@ export class HomeComponent {
     else if (state === 'visible') return '250px'
     return '0px'
   });
-  
+
   constructor() {
     this._breakpointObserver
       .observe([MOBILE_BREAKPOINT])
