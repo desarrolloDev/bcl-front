@@ -1,6 +1,11 @@
 
-.container {
+.containerHome {
     width: 100%;
+    .containerImages {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
 }
 .menu-item {
     border-left: 3px solid !important;
@@ -61,3 +66,43 @@ mat-sidenav-container {
 .mat-drawer-content {
     position: static !important;
 }
+
+.container {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .timeline {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    position: relative;
+  }
+  
+  .item {
+    width: 180px;
+    text-align: center;
+    padding: 15px;
+    background: navy;
+    color: white;
+    border-radius: 10px;
+    margin: 10px;
+  }
+  
+  .highlight {
+    background: gold;
+    color: black;
+  }
+  
+  .icon {
+    font-size: 2rem;
+    margin-bottom: 10px;
+  }
+  

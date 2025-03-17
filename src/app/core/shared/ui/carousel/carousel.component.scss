@@ -1,12 +1,63 @@
-ngb-carousel {
-    max-width: 800px;
-    margin: auto;
+// ngb-carousel {
+//     max-width: 800px;
+//     margin: auto;
+// }
+
+// .carousel-item img {
+//     width: 100%;
+//     height: 400px;
+//     object-fit: cover;
+//     border-radius: 10px;
+// }
+// :host {
+//     scroll-behavior: auto !important;
+// }
+
+
+// .carruselDiv {
+//     min-height: 30vh;
+// }
+
+// ngb-carousel .picsum-img-wrapper {
+// 	position: relative;
+// 	height: 0;
+// 	padding-top: 55%; /* Keep ratio for 900x500 images */
+//     max-height: 50vh;
+// }
+
+// ngb-carousel .picsum-img-wrapper > img {
+//     width: 100%;
+//     max-height: 50vh;
+// 	position: absolute;
+// 	top: 0;
+// 	left: 0;
+// 	bottom: 0;
+// 	right: 0;
+// }
+.carruselDiv {
+	width: 100%;
+	/* O un ancho específico */
+	display: flex;
+	justify-content: center;
 }
 
-.carousel-item img {
-    width: 100%;
-    height: 400px;
-    object-fit: cover;
-    border-radius: 10px;
+ngb-carousel {
+	width: 100%;
+	max-height: 100%;
 }
-  
+
+.picsum-img-wrapper {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: auto;
+}
+
+.picsum-img-wrapper img {
+	width: 100%;
+	height: auto;
+	/* Mantener la proporción */
+	max-height: 500px;
+	/* Ajusta según sea necesario */
+	object-fit: contain;
+}

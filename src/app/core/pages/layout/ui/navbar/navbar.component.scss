@@ -1,14 +1,29 @@
-.container {
+.containerNav {
     background: #002B3E;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    padding: 8px;
+    padding: 0px;
 
     .collapse {
         display: flex;
         flex-direction: row;
         align-items: center;
         gap: 20px;
+        padding: 8px 8px 8px 24px;
+    }
+}
+
+@media screen and (max-width:768px) {
+    .containerNav {
+        max-height: 50px;
+        .collapse {
+            padding: 8px 8px 8px 16px;
+            img {
+                width: 60%;
+                height: 60%;
+                object-fit: cover;
+            }
+        }
     }
 }

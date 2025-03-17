@@ -8,7 +8,7 @@ import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatListModule } from "@angular/material/list";
 import { MatIconModule } from "@angular/material/icon";
 import { SidenavService } from '../../services/sidenav.service';
-import { CarouselSlideComponent } from '../../shared/ui/carousel/carousel.component';
+import { CarouselComponent } from '../../shared/ui/carousel/carousel.component';
 
 const MOBILE_BREAKPOINT = '(min-width: 769px)';
 
@@ -23,7 +23,7 @@ const MOBILE_BREAKPOINT = '(min-width: 769px)';
     MatSidenavModule,
     MatListModule,
     MatIconModule,
-    CarouselSlideComponent
+    CarouselComponent
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
@@ -41,15 +41,9 @@ export class HomeComponent {
   private _breakpointObserver = inject(BreakpointObserver);
 
   arrayImage: any = [
-    {
-      src: '../../../../assets/images/BANNER_01_home.png'
-    },
-    {
-      src: '../../../../assets/images/BANNER_02_home.png'
-    },
-    {
-      src: '../../../../assets/images/BANNER_03_home.png'
-    }
+    '../../../../assets/images/BANNER_01_home.jpeg',
+    '../../../../assets/images/BANNER_02_home.jpeg',
+    '../../../../assets/images/BANNER_03_home.jpeg'
   ];
 
 
