@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
+import { getAuth } from "firebase/auth";
 import { LayoutComponent } from '../app/core/pages/layout/layout.component';
 
 @Component({
@@ -37,4 +38,5 @@ export class AppComponent {
   // Initialize Firebase
   app = initializeApp(this.firebaseConfig);
   // analytics = getAnalytics(this.app);
+  auth = getAuth(this.app); // Initialize Firebase Authentication and get a reference to the service
 }

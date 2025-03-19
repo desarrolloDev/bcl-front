@@ -3,8 +3,8 @@ import { Component, OnInit, inject } from '@angular/core';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatToolbarModule } from "@angular/material/toolbar";
-import { ButtonComponent } from '../../../../shared/ui/button/button.component';
-import { SidenavService } from '../../../../services/sidenav.service';
+import { ButtonComponent } from '../../../../../ui/button/button.component';
+import { SidenavService } from '../../../../../services/sidenav.service';
 
 const MOBILE_BREAKPOINT = '(min-width: 769px)';
 
