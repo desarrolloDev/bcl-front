@@ -3,14 +3,16 @@ import { RouterOutlet } from '@angular/router';
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
-import { LayoutComponent } from '../app/core/pages/layout/layout.component';
+// import { LayoutComponent } from '../app/core/pages/layout/layout.component';
+import { HeaderComponent } from './components/header/header.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
     RouterOutlet,
-    LayoutComponent
+    // LayoutComponent,
+    HeaderComponent
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'

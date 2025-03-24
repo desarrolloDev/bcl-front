@@ -1,5 +1,14 @@
 {
   "projects": {
     "default": "bcl-dev-92308"
+  },
+  "targets": {
+    "bcl-dev-92308": {
+      "hosting": {
+        "bcl-front": [
+          "bcl-dev-92308"
+        ]
+      }
+    }
   }
 }

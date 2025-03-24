@@ -94,6 +94,23 @@
             ],
             "scripts": []
           }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {
+            "version": 2
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "bcl-front:build:production",
+              "serveTarget": "bcl-front:serve:production"
+            },
+            "development": {
+              "buildTarget": "bcl-front:build:development",
+              "serveTarget": "bcl-front:serve:development"
+            }
+          },
+          "defaultConfiguration": "production"
         }
       }
     }
