@@ -1,0 +1,25 @@
+@use '../../../styles.scss' as *;
+
+.custom-tab-group {
+    background: $base-color;
+  
+    .mat-tab-label {
+      background-color: transparent;
+      color: $base-color;
+      font-weight: normal;
+      border-bottom: 4px solid transparent;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+  
+    .mat-tab-label-active {
+      background-color: $primary-color;
+      color: black;
+      font-weight: bold;
+      border-bottom: 4px solid $secondary-color;
+    }
+  
+    .mat-ink-bar {
+      display: none !important;
+    }
+  }
+  

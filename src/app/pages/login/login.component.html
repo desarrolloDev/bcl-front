@@ -1,6 +1,15 @@
-<h2>Login</h2>
-<form (submit)="onLogin()">
-  <input type="email" placeholder="Email" [(ngModel)]="email" name="email" required>
-  <input type="password" placeholder="Password" [(ngModel)]="password" name="password" required>
-  <button type="submit">Login</button>
-</form>
+<div class="min-w-[300px] max-w-[360px] min-h-[453px] max-h-[537px] flex flex-col items-center bg-[#002B3E]">
+  <div class="w-full flex flex-col bg-[#FFFFFF] mt-3 p-3">
+    <span class="text-[14px] text-[#000000] font-semibold text-center">Iniciar Sesión</span>
+  </div>
+  <div class="w-full">
+    <app-tabs>
+      <app-tab tabTitle="Alumno">
+        <app-body-login vista="alumno"></app-body-login>
+      </app-tab>
+      <app-tab tabTitle="Profesor">
+        <app-body-login vista="profesor"></app-body-login>
+      </app-tab>
+    </app-tabs>
+  </div>
+</div>

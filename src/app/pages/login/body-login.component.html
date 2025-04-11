@@ -1,0 +1,24 @@
+<div class="flex flex-col bg-[#002B3E] p-4 gap-4">
+    <div class="flex justify-center"><img src="../../assets/images/logo-bcl.png" alt="" class="w-[60px] h-[60px]"></div>
+    <form (submit)="onLogin()" class="flex flex-col gap-4">
+        <div class="flex flex-col">
+            <span class="text-[12px] text-[#DABC62] font-medium text-left">Ingresa tu correo</span>
+            <input type="email" placeholder="" [(ngModel)]="email" name="email" required
+                class="bg-[#FFFFFF] !rounded-lg py-2 px-2">
+        </div>
+        <div class="flex flex-col">
+            <span class="text-[12px] text-[#DABC62] font-medium text-left">Contraseña</span>
+            <input type="password" placeholder="" [(ngModel)]="password" name="password" required
+                class="bg-[#FFFFFF] !rounded-lg py-2 px-2">
+        </div>
+    </form>
+    <div class="flex justify-end">
+        <span class="text-[12px] text-[#DABC62] font-medium underline">¿Olvidaste tu contraseña?</span>
+    </div>
+    <div class="">
+        <button (click)="onLogin()" class="w-full bg-[#DABC62] text-[#002B3E] !rounded-lg py-2 px-4">Iniciar Sesión</button>
+    </div>
+    <div class="flex justify-center" *ngIf="vista == 'alumno'">
+        <span (click)="onCreateUser()" class="text-[14px] text-[#FFFFFF] !font-medium text-rigth underline">Aun no estoy registrado</span>
+    </div>
+</div>
