@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 body {
   width: 100%;
   height: 100vh;
@@ -9,3 +11,9 @@ body {
 }
 /* Importing Bootstrap SCSS file. */
 // @import 'bootstrap/scss/bootstrap';
+
+$primary-color: #DABC62;
+$secondary-color: #002B3E;
+$base-color: #FAFAFA;
+$black: #000000;
+$gray: #A0A0A0;
