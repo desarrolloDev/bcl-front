@@ -1,0 +1,15 @@
+<div class="flex flex-col items-center p-6 rounded-lg">
+    <mat-icon class="!text-[60px] !text-[#F39200] !w-[60px] !h-[60px]" aria-hidden="false" aria-label="Example home icon" fontIcon="warning"></mat-icon>
+    <span mat-dialog-title class="!text-[16px] !text-[#009A3F] !font-medium text-center">{{data.titulo}}</span>
+    <mat-dialog-content>
+        <span class="!text-[14px] !text-[#58595B] !font-mediumt">{{data.mensaje}}</span>
+    </mat-dialog-content>
+    <mat-dialog-actions class="gap-4">
+        <button *ngIf="data.msgBtnAceptar" (click)="onConfirm()"
+            class="border border-green-600 text-green-600 bg-white px-4 py-2 rounded w-full sm:w-auto">
+            {{data.msgBtnAceptar}}</button>
+        <button (click)="onCancel()"
+            class="bg-green-600 text-white px-4 py-2 rounded w-full sm:w-auto">
+            {{data.msgBtCerrar}}</button>
+    </mat-dialog-actions>
+</div>

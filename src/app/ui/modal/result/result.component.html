@@ -1,0 +1,19 @@
+<div class="flex flex-col items-center p-6 rounded-lg">
+    @if (data.success) {
+    <mat-icon class="!text-[60px] !text-[#1D1D1B] !w-[60px] !h-[60px]" aria-hidden="false"
+        aria-label="Example home icon" fontIcon="check_circle"></mat-icon>
+    }
+    @if (!data.success) {
+    <mat-icon class="!text-[60px] !text-[#E4032E] !w-[60px] !h-[60px]" aria-hidden="false"
+        aria-label="Example home icon" fontIcon="error"></mat-icon>
+    }
+    <mat-dialog-content>
+        <p *ngIf="data.success" class="!text-[16px] !text-[#1D1D1B] !font-mediumt">{{ data.message }}</p>
+        <p *ngIf="!data.success" class="!text-[16px] !text-[#58595B] !font-mediumt">{{ data.message }}</p>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <button mat-button mat-dialog-close
+            class="!bg-gray-400 !text-white !px-4 !py-2 !rounded w-full sm:w-auto">
+            Aceptar</button>
+    </mat-dialog-actions>
+</div>
