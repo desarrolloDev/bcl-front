@@ -1,0 +1,9 @@
+<div class="operation-selector w-auto">
+    <span [ngStyle]="{ 'color': color }" class="text-[12px] font-semibold text-left">{{label}}</span>
+    <div class="select-wrapper">
+        <select [formControl]="control">
+            <option *ngFor="let item of items" [value]="item.id">{{ item.nombre }}</option>
+        </select>
+        <i class="fas fa-chevron-down"></i>
+    </div>
+</div>

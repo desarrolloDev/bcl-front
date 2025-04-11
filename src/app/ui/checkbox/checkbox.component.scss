@@ -1,0 +1,10 @@
+:host ::ng-deep .custom-checkbox .mdc-checkbox__background {
+    background-color: white !important;
+    border-color: #ddd !important;
+}
+
+:host ::ng-deep .custom-checkbox.mat-mdc-checkbox-checked .mdc-checkbox__checkmark {
+    color: white !important;
+    background-color: #002B3E !important;
+    border-color: #002B3E !important;
+}

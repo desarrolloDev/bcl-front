@@ -1,0 +1,30 @@
+.operation-selector {
+    padding-bottom: 1px;
+    .select-wrapper {
+        position: relative;
+
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #B3B3B3;
+            border-radius: 8px;
+            appearance: none;
+            font-size: 14px;
+            background-color: #FAFAFA;
+
+            &:focus {
+                outline: none;
+                border-color: #949090;
+            }
+        }
+
+        i {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+            pointer-events: none;
+        }
+    }
+}

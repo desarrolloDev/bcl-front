@@ -1,0 +1,6 @@
+<div class="flex flex-col">
+    <span [ngStyle]="{ 'color': color }" class="text-[12px] font-semibold text-left">{{label}}</span>
+    <input [type]="type" [placeholder]="placeholder" [formControl]="control" name="ngModelValue" 
+    [ngStyle]="{ 'background-color': bg, 'border-width': '1px', 'border-style': 'solid', 'border-color': borderColor }"
+    class="!rounded-lg py-2 px-2">
+</div>
