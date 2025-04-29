@@ -13,6 +13,7 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-result',
+  standalone: true,
   imports: [
     MatFormFieldModule,
     MatDialogContent,

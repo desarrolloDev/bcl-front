@@ -1,8 +1,8 @@
 import { Component, Input, inject } from '@angular/core';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatDialogActions, MatDialogContent, MatDialogRef } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { InputComponent } from '../../ui/input/input.component';
 import { AuthService } from '../../services/auth.service';
 import { LoginComponent } from './login.component';
 
@@ -10,11 +10,10 @@ import { LoginComponent } from './login.component';
   selector: 'app-body-login',
   standalone: true,
   imports: [
-    ReactiveFormsModule,
-    FormsModule,
-    MatDialogContent,
-    MatDialogActions,
     CommonModule,
+    InputComponent,
+    MatDialogContent,
+    MatDialogActions
   ],
   templateUrl: './body-login.component.html'
 })
@@ -22,22 +21,33 @@ export class BodyLoginComponent {
   readonly dialogRef = inject(MatDialogRef<LoginComponent>);
 
   @Input() vista: string = '';
-  
+
+  loading: boolean = false;
+
   email: string = '';
   password: string = '';
+  mensajeError: string = '';
 
   constructor(
     private authService: AuthService,
     private router: Router
-  ) {}
+  ) { }
 
   onLogin() {
-    this.authService.login(this.email, this.password).then(() => {
-      this.dialogRef.close(true);
-    })
-    .catch(err => {
-      console.error('Error al registrar:', err);
-    });
+    this.loading = true;
+    this.mensajeError = '';
+
+    this.authService.login(this.email, this.password)
+      .then(() => {
+        localStorage.setItem('correo', this.email);
+        this.dialogRef.close(true);
+        this.loading = false;
+      })
+      .catch((error) => {
+        console.error(error);
+        this.loading = false;
+        this.mensajeError = 'Credenciales incorrectas';
+      });
   }
 
   onCreateUser() {

@@ -12,11 +12,11 @@ export class AuthGuard implements CanActivate {
 
   canActivate(): Observable<boolean> {
     return new Observable<boolean>(observer => {
-      const unsubscribe = this.auth.onAuthStateChanged(user => {
+      const unsubscribe = this.auth.onAuthStateChanged((user) => {
         if (user) {
           observer.next(true);
         } else {
-          this.router.navigate(['/login']);
+          this.router.navigate(['/']);
           observer.next(false);
         }
         observer.complete();

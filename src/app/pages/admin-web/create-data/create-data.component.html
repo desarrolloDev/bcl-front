@@ -1,0 +1,76 @@
+<div class="w-full p-4 
+    border border-solid border-[#DABC62] bg-[#F5F5F5]
+    flex justify-between">
+    <div class="w-3/10 flex flex-col gap-4">
+        <div *ngFor="let item of data" (click)="selectItem(item.name, item.id)"
+        class="border-2 border-solid border-[#002B3E] rounded-sm px-2 py-3 flex justify-between items-center"
+        [ngStyle]="{ 'background-color': itemSelect == item.name ? '#002B3E' : '#FFFFFF', 'color': itemSelect == item.name ? '#FFFFFF' : '#002B3E' }">
+            <span class="font-normal">{{item.name}}</span>
+            <mat-icon class="!text-[14px] !w-[14px] !h-[14px]" aria-hidden="false" aria-label="Example home icon" fontIcon="arrow_forward_ios"
+            [ngStyle]="{ 'color': itemSelect == item.name ? '#FFFFFF' : '#002B3E' }"
+            ></mat-icon>
+        </div>
+    </div>
+    <div class="w-6/10 p-4
+    border-[2px] border-solid border-[#002B3E] rounded-lg 
+    flex flex-col justify-between">
+        <div *ngIf="typeData == 'arrayString'">
+            <div class="mb-4"><span class="text-[24px] text-[#002B3E] font-bold">Lista desplegable:</span></div>
+            <div>
+                <div *ngFor="let option of dataList; let i = index" class="flex items-center">
+                    <mat-icon (click)="deleteItem(option)" class="!text-[18px] !text-[#002B3E] !w-[18px] !h-[18px] mr-2" aria-hidden="false" aria-label="Example home icon" fontIcon="delete"></mat-icon>
+    
+                    <ng-container *ngIf="option.editing; else displayText">
+                        <app-input color="#002B3E" bg="#F5F5F5" borderColor="#F5F5F5" label="" placeholder="" type="string" typeControl="model" [(controlModel)]="option.item" [name]="option.id"></app-input>
+                    </ng-container>
+                
+                    <ng-template #displayText>
+                        <mat-icon (click)="editItem(option)" class="!text-[18px] !text-[#002B3E] !w-[18px] !h-[18px] mr-2" aria-hidden="false" aria-label="Example home icon" fontIcon="edit"></mat-icon>
+                        <span class="text-[18px] text-[#002B3E]">{{option.item}}</span>
+                    </ng-template>
+                </div>
+            </div>
+            <div class="flex items-center mt-4">
+                <mat-icon class="!text-[14px] !text-[#DABC62] !w-[16px] !h-[16px] ml-6 mr-2" aria-hidden="false" aria-label="Example home icon" fontIcon="add_circle"></mat-icon>
+                <span (click)="addItem()" class="text-[16px] text-[#DABC62]">Agregar nuevo campo</span>
+            </div>
+        </div>
+        <div *ngIf="typeData == 'arrayObject'">
+            <div class="mb-4 flex w-full">
+                <span class="w-3/5 text-[20px] text-[#002B3E] font-bold">Lista desplegable:</span>
+                <span class="w-2/5 text-[20px] text-[#002B3E] font-bold">Aplica para clases:</span>
+            </div>
+            <div class="w-full">
+                <div *ngFor="let option of dataList; let i = index" class="flex items-center w-full">
+                    <div class="w-3/5 flex items-center">
+                        <mat-icon (click)="deleteItem(option)" class="!text-[16px] !text-[#002B3E] !w-[16px] !h-[16px] mr-2" aria-hidden="false" aria-label="Example home icon" fontIcon="delete"></mat-icon>
+    
+                        <ng-container *ngIf="option.editing; else displayText">
+                            <app-input color="#002B3E" bg="#F5F5F5" borderColor="#F5F5F5" label="" placeholder="" type="string" typeControl="model" [(controlModel)]="option.name" [name]="option.id"></app-input>
+                        </ng-container>
+                    
+                        <ng-template #displayText>
+                            <mat-icon (click)="editItem(option)" class="!text-[16px] !text-[#002B3E] !w-[16px] !h-[16px] mr-2" aria-hidden="false" aria-label="Example home icon" fontIcon="edit"></mat-icon>
+                            <span class="text-[16px] text-[#002B3E]">{{option.name}}</span>
+                        </ng-template>
+                    </div>
+                    <div class="flex w-2/5">
+                        <app-checkbox label="Individual" typeControl="model" [(controlModel)]="option.individual"></app-checkbox>
+                        <app-checkbox label="Grupal" typeControl="model" [(controlModel)]="option.grupal"></app-checkbox>
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center mt-4">
+                <mat-icon class="!text-[14px] !text-[#DABC62] !w-[16px] !h-[16px] ml-6 mr-2" aria-hidden="false" aria-label="Example home icon" fontIcon="add_circle"></mat-icon>
+                <span (click)="addItem()" class="text-[16px] text-[#DABC62]">Agregar nuevo campo</span>
+            </div>
+        </div>
+        <div *ngIf="typeData == 'string'">
+            <app-text-tarea color="#002B3E" bg="#F5F5F5" borderColor="#F5F5F5" label="" placeholder="" name="textTarea"
+            typeControl="model" [(controlModel)]="dataText" [rows]="20" [cols]="10"></app-text-tarea>
+        </div>
+        <div *ngIf="typeData">
+            <button (click)="save()" class="w-full bg-[#008C4B] text-[#FFFFFF] !rounded-lg py-2 px-4">GUARDAR</button>
+        </div>
+    </div>
+</div>

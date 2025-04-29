@@ -2,49 +2,31 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { MatIconModule } from '@angular/material/icon';
 
 @Component({
-  selector: 'app-input',
+  selector: 'app-text-tarea',
   standalone: true,
   imports: [
-    FormsModule,
     CommonModule,
-    ReactiveFormsModule,
-    MatIconModule
+    FormsModule,
+    ReactiveFormsModule
   ],
-  templateUrl: './input.component.html',
-  styleUrl: './input.component.scss'
+  templateUrl: './text-tarea.component.html',
+  styleUrl: './text-tarea.component.scss'
 })
-export class InputComponent {
+export class TextTareaComponent {
   @Input() label: string = '';
   @Input() placeholder: string = '';
-  @Input() type: string = 'text';
   @Input() color: string = '#DABC62';
   @Input() bg: string = '#FFFFFF';
   @Input() borderColor: string = '#FFFFFF';
   @Input() name: string = '';
-  @Input() maxlength: number | null = null;
+  @Input() rows: number = 0;
+  @Input() cols: number = 0;
 
   @Input() typeControl: string = 'form'; // 'model'
   @Input() control = new FormControl<string | number>('', []);
-  @Input() controlModel: string = '';
+  @Input() controlModel: any;
 
   @Output() controlModelChange = new EventEmitter<any>();
-
-  internalModel: any = '';
-
-  showPassword: boolean = false;
-
-  togglePassword() {
-    this.showPassword = !this.showPassword;
-  }
-
-  ngOnChanges() {
-    this.internalModel = this.controlModel;
-  }
-
-  onModelChange(value: any) {
-    this.controlModelChange.emit(value);
-  }
 }

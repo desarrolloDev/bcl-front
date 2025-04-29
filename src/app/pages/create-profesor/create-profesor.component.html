@@ -2,11 +2,12 @@
     <span class="text-[#002B3E] text-[24px] font-semibold font-inter">Bienvenido a Better Call Leo Academy</span>
     <div class="pt-4">
         <div class="flex flex-col">
-            <span class="text-[#000000] text-[16px] font-semibold font-inter">Datos del Alumno</span>
+            <span class="text-[#000000] text-[16px] font-semibold font-inter">Datos del Profesor/Administrador</span>
             <span class="text-[#000000] text-[14px] font-inter">Ingresa tu información</span>
         </div>
         
         <div class="grid gap-4 pt-4">
+            <app-select class="w-full" label="Tipo de Rol" [items]="this.listService.tipoRol" [control]="form.controls['rol']"></app-select>
             <app-input color="#6C6C6C" bg="#FAFAFA" borderColor="#B3B3B3" label="Nombres" placeholder="Ingresa tu nombre" type="string" [control]="form.controls['nombre']" ></app-input>
             <app-input color="#6C6C6C" bg="#FAFAFA" borderColor="#B3B3B3" label="Apellidos" placeholder="Ingresa tus apellidos" type="string" [control]="form.controls['apellido']" ></app-input>
             <div class="flex justify-between items-end w-full">
@@ -15,7 +16,7 @@
             </div>
             <app-input color="#6C6C6C" bg="#FAFAFA" borderColor="#B3B3B3" label="Celular" placeholder="Ingresa tu celular" type="number" [control]="form.controls['celular']" [maxlength]="9"></app-input>
             <div class="grid gap-4 pt-4">
-                <span class="text-[#000000] text-[14px] font-inter">Con estos datos podrás ingresar a tu cuenta clip</span>
+                <span class="text-[#000000] text-[14px] font-inter">Con estos datos podrás ingresar a tu cuenta</span>
                 <app-input color="#6C6C6C" bg="#FAFAFA" borderColor="#B3B3B3" label="Correo" placeholder="Ingresa tu correo" type="email" [control]="form.controls['correo']" ></app-input>
                 <app-input color="#6C6C6C" bg="#FAFAFA" borderColor="#B3B3B3" label="Contraseña" placeholder="Ingresa tu contraseña" type="password" [control]="form.controls['contraseña']" ></app-input>
                 <div class="flex flex-col">
@@ -28,12 +29,7 @@
         </div>
     </div>
 
-    <div class="flex flex-col py-6 gap-0">
-        <app-checkbox [control]="form.controls['terminos_cond']" label="He leído los términos y condiciones"></app-checkbox>
-        <app-checkbox [control]="form.controls['politicas_priv']" label="Declaro haber leído las  políticas de privacidad y autorizo el tratamiento de mis datos conforme a ella"></app-checkbox>
-    </div>
-
-    <div class="pb-6">
+    <div class="pb-6 mt-4">
         <button (click)="registrar()" class="w-full bg-[#DABC62] text-[#002B3E] !rounded-lg py-2 px-4">Registrarme</button>
     </div>
 </div>

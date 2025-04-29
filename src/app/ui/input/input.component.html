@@ -1,6 +1,45 @@
-<div class="flex flex-col">
+<!-- <div class="flex flex-col">
     <span [ngStyle]="{ 'color': color }" class="text-[12px] font-semibold text-left">{{label}}</span>
-    <input [type]="type" [placeholder]="placeholder" [formControl]="control" name="ngModelValue" 
+    
+    <input *ngIf="typeControl == 'form'" [type]="type" [placeholder]="placeholder" [formControl]="control" name="ngModelValue" 
     [ngStyle]="{ 'background-color': bg, 'border-width': '1px', 'border-style': 'solid', 'border-color': borderColor }"
     class="!rounded-lg py-2 px-2">
+
+    <input *ngIf="typeControl == 'model'" [type]="type" [placeholder]="placeholder"
+    [(ngModel)]="controlModel" (ngModelChange)="onModelChange($event)" [name]="name"
+    [ngStyle]="{ 'background-color': bg, 'border-width': '1px', 'border-style': 'solid', 'border-color': borderColor }"
+    class="!rounded-lg py-2 px-2">
+</div> -->
+
+<div class="flex flex-col relative">
+    <span [ngStyle]="{ 'color': color }" class="text-[12px] font-semibold text-left">{{ label }}</span>
+
+    <!-- Control por formControl -->
+    <div *ngIf="typeControl == 'form'" class="relative">
+        <input [type]="showPassword ? 'text' : type" [placeholder]="placeholder" [formControl]="control"
+            name="ngModelValue"
+            [ngStyle]="{ 'background-color': bg, 'border-width': '1px', 'border-style': 'solid', 'border-color': borderColor }"
+            class="!rounded-lg py-2 px-2 w-full"
+            [maxlength]="maxlength ? maxlength : null">
+
+        <button *ngIf="type === 'password'" type="button" (click)="togglePassword()"
+            class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500">
+            <mat-icon class="!text-[16px] !text-[#002B3E] !w-[16px] !h-[16px]" aria-hidden="false" aria-label="Example home icon" [fontIcon]="showPassword ? 'visibility' : 'visibility_off'"></mat-icon>
+        </button>
+    </div>
+
+    <!-- Control por [(ngModel)] -->
+    <div *ngIf="typeControl == 'model'" class="relative">
+        <input [type]="showPassword ? 'text' : type" [placeholder]="placeholder" [(ngModel)]="controlModel"
+            (ngModelChange)="onModelChange($event)" [name]="name"
+            [ngStyle]="{ 'background-color': bg, 'border-width': '1px', 'border-style': 'solid', 'border-color': borderColor }"
+            class="!rounded-lg py-2 px-2 w-full"
+            [maxlength]="maxlength ? maxlength : null">
+
+        <!-- Botón ojito -->
+        <button *ngIf="type === 'password'" type="button" (click)="togglePassword()"
+            class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500">
+            <mat-icon class="!text-[16px] !text-[#002B3E] !w-[16px] !h-[16px]" aria-hidden="false" aria-label="Example home icon" [fontIcon]="showPassword ? 'visibility' : 'visibility_off'"></mat-icon>
+        </button>
+    </div>
 </div>

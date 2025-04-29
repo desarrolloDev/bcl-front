@@ -13,6 +13,9 @@ export class AuthService {
   private userData = new BehaviorSubject<User | null>(null);
   user$ = this.userData.asObservable();
 
+  private nombreSubject = new BehaviorSubject<string | null>(localStorage.getItem('nombre'));
+  nombre$ = this.nombreSubject.asObservable();
+
   constructor(
     private auth: Auth,
     private router: Router
@@ -20,6 +23,14 @@ export class AuthService {
     onAuthStateChanged(this.auth, (user) => {
       this.userData.next(user);
     });
+  }
+
+  setNombre(nombre: string) {
+    this.nombreSubject.next(nombre);
+  }
+
+  clearNombre() {
+    this.nombreSubject.next(null);
   }
 
   // Crear sesión Usuario
@@ -30,7 +41,9 @@ export class AuthService {
   // Iniciar Sesión
   login(email: string, password: string) {
     return signInWithEmailAndPassword(this.auth, email, password)
-      .then(() => this.router.navigate(['/dashboard']))
+      .then((result) => {
+        this.router.navigate(['/dashboard'])
+      })
       .catch(error => console.error(error));
   }
 

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, OnDestroy, Renderer2, ViewEncapsulation } from '@angular/core';
-import { NgbCarouselModule, NgbCarouselConfig } from '@ng-bootstrap/ng-bootstrap';
+import { NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -16,13 +16,6 @@ import { CommonModule } from '@angular/common';
 export class CarouselComponent implements OnInit, OnDestroy {
   @Input() images: any;
 
-  // constructor(private config: NgbCarouselConfig) {
-  //   // customize default values of carousels used by this component tree
-  //   this.config.interval = 10000;
-  //   this.config.wrap = false;
-  //   this.config.keyboard = false;
-  //   this.config.pauseOnHover = false;
-  // }
   private bootstrapLink!: HTMLLinkElement;
 
   constructor(private renderer: Renderer2) {}
@@ -39,5 +32,4 @@ export class CarouselComponent implements OnInit, OnDestroy {
       this.renderer.removeChild(document.head, this.bootstrapLink);
     }
   }
-  
 }

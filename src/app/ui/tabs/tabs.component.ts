@@ -1,4 +1,4 @@
-import { Component, ContentChildren, AfterContentInit, QueryList } from '@angular/core';
+import { Component, ContentChildren, AfterContentInit, QueryList, Input } from '@angular/core';
 import { TabComponent } from '../tab/tab.component';
 import { CommonModule } from '@angular/common';
 
@@ -10,7 +10,8 @@ import { CommonModule } from '@angular/common';
     <ul class="tab-titles w-full">
       <li *ngFor="let tab of tabs; let i = index"
           (click)="selectTab(i)"
-          [class.active]="tab.active" class="1/2">
+          [class.active]="tab.active" class="1/2"
+          [ngStyle]="{ 'width': width, 'border-radius': borderR }">
         {{ tab.tabTitle }}
       </li>
     </ul>
@@ -20,6 +21,8 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./tabs.component.scss']
 })
 export class TabsComponent implements AfterContentInit {
+  @Input() width: string = '180px';
+  @Input() borderR: string = '';
   @ContentChildren(TabComponent) tabs!: QueryList<TabComponent>;
 
   ngAfterContentInit() {

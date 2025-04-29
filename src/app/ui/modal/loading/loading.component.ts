@@ -8,6 +8,7 @@ import {
 
 @Component({
   selector: 'app-loading',
+  standalone: true,
   imports: [
     MatDialogContent,
     MatProgressSpinnerModule

@@ -1,0 +1,13 @@
+<div class="flex flex-col">
+    <span [ngStyle]="{ 'color': color }" class="text-[12px] font-semibold text-left">{{label}}</span>
+    
+    <textarea *ngIf="typeControl == 'model'" [(ngModel)]="controlModel" (ngModelChange)="controlModelChange.emit($event)"
+    [name]="name" [rows]="rows" [cols]="cols" [placeholder]="placeholder"
+    [ngStyle]="{ 'background-color': bg, 'border-width': '1px', 'border-style': 'solid', 'border-color': borderColor }"
+    class="!rounded-lg py-2 px-2"></textarea>
+
+    <textarea *ngIf="typeControl == 'form'" [formControl]="control"
+    [name]="name" [rows]="rows" [cols]="cols" [placeholder]="placeholder"
+    [ngStyle]="{ 'background-color': bg, 'border-width': '1px', 'border-style': 'solid', 'border-color': borderColor }"
+    class="!rounded-lg py-2 px-2"></textarea>
+</div>

@@ -1,3 +1,9 @@
-<mat-checkbox class="custom-checkbox" [formControl]="control">
-    {{ label ? label : ''}}
-</mat-checkbox>
+<div>
+    <mat-checkbox *ngIf="typeControl == 'model'" [(ngModel)]="controlModel" (ngModelChange)="controlModelChange.emit($event)" class="custom-checkbox">
+        {{ label ? label : ''}}
+    </mat-checkbox>
+
+    <mat-checkbox *ngIf="typeControl == 'form'" [formControl]="control" class="custom-checkbox">
+        {{ label ? label : ''}}
+    </mat-checkbox>
+</div>

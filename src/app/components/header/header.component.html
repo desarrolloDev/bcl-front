@@ -1,11 +1,22 @@
 <header>
     <nav>
-      <!-- <button (click)="toggleMenu()">☰</button> -->
       <img src="../../assets/images/logo-bcl.png" alt="">
-      <!-- <ul [class.open]="menuOpen">
-        <li><a routerLink="/">Home</a></li>
-        <li *ngIf="!(user | async)"><a routerLink="/login">Login</a></li>
-        <li *ngIf="user | async" (click)="logout()">Logout</li>
-      </ul> -->
+      <div>
+        <div *ngIf="nombre$ | async as nombre; else noLogin" class="flex">
+          <span class="text-[#FAFAFA] text-[22px] font-semibold">{{nombre}}</span>
+          <div>
+            <button mat-button [matMenuTriggerFor]="menu">
+              <mat-icon aria-hidden="false" aria-label="person" fontIcon="person"
+              class="!text-[18px] !text-[#F5F5F5] !w-[18px] !h-[18px]"></mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="logout()" class="!text-[#002B3E]">Cerrar sesión</button>
+            </mat-menu>
+          </div>
+        </div>
+        <ng-template #noLogin>
+          <button (click)="iniciarSesion()" class="!text-[16px]">Iniciar Sesión</button>
+        </ng-template>
+      </div>
     </nav>
 </header>

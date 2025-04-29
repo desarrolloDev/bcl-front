@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Firestore, doc, setDoc, getDoc } from '@angular/fire/firestore';
+import { Firestore, doc, setDoc, getDoc, collection, getDocs, updateDoc } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -23,5 +23,26 @@ export class FirestoreService {
         throw new Error('El usuario no existe.');
       }
     });
+  }
+
+  // listar documentos de una colección
+  obtenerDocumentos(coleccion: string): Promise<any> {
+    const miColeccion = collection(this.firestore, coleccion);
+    return getDocs(miColeccion).then(documentos => {
+      if (documentos.docs) {
+        const listaDocumentos = documentos.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        return listaDocumentos;
+      } else {
+        throw new Error('El usuario no existe.');
+      }
+    })
+  }
+
+  updateSubColeccionData(coleccion: string, documento: string, newData: string | string[] | any[]) {
+    const docRef = doc(this.firestore, coleccion, documento);
+    return updateDoc(docRef, { data: newData });
   }
 }

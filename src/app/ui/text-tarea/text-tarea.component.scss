@@ -1,0 +1,13 @@
+textarea::placeholder {
+    font-weight: lighter;
+    font-size: 11px;
+    color: #A0A0A0;
+    opacity: 1;
+}
+
+textarea {
+    &:focus {
+        outline: none;
+        border-color: #949090;
+    }
+}

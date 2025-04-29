@@ -3,25 +3,23 @@ import { CommonModule } from '@angular/common';
 import { NonNullableFormBuilder, Validators } from '@angular/forms';
 import { InputComponent } from '../../ui/input/input.component';
 import { SelectComponent } from '../../ui/select/select.component';
-import { CheckboxComponent } from '../../ui/checkbox/checkbox.component';
 import { FirestoreService } from '../../services/firestore.service';
 import { AuthService } from '../../services/auth.service';
 import { ListService } from '../../services/list.service';
 import { ModalService } from '../../ui/modal/modal.service';
 
 @Component({
-  selector: 'app-create-user',
+  selector: 'app-create-profesor',
   standalone: true,
   imports: [
     CommonModule,
     InputComponent,
-    SelectComponent,
-    CheckboxComponent
+    SelectComponent
   ],
-  templateUrl: './create-user.component.html',
-  styleUrl: './create-user.component.scss'
+  templateUrl: './create-profesor.component.html',
+  styleUrl: './create-profesor.component.scss'
 })
-export class CreateUserComponent {
+export class CreateProfesorComponent {
   private _fb = inject(NonNullableFormBuilder);
   maxlengthTD: number = 8;
   loading: boolean = false;
@@ -42,15 +40,13 @@ export class CreateUserComponent {
     correo: this._fb.control<string>('', [Validators.required, Validators.email]),
     contraseña: this._fb.control<string>('', [Validators.required, Validators.minLength(8)]),
     rep_contraseña: this._fb.control<string>('', [Validators.required, Validators.minLength(8)]),
-    terminos_cond: this._fb.control<boolean>(false, [Validators.required]),
-    politicas_priv: this._fb.control<boolean>(false, [Validators.required]),
-    rol: this._fb.control<string>('ESTUDIANTE', [Validators.required]),
+    rol: this._fb.control<string>('', [Validators.required]),
   });
 
   async registrar() {
     if (this.form.valid) {
       const confirmed = await this.modalService.openConfirmDialog({ 
-        titulo: '¿Está seguro de guardar esta información?',
+        titulo: '¿Está seguro de guardar este usuario?',
         mensaje: '',
         type: '',
         load: this.loading,
@@ -69,9 +65,9 @@ export class CreateUserComponent {
         .then(() => {
           this.fs.addUser(this.form.value)
             .then(() => {
-              console.log('Tu usuario fue registrado');
+              console.log('Usuario registrado y datos guardados!');
               loadingRef.close();
-              this.modalService.openResultDialog(true, 'Tu usuario fue registrado');
+              this.modalService.openResultDialog(true, 'Usuario registrado y datos guardados!');
               this.form.reset();
             }).catch(err => {
               console.error('Error al guardar:', err);

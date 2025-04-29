@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-confirm',
+  standalone: true,
   imports: [
     MatDialogContent,
     MatDialogActions,
