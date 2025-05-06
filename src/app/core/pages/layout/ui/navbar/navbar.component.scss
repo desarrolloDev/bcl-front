@@ -11,6 +11,10 @@
         align-items: center;
         gap: 20px;
         padding: 8px 8px 8px 24px;
+        img {
+            width: 130px;
+            height: 40px;
+        }
     }
 }
 
@@ -20,8 +24,8 @@
         .collapse {
             padding: 8px 8px 8px 16px;
             img {
-                width: 60%;
-                height: 60%;
+                width: 120px;
+                height: 30px;
                 object-fit: cover;
             }
         }
