@@ -45,4 +45,16 @@ export class FirestoreService {
     const docRef = doc(this.firestore, coleccion, documento);
     return updateDoc(docRef, { data: newData });
   }
+
+  // data de un usuario
+  getSubColeccionData(ruta: string): Promise<any> {
+    const itemDoc = doc(this.firestore, ruta);
+    return getDoc(itemDoc).then(docSnap => {
+      if (docSnap.exists()) {
+        return { id: docSnap.id, ...docSnap.data() };
+      } else {
+        throw new Error('El usuario no existe.');
+      }
+    });
+  }
 }

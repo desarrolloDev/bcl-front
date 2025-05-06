@@ -1,1 +1,20 @@
-<p>registro-horarios works!</p>
+<div>
+    <span>Gestión de Horarios y Cursos</span>
+    <div class="flex">
+        <div>
+            <div>
+                <app-select label="Selecciona la semana" [items]="horariosList" typeControl="model" [controlModel]="semana"></app-select>
+                <app-select label="Selecciona el día" [items]="listService.diasSemana" typeControl="model" [controlModel]="dia"></app-select>
+
+                <span>Marca tus horarios disponibles</span>
+            </div>
+            <div>
+
+            </div>
+        </div>
+        <div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>

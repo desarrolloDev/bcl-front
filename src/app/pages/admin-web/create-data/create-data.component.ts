@@ -5,7 +5,9 @@ import { v4 as uuidv4 } from 'uuid';
 import { InputComponent } from '../../../ui/input/input.component';
 import { TextTareaComponent } from '../../../ui/text-tarea/text-tarea.component';
 import { CheckboxComponent } from '../../../ui/checkbox/checkbox.component';
+import { SelectComponent } from '../../../ui/select/select.component';
 import { FirestoreService } from '../../../services/firestore.service';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-create-data',
@@ -15,7 +17,8 @@ import { FirestoreService } from '../../../services/firestore.service';
     MatIconModule,
     InputComponent,
     TextTareaComponent,
-    CheckboxComponent
+    CheckboxComponent,
+    SelectComponent
   ],
   templateUrl: './create-data.component.html',
   styleUrl: './create-data.component.scss'
@@ -28,38 +31,63 @@ export class CreateDataComponent {
     private fs: FirestoreService
   ) {}
 
-  itemSelect: string = '';
-  itemId: string = '';
+  itemSelect: string = ''; // item seleccionado de las opciones (nombre)
+  itemId: string = ''; // item seleccionado de las opciones (id)
 
-  typeData: string = '';
+  typeData: string = ''; // Sirve para saber si es data standar o personalizada (Standar: string - arrayString)
+  dataText: string = ''; // data para tipo string
+  dataList: any = []; // data para tipo arrayString
 
-  dataList: any = [];
-  dataText: string = '';
+  listCursos: { id: string, nombre: string }[] = [];
+  cursoSelect: string = '';
+  data_paquete_precio: any = [];
 
   selectItem(item: string, id: string) {
     this.itemSelect = item;
     this.itemId = id;
 
-    const listaSelectItem = this.data.filter((itemList: any) => itemList.name == item);
-    // console.log('listaSelectItem', listaSelectItem);
+    const listaSelectItem = this.data.filter((itemList: any) => itemList.id == id);
+    console.log('listaSelectItem', listaSelectItem);
 
-    if (listaSelectItem.length > 0) {
-      if (typeof listaSelectItem[0].data == 'string') {
-        this.typeData = 'string';
-        this.dataText = listaSelectItem[0].data;
-      } else if (typeof listaSelectItem[0].data == 'object') {
-        if (typeof listaSelectItem[0].data[0] == 'object') {
-          this.typeData = 'arrayObject';
-          this.dataList = listaSelectItem[0].data.map((item: any) => ({ editing: false, id: uuidv4(), name: item.name, grupal: item.grupal, individual: item.individual }));
-        } else {
-          this.typeData = 'arrayString';
-          this.dataList = listaSelectItem[0].data.map((item: any) => ({ item, editing: false, id: uuidv4() }));
-        }
+    if (listaSelectItem[0].type == 'string') {
+
+      this.typeData = 'string';
+      this.dataText = listaSelectItem[0].data.length > 0 ? listaSelectItem[0].data : [];
+
+    } else if (listaSelectItem[0].type == 'arrayString') {
+
+      this.typeData = 'arrayString';
+      this.dataList = listaSelectItem[0].data.length > 0 ? listaSelectItem[0].data.map((item: any) => ({ item, editing: false, id: uuidv4() })) : [];
+
+    } else if (listaSelectItem[0].type == 'personalizado') {
+
+      if (listaSelectItem[0].id == 'paquete_clase') {
+
+        this.typeData = 'paquete_precio';
+  
+        const searchCursos = this.data.filter((itemList: any) => itemList.id == 'curso');
+        if (searchCursos.length > 0) {
+
+          this.listCursos = searchCursos[0].data.map((item: any) => ({ id: item, nombre: item }));
+  
+          const newDataPaquetePrecio = [];
+          for (let i = 0; i < searchCursos[0].data.length; i++) {
+            const curso = searchCursos[0].data[i];
+
+            const dataCurso = Object.entries(listaSelectItem[0])
+              .filter(([clave, valor]) => clave == curso)
+              .map(([clave, valor]) => valor);
+            console.log('dataCurso', dataCurso)
+            newDataPaquetePrecio.push({ id: curso, data: dataCurso })
+
+          }
+          console.log('newDataPaquetePrecio', newDataPaquetePrecio);
+  
+          this.data_paquete_precio = newDataPaquetePrecio;
+        } 
       }
+
     }
-    // console.log('this.typeData', this.typeData);
-    // console.log('this.dataText', this.dataText);
-    // console.log('this.dataList', this.dataList);
   }
 
   addItem() {
@@ -70,20 +98,25 @@ export class CreateDataComponent {
         isNew: true,
         editing: true
       });
-    } else if (this.typeData == 'arrayObject') {
-      this.dataList.push({
-        id: uuidv4(),
-        name: '',
-        grupal: false,
-        individual: false,
-        isNew: true,
-        editing: true
-      })
+    } else if (this.typeData == 'paquete_precio') {
+      this.data_paquete_precio.forEach((element: any) => {
+        if (element.id == this.cursoSelect) {
+          element.data = [...element.data, {
+            id: uuidv4(),
+            name: '',
+            grupal: 0,
+            individual: 0,
+            isNew: true,
+            editing: true
+          }];
+        }
+      });
     }
   }
 
   deleteItem(item: any) {
-    this.dataList = this.dataList.filter((i: any) => i.id !== item.id);
+    if (this.typeData == 'arrayString') this.dataList = this.dataList.filter((i: any) => i.id !== item.id);
+    else if (this.typeData == 'paquete_precio') console.log('no')
   }
 
   editItem(item: any) { item.editing = true; }
@@ -91,27 +124,26 @@ export class CreateDataComponent {
   stopEditing(item: any) { item.editing = false; }
 
   save() {
-    console.log('this.dataList', this.dataList);
-    console.log('this.dataText', this.dataText);
+    // console.log('this.dataList', this.dataList);
+    // console.log('this.dataText', this.dataText);
+    console.log('this.cursoSelect', this.cursoSelect);
     // this.dropdownService.saveItems(this.items);
 
     if (this.typeData == 'string') this.fs.updateSubColeccionData(this.coleccion, this.itemId, this.dataText);
-    else {
+    else if (this.typeData == 'string') {
       let newData: any[] = [];
-      if (this.typeData == 'arrayString') {
-        this.dataList.forEach((element: any) => {
-          newData.push(element.item);
-        });
-      } else if (this.typeData == 'arrayObject') {
-        this.dataList.forEach((element: any) => {
-          newData.push({
-            name: element.name,
-            grupal: element.grupal,
-            individual: element.individual
-          });
-        });
-      }
+      this.dataList.forEach((element: any) => {
+        newData.push(element.item);
+      });
       this.fs.updateSubColeccionData(this.coleccion, this.itemId, newData);
+    } else if (this.typeData == 'paquete_precio') {
+      // this.dataList.forEach((element: any) => {
+      //   newData.push({
+      //     name: element.name,
+      //     grupal: element.grupal,
+      //     individual: element.individual
+      //   });
+      // });
     }
   }
 }

@@ -35,34 +35,45 @@
                 <span (click)="addItem()" class="text-[16px] text-[#DABC62]">Agregar nuevo campo</span>
             </div>
         </div>
-        <div *ngIf="typeData == 'arrayObject'">
-            <div class="mb-4 flex w-full">
-                <span class="w-3/5 text-[20px] text-[#002B3E] font-bold">Lista desplegable:</span>
-                <span class="w-2/5 text-[20px] text-[#002B3E] font-bold">Aplica para clases:</span>
-            </div>
-            <div class="w-full">
-                <div *ngFor="let option of dataList; let i = index" class="flex items-center w-full">
-                    <div class="w-3/5 flex items-center">
-                        <mat-icon (click)="deleteItem(option)" class="!text-[16px] !text-[#002B3E] !w-[16px] !h-[16px] mr-2" aria-hidden="false" aria-label="Example home icon" fontIcon="delete"></mat-icon>
-    
-                        <ng-container *ngIf="option.editing; else displayText">
-                            <app-input color="#002B3E" bg="#F5F5F5" borderColor="#F5F5F5" label="" placeholder="" type="string" typeControl="model" [(controlModel)]="option.name" [name]="option.id"></app-input>
-                        </ng-container>
-                    
-                        <ng-template #displayText>
-                            <mat-icon (click)="editItem(option)" class="!text-[16px] !text-[#002B3E] !w-[16px] !h-[16px] mr-2" aria-hidden="false" aria-label="Example home icon" fontIcon="edit"></mat-icon>
-                            <span class="text-[16px] text-[#002B3E]">{{option.name}}</span>
-                        </ng-template>
+        <div *ngIf="typeData == 'paquete_precio'">
+            <app-select label="Selecciona tu curso" [items]="listCursos" typeControl="model" [(controlModel)]="cursoSelect"></app-select>
+            
+            <div *ngFor="let option of data_paquete_precio; let i = index">
+                <div *ngIf="option.id == cursoSelect">
+                    <div class="flex flex-col w-full mb-4">
+                        <div class="mb-2 flex w-full">
+                            <span class="w-6/10 text-[20px] text-[#002B3E] font-bold text-left">Lista desplegable:</span>
+                            <span class="w-2/10 text-[20px] text-[#002B3E] font-bold text-right">Individual</span>
+                            <span class="w-2/10 text-[20px] text-[#002B3E] font-bold text-right">Grupal</span>
+                        </div>
+                        <div *ngFor="let item of option.data; let i = index" class="flex">
+                            <div class="w-6/10 flex items-center">
+                                <mat-icon (click)="deleteItem(item)" class="!text-[16px] !text-[#002B3E] !w-[16px] !h-[16px] mr-2" aria-hidden="false" aria-label="Example home icon" fontIcon="delete"></mat-icon>
+            
+                                <ng-container *ngIf="item.editing; else displayText">
+                                    <app-input color="#002B3E" bg="#F5F5F5" borderColor="#F5F5F5" label="" placeholder="" type="string" typeControl="model" [(controlModel)]="item.name" [name]="item.id"></app-input>
+                                </ng-container>
+                            
+                                <ng-template #displayText>
+                                    <mat-icon (click)="editItem(item)" class="!text-[16px] !text-[#002B3E] !w-[16px] !h-[16px] mr-2" aria-hidden="false" aria-label="Example home icon" fontIcon="edit"></mat-icon>
+                                    <span class="text-[16px] text-[#002B3E]">{{item.name}}</span>
+                                </ng-template>
+                            </div>
+                            <div class="flex w-2/10 justify-end">
+                                <span class="text-[10px] text-[#002B3E]">S/.</span>
+                                <app-input class="w-2/3" color="#002B3E" bg="#F5F5F5" borderColor="#F5F5F5" label="" placeholder="" type="number" typeControl="model" [(controlModel)]="item.individual" [name]="item.id"></app-input>
+                            </div>
+                            <div class="flex w-2/10 justify-end">
+                                <span class="text-[10px] text-[#002B3E]">S/.</span>
+                                <app-input class="w-2/3" color="#002B3E" bg="#F5F5F5" borderColor="#F5F5F5" label="" placeholder="" type="number" typeControl="model" [(controlModel)]="item.grupal" [name]="item.id"></app-input>
+                            </div>
+                        </div>
                     </div>
-                    <div class="flex w-2/5">
-                        <app-checkbox label="Individual" typeControl="model" [(controlModel)]="option.individual"></app-checkbox>
-                        <app-checkbox label="Grupal" typeControl="model" [(controlModel)]="option.grupal"></app-checkbox>
+                    <div class="flex items-center mt-4">
+                        <mat-icon class="!text-[14px] !text-[#DABC62] !w-[16px] !h-[16px] ml-6 mr-2" aria-hidden="false" aria-label="Example home icon" fontIcon="add_circle"></mat-icon>
+                        <span (click)="addItem()" class="text-[16px] text-[#DABC62]">Agregar nuevo campo</span>
                     </div>
                 </div>
-            </div>
-            <div class="flex items-center mt-4">
-                <mat-icon class="!text-[14px] !text-[#DABC62] !w-[16px] !h-[16px] ml-6 mr-2" aria-hidden="false" aria-label="Example home icon" fontIcon="add_circle"></mat-icon>
-                <span (click)="addItem()" class="text-[16px] text-[#DABC62]">Agregar nuevo campo</span>
             </div>
         </div>
         <div *ngIf="typeData == 'string'">

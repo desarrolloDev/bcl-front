@@ -19,6 +19,16 @@ export class ListService {
     { id: 'ESTUDIANTE', nombre: 'Estudiante' },
   ];
 
+  diasSemana: any[] = [
+    { id: 'LUNES', nombre: 'Lunes' },
+    { id: 'MARTES', nombre: 'Martes' },
+    { id: 'MIERCOLES', nombre: 'Miércoles' },
+    { id: 'JUEVES', nombre: 'Jueves' },
+    { id: 'VIERNES', nombre: 'Viernes' },
+    { id: 'SABADO', nombre: 'Sábado' },
+    { id: 'DOMINGO', nombre: 'Domingo' },
+  ];
+
   modulosDashboard(rol: string): any {
     const newModulos = [];
 
