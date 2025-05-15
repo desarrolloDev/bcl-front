@@ -2,14 +2,14 @@
     <span [ngStyle]="{ 'color': color }" class="text-[12px] font-semibold text-left">{{label}}</span>
     
     <div class="select-wrapper" *ngIf="typeControl == 'form'">
-        <select [formControl]="control">
+        <select [formControl]="control" [ngStyle]="{ 'padding': padding }">
             <option *ngFor="let item of items" [value]="item.id">{{ item.nombre }}</option>
         </select>
         <i class="fas fa-chevron-down"></i>
     </div>
 
     <div class="select-wrapper" *ngIf="typeControl == 'model'">
-        <select [(ngModel)]="controlModel" (ngModelChange)="onModelChange($event)">
+        <select [(ngModel)]="controlModel" [ngStyle]="{ 'padding': padding }" (ngModelChange)="onModelChange($event)">
             <option *ngFor="let item of items" [value]="item.id">{{ item.nombre }}</option>
         </select>
         <i class="fas fa-chevron-down"></i>

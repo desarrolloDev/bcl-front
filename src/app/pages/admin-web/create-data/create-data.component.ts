@@ -78,7 +78,7 @@ export class CreateDataComponent {
               .filter(([clave, valor]) => clave == curso)
               .map(([clave, valor]) => valor);
             console.log('dataCurso', dataCurso)
-            newDataPaquetePrecio.push({ id: curso, data: dataCurso })
+            newDataPaquetePrecio.push({ id: curso, data: dataCurso.length > 0 ? dataCurso[0] : [] });
 
           }
           console.log('newDataPaquetePrecio', newDataPaquetePrecio);
@@ -124,11 +124,6 @@ export class CreateDataComponent {
   stopEditing(item: any) { item.editing = false; }
 
   save() {
-    // console.log('this.dataList', this.dataList);
-    // console.log('this.dataText', this.dataText);
-    console.log('this.cursoSelect', this.cursoSelect);
-    // this.dropdownService.saveItems(this.items);
-
     if (this.typeData == 'string') this.fs.updateSubColeccionData(this.coleccion, this.itemId, this.dataText);
     else if (this.typeData == 'string') {
       let newData: any[] = [];
@@ -137,13 +132,15 @@ export class CreateDataComponent {
       });
       this.fs.updateSubColeccionData(this.coleccion, this.itemId, newData);
     } else if (this.typeData == 'paquete_precio') {
-      // this.dataList.forEach((element: any) => {
-      //   newData.push({
-      //     name: element.name,
-      //     grupal: element.grupal,
-      //     individual: element.individual
-      //   });
-      // });
+      this.data_paquete_precio.forEach((element: any) => {
+        const newData: any = [];
+        element.data.forEach((element: any) => {
+          element.isNew = false;
+          element.editing = false;
+          newData.push(element);
+        });
+        this.fs.updateSubColeccionData(this.coleccion, this.itemId, { [element.id]: newData });
+      });
     }
   }
 }

@@ -1,5 +1,5 @@
 <div>
-    <mat-checkbox *ngIf="typeControl == 'model'" [(ngModel)]="controlModel" (ngModelChange)="controlModelChange.emit($event)" class="custom-checkbox">
+    <mat-checkbox *ngIf="typeControl == 'model'" [(ngModel)]="controlModel" (ngModelChange)="onModelChange($event)" class="custom-checkbox">
         {{ label ? label : ''}}
     </mat-checkbox>
 

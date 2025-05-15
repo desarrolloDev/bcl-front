@@ -41,9 +41,9 @@ export class FirestoreService {
     })
   }
 
-  updateSubColeccionData(coleccion: string, documento: string, newData: string | string[] | any[]) {
+  updateSubColeccionData(coleccion: string, documento: string, newData: any) {
     const docRef = doc(this.firestore, coleccion, documento);
-    return updateDoc(docRef, { data: newData });
+    return updateDoc(docRef, documento !== 'paquete_clase' ? { data: newData } : newData);
   }
 
   // data de un usuario

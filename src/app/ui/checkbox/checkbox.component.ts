@@ -21,7 +21,15 @@ export class CheckboxComponent {
 
   @Input() typeControl: string = 'form'; // 'model'
   @Input() control = new FormControl<boolean>(false);
-  @Input() controlModel: string = '';
+  @Input() controlModel: boolean = false;
 
   @Output() controlModelChange = new EventEmitter<any>();
+
+  @Output() changeSelect = new EventEmitter<void>();
+
+  onModelChange(value: any) {
+    this.controlModelChange.emit(value);
+
+    if (this.changeSelect) this.changeSelect.emit();
+  }
 }
