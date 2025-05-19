@@ -1,20 +1,19 @@
 table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  th, td {
-    border: 1px solid #ccc;
-    text-align: center;
-    padding: 10px;
-  }
-  th {
-    // background: #f4f4f4;
-  }
-  td {
-    // cursor: pointer;
-    background: #F5F5F5;
-  }
-  td.selected {
-    background: white;
-  }
-  
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  border: 1px solid #ccc;
+  text-align: center;
+  padding: 10px;
+}
+
+th {}
+
+td {}
+
+td.selected {
+  background: white;
+}

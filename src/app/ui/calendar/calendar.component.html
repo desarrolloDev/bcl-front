@@ -2,13 +2,15 @@
     <thead>
       <tr>
         <th class="bg-[#002B3E] text-[12px] text-[#FFFFFF] font-light">Hora</th>
-        <th class="bg-[#002B3E] text-[12px] text-[#FFFFFF] font-light" *ngFor="let day of listService.diasSemana">{{ day.nombre }}</th>
+        <th class="bg-[#002B3E] text-[12px] text-[#FFFFFF] font-light" *ngFor="let day of listService.diasSemana">
+          {{ tipo == 'pc' ? day.nombre : (day.nombre ? (day.nombre).slice(0,1) : '') }}
+        </th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let hour of hours; let i = index">
-        <td>{{ hour }}</td>
-        <td *ngFor="let day of listService.diasSemana; let j = index"
+        <td class="bg-[#FFFFFF]" [ngStyle]="{ 'width': widthHora, 'font-size': fontSize }">{{ hour }}</td>
+        <td class="bg-[#E0E0E0]" *ngFor="let day of listService.diasSemana; let j = index"
             [class.selected]="selectedSlots.length > 0 ? selectedSlots[i][j] : false"></td>
             <!-- (click)="toggleSlot(i, j)"></td> -->
       </tr>

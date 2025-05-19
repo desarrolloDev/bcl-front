@@ -69,7 +69,7 @@ export class ListService {
     const newModulos = [];
 
     if (rol == 'ADMIN') {
-      newModulos.push({ image: '../../../../assets/images/modulo_horarios.PNG', title: 'Horario de Profesores', redirect: '' });
+      newModulos.push({ image: '../../../../assets/images/modulo_horarios.PNG', title: 'Horario de Profesores', redirect: '/horarios_profesor' });
       newModulos.push({ image: '../../../../assets/images/modulo_horarios.PNG', title: 'Crear Profesor/Admin', redirect: '/createProfesorAdmin' });
       newModulos.push({ image: '../../../../assets/images/modulo_confirmacion.PNG', title: 'Confirmación de Reservas', redirect: '' });
       newModulos.push({ image: '../../../../assets/images/modulo_reporte.PNG', title: 'Reportes', redirect: '' });

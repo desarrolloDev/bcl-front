@@ -59,12 +59,12 @@
                                     <span class="text-[16px] text-[#002B3E]">{{item.name}}</span>
                                 </ng-template>
                             </div>
-                            <div class="flex w-2/10 justify-end">
-                                <span class="text-[10px] text-[#002B3E]">S/.</span>
+                            <div class="flex w-2/10 justify-end items-center">
+                                <span class="text-[16px] text-[#002B3E]">S/.</span>
                                 <app-input class="w-2/3" color="#002B3E" bg="#F5F5F5" borderColor="#F5F5F5" label="" placeholder="" type="number" typeControl="model" [(controlModel)]="item.individual" [name]="item.id"></app-input>
                             </div>
-                            <div class="flex w-2/10 justify-end">
-                                <span class="text-[10px] text-[#002B3E]">S/.</span>
+                            <div class="flex w-2/10 justify-end items-center">
+                                <span class="text-[16px] text-[#002B3E]">S/.</span>
                                 <app-input class="w-2/3" color="#002B3E" bg="#F5F5F5" borderColor="#F5F5F5" label="" placeholder="" type="number" typeControl="model" [(controlModel)]="item.grupal" [name]="item.id"></app-input>
                             </div>
                         </div>
@@ -74,6 +74,42 @@
                         <span (click)="addItem()" class="text-[16px] text-[#DABC62]">Agregar nuevo campo</span>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div *ngIf="typeData == 'profesor_preferencia'">
+            <div class="mb-4"><span class="text-[24px] text-[#002B3E] font-bold">Lista desplegable:</span></div>
+            <div>
+                <div class="mb-2 flex w-full">
+                    <span class="w-6/10 text-left text-[20px] text-[#002B3E] font-bold">nombre</span>
+                    <span class="w-4/10 text-left text-[20px] text-[#002B3E] font-bold">correo</span>
+                </div>
+
+                <div *ngFor="let option of dataList; let i = index" class="flex items-center">
+                    <ng-container *ngIf="option.editing; else displayText">
+                        <div class="flex items-center w-6/10">
+                            <mat-icon (click)="deleteItem(option)" class="!text-[18px] !text-[#002B3E] !w-[18px] !h-[18px] mr-2" aria-hidden="false" aria-label="Example home icon" fontIcon="delete"></mat-icon>
+                            <app-input color="#002B3E" bg="#F5F5F5" borderColor="#F5F5F5" label="" placeholder="" type="string" typeControl="model" [(controlModel)]="option.nombre" [name]="option.nombre"></app-input>
+                        </div>
+                        <div class="w-4/10">
+                            <app-input color="#002B3E" bg="#F5F5F5" borderColor="#F5F5F5" label="" placeholder="" type="string" typeControl="model" [(controlModel)]="option.id" [name]="option.id"></app-input>
+                        </div>
+                    </ng-container>
+
+                    <ng-template #displayText>
+                        <div class="flex items-center w-6/10">
+                            <mat-icon (click)="deleteItem(option)" class="!text-[18px] !text-[#002B3E] !w-[18px] !h-[18px] mr-2" aria-hidden="false" aria-label="Example home icon" fontIcon="delete"></mat-icon>
+                            <mat-icon (click)="editItem(option)" class="!text-[18px] !text-[#002B3E] !w-[18px] !h-[18px] mr-2" aria-hidden="false" aria-label="Example home icon" fontIcon="edit"></mat-icon>
+                            <span class="w-5/10 text-left text-[12px] text-[#002B3E]">{{option.nombre}}</span>
+                        </div>
+                        <div class="w-4/10">
+                            <span class="w-5/10 text-left text-[12px] text-[#002B3E]">{{option.id}}</span>
+                        </div>
+                    </ng-template>
+                </div>
+            </div>
+            <div class="flex items-center mt-4">
+                <mat-icon class="!text-[14px] !text-[#DABC62] !w-[16px] !h-[16px] ml-6 mr-2" aria-hidden="false" aria-label="Example home icon" fontIcon="add_circle"></mat-icon>
+                <span (click)="addItem()" class="text-[16px] text-[#DABC62]">Agregar nuevo campo</span>
             </div>
         </div>
         <div *ngIf="typeData == 'string'">

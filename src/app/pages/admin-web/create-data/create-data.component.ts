@@ -7,7 +7,7 @@ import { TextTareaComponent } from '../../../ui/text-tarea/text-tarea.component'
 import { CheckboxComponent } from '../../../ui/checkbox/checkbox.component';
 import { SelectComponent } from '../../../ui/select/select.component';
 import { FirestoreService } from '../../../services/firestore.service';
-import { filter } from 'rxjs';
+import { ModalService } from '../../../ui/modal/modal.service';
 
 @Component({
   selector: 'app-create-data',
@@ -28,8 +28,11 @@ export class CreateDataComponent {
   @Input() coleccion: string = '';
 
   constructor(
-    private fs: FirestoreService
+    private fs: FirestoreService,
+    private modalService: ModalService
   ) {}
+
+  loadChange: boolean = false;
 
   itemSelect: string = ''; // item seleccionado de las opciones (nombre)
   itemId: string = ''; // item seleccionado de las opciones (id)
@@ -47,7 +50,6 @@ export class CreateDataComponent {
     this.itemId = id;
 
     const listaSelectItem = this.data.filter((itemList: any) => itemList.id == id);
-    console.log('listaSelectItem', listaSelectItem);
 
     if (listaSelectItem[0].type == 'string') {
 
@@ -58,6 +60,11 @@ export class CreateDataComponent {
 
       this.typeData = 'arrayString';
       this.dataList = listaSelectItem[0].data.length > 0 ? listaSelectItem[0].data.map((item: any) => ({ item, editing: false, id: uuidv4() })) : [];
+
+    } else if (listaSelectItem[0].type == 'profesor_preferencia') {
+
+      this.typeData = 'profesor_preferencia';
+      this.dataList = listaSelectItem[0].data.length > 0 ? listaSelectItem[0].data.map((item: any) => ({ nombre: item.nombre, editing: false, id: item.id })) : [];
 
     } else if (listaSelectItem[0].type == 'personalizado') {
 
@@ -77,11 +84,9 @@ export class CreateDataComponent {
             const dataCurso = Object.entries(listaSelectItem[0])
               .filter(([clave, valor]) => clave == curso)
               .map(([clave, valor]) => valor);
-            console.log('dataCurso', dataCurso)
             newDataPaquetePrecio.push({ id: curso, data: dataCurso.length > 0 ? dataCurso[0] : [] });
 
           }
-          console.log('newDataPaquetePrecio', newDataPaquetePrecio);
   
           this.data_paquete_precio = newDataPaquetePrecio;
         } 
@@ -111,36 +116,73 @@ export class CreateDataComponent {
           }];
         }
       });
+    } else if (this.typeData == 'profesor_preferencia') {
+      this.dataList.push({
+        id: '',
+        nombre: '',
+        isNew: true,
+        editing: true
+      });
     }
   }
 
   deleteItem(item: any) {
-    if (this.typeData == 'arrayString') this.dataList = this.dataList.filter((i: any) => i.id !== item.id);
-    else if (this.typeData == 'paquete_precio') console.log('no')
+    if (this.typeData == 'arrayString' || this.typeData == 'profesor_preferencia') this.dataList = this.dataList.filter((i: any) => i.id !== item.id);
+    else if (this.typeData == 'paquete_precio') {
+      this.data_paquete_precio.forEach((element: any) => {
+        if (element.id == this.cursoSelect) {
+          element.data = element.data.filter((curso: any) => curso.id !== item.id);
+        }
+      });
+    }
   }
 
   editItem(item: any) { item.editing = true; }
 
   stopEditing(item: any) { item.editing = false; }
 
-  save() {
-    if (this.typeData == 'string') this.fs.updateSubColeccionData(this.coleccion, this.itemId, this.dataText);
-    else if (this.typeData == 'string') {
-      let newData: any[] = [];
-      this.dataList.forEach((element: any) => {
-        newData.push(element.item);
-      });
-      this.fs.updateSubColeccionData(this.coleccion, this.itemId, newData);
-    } else if (this.typeData == 'paquete_precio') {
-      this.data_paquete_precio.forEach((element: any) => {
-        const newData: any = [];
-        element.data.forEach((element: any) => {
-          element.isNew = false;
-          element.editing = false;
-          newData.push(element);
+  async save() {
+    const confirmed = await this.modalService.openConfirmDialog({ 
+      titulo: '¿Está seguro de guardar esta información?',
+      mensaje: '',
+      type: '',
+      load: this.loadChange,
+      msgBtnAceptar: 'Sí, Guardar',
+      msgBtCerrar: 'Cancelar'
+    }).toPromise();
+
+    if (confirmed) {
+      const loadingRef = this.modalService.openLoadingDialog('Guardando...');
+
+      this.loadChange = true;
+
+      if (this.typeData == 'string') this.fs.updateSubColeccionData(this.coleccion, this.itemId, this.dataText, '');
+      else if (this.typeData == 'arrayString') {
+        let newData: any[] = [];
+        this.dataList.forEach((element: any) => {
+          newData.push(element.item);
         });
-        this.fs.updateSubColeccionData(this.coleccion, this.itemId, { [element.id]: newData });
-      });
+        this.fs.updateSubColeccionData(this.coleccion, this.itemId, newData, '');
+      } else if (this.typeData == 'profesor_preferencia') {
+        let newData: any[] = [];
+        this.dataList.forEach((element: any) => {
+          newData.push({ nombre: element.nombre, id: element.id });
+        });
+        this.fs.updateSubColeccionData(this.coleccion, this.itemId, newData, '');
+      } else if (this.typeData == 'paquete_precio') {
+        this.data_paquete_precio.forEach((element: any) => {
+          const newData: any = [];
+          element.data.forEach((element: any) => {
+            element.isNew = false;
+            element.editing = false;
+            newData.push(element);
+          });
+          this.fs.updateSubColeccionData(this.coleccion, this.itemId, { [element.id]: newData }, '');
+        });
+      }
+
+      loadingRef.close();
+      this.modalService.openResultDialog(true, 'Tu data fue guardada');
     }
   }
 }

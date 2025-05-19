@@ -14,6 +14,9 @@ import { ListService } from '../../services/list.service';
 export class CalendarComponent {
   @Input() hours: string[] = [];
   @Input() selectedSlots: boolean[][] = [];
+  @Input() tipo: string = 'pc';
+  @Input() widthHora: string = '145px';
+  @Input() fontSize: string = '14px';
 
   constructor(public listService: ListService) {}
 

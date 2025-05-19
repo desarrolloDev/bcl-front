@@ -47,4 +47,15 @@ export class InputComponent {
   onModelChange(value: any) {
     this.controlModelChange.emit(value);
   }
+
+  handleInput(event: Event) {
+    const input = event.target as HTMLInputElement;
+    let value = input.value;
+
+    // inputValue.replace(/[^A-ZÑ0-9\s]/gi, '').toUpperCase().slice(0, 15);
+    if (this.maxlength && value.length > this.maxlength) {
+      value = value.slice(0, this.maxlength);
+      input.value = value;
+    }
+  }
 }

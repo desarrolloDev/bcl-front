@@ -41,9 +41,9 @@ export class FirestoreService {
     })
   }
 
-  updateSubColeccionData(coleccion: string, documento: string, newData: any) {
+  updateSubColeccionData(coleccion: string, documento: string, newData: any, tipo: string | '') {
     const docRef = doc(this.firestore, coleccion, documento);
-    return updateDoc(docRef, documento !== 'paquete_clase' ? { data: newData } : newData);
+    return updateDoc(docRef, documento !== 'paquete_clase' ? (tipo == '' ? { data: newData } : newData) : newData);
   }
 
   // data de un usuario
@@ -56,5 +56,40 @@ export class FirestoreService {
         throw new Error('El usuario no existe.');
       }
     });
+  }
+
+  async getAllReservasSemana(uid: string, semanas: any[]) {
+    const dataSemal: any = {};
+
+    for (let i = 0; i < semanas.length; i++) {
+      await this.getReservas(uid, semanas[i].id.replaceAll('/', '|'))
+      .then(data => {
+        dataSemal[semanas[i].id] = data;
+      }).catch((error) => {
+        dataSemal[semanas[i].id] = [];
+      });
+    }
+
+    return dataSemal;
+  }
+
+  async getReservas(uid: string, periodo: string): Promise<any[]> {
+    const docRef = doc(this.firestore, 'reservas_clase', uid);
+    const snapshot = await getDoc(docRef);
+  
+    if (!snapshot.exists()) {
+      throw new Error('Documento no encontrado');
+    }
+  
+    const data = snapshot.data();
+  
+    const reservas = data[periodo];
+  
+    if (!reservas) {
+      console.warn('No hay reservas en este periodo');
+      return [];
+    }
+
+    return Object.values(reservas);
   }
 }

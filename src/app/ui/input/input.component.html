@@ -7,7 +7,9 @@
             name="ngModelValue"
             [ngStyle]="{ 'background-color': bg, 'border-width': '1px', 'border-style': 'solid', 'border-color': borderColor }"
             class="!rounded-lg py-2 px-2 w-full"
-            [maxlength]="maxlength ? maxlength : null">
+            [maxlength]="maxlength ? maxlength : null"
+            (input)="handleInput($event)"
+            >
 
         <button *ngIf="type === 'password'" type="button" (click)="togglePassword()"
             class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500">
@@ -21,7 +23,9 @@
             (ngModelChange)="onModelChange($event)" [name]="name"
             [ngStyle]="{ 'background-color': bg, 'border-width': '1px', 'border-style': 'solid', 'border-color': borderColor }"
             class="!rounded-lg py-2 px-2 w-full"
-            [maxlength]="maxlength ? maxlength : null">
+            [maxlength]="maxlength ? maxlength : null"
+            (input)="handleInput($event)"
+            >
 
         <!-- Botón ojito -->
         <button *ngIf="type === 'password'" type="button" (click)="togglePassword()"

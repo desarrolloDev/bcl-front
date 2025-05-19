@@ -9,7 +9,9 @@ export class DataService {
   private _datosListasProfesor: BehaviorSubject<any> = new BehaviorSubject<any>([]);
   private _datosHorarios: BehaviorSubject<any> = new BehaviorSubject<any>([]);
   private _datosCursos: BehaviorSubject<any> = new BehaviorSubject<any>([]);
+  private _datosSelectCursosProf: BehaviorSubject<any> = new BehaviorSubject<any>([]);
   private _termCondProf: BehaviorSubject<any> = new BehaviorSubject<string>('');
+  private _listaProf: BehaviorSubject<any> = new BehaviorSubject<any>([]);
 
   constructor() {
   }
@@ -26,6 +28,12 @@ export class DataService {
   setDatosCursos(value: any) { this._datosCursos.next(value); }
   get datosCursos(): any { return this._datosCursos.value; }
 
+  setDatosSelectCursosProf(value: any) { this._datosSelectCursosProf.next(value); }
+  get datosSelectCursosProf(): any { return this._datosSelectCursosProf.value; }
+
   setTermCondProf(value: any) { this._termCondProf.next(value); }
   get termCondProf(): any { return this._termCondProf.value; }
+
+  setListaProf(value: any) { this._listaProf.next(value); }
+  get listaProf(): any { return this._listaProf.value; }
 }

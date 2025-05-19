@@ -1,47 +1,155 @@
 <div class="px-4 py-2">
-    <span class="text-[20px] text-[#002B3E] font-bold">Gestión de Horarios y Cursos</span>
-    <div class="flex justify-between w-full">
-        <div class="flex flex-col w-7/20">
-            <div class="flex flex-col border-[2px] border-solid border-[#002B3E] rounded-lg p-4">
-                <app-select (changeSelect)="inicializarHorarios()" label="Selecciona la semana"
-                    [items]="semanasList" typeControl="model" [(controlModel)]="selectedSemana" color="#002B3E"></app-select>
+    <div *ngIf="!isSmallScreen">
+        <mat-stepper [linear]="isLinear" #stepper>
+            <mat-step label="Seleccionar horarios">
+                <div class="flex mb-4">
+                    <span class="w-1/2 text-[20px] text-[#002B3E] font-bold">Gestión de Horarios</span>
+                    <div class="w-1/2 flex justify-end"><button (click)="guardarHorarios()" class="w-[120px] bg-[#008C4B] text-[#FFFFFF] !rounded-lg py-2 px-4">GUARDAR</button></div>
+                </div>   
 
-                <app-select (changeSelect)="inicializarHorarios()" label="Selecciona el día"
-                    [items]="diasList" typeControl="model" [(controlModel)]="selectedtDia" color="#002B3E"></app-select>
-
-                <span class="text-[16px] text-[#002B3E] font-bold">Marca tus horarios disponibles</span>
-
-                <div *ngFor="let horario of horariosList" class="flex justify-between items-center">
-                    <app-checkbox [label]="horario" typeControl="model" [(controlModel)]="data[selectedSemana][selectedtDia][horario].checked" (changeSelect)="actualizarHorarios()"></app-checkbox>
-
-                    <app-select *ngIf="data[selectedSemana][selectedtDia][horario].checked" label="" [items]="tipoClaseList" typeControl="model" [(controlModel)]="data[selectedSemana][selectedtDia][horario].type" padding="2px 4px"></app-select>
+                <div class="flex justify-between w-full">
+                    <div class="flex flex-col w-7/20 border-[2px] border-solid border-[#002B3E] rounded-lg p-4">
+                        <app-select class="mb-4" label="Selecciona la semana" [items]="semanasList"
+                            typeControl="model" [(controlModel)]="selectedSemana" color="#002B3E"></app-select>
+        
+                        <app-select class="mb-4" label="Selecciona el día" [items]="diasList"
+                            typeControl="model" [(controlModel)]="selectedtDia" color="#002B3E"></app-select>
+        
+                        <span class="text-[16px] text-[#002B3E] font-bold">Marca tus horarios disponibles</span>
+        
+                        <div *ngFor="let horario of horariosList" class="flex justify-between items-center">
+                            <app-checkbox [label]="horario" typeControl="model"
+                                [(controlModel)]="data[selectedSemana][selectedtDia][horario].checked"
+                                (changeSelect)="actualizarHorarios()"></app-checkbox>
+        
+                            <app-select *ngIf="data[selectedSemana][selectedtDia][horario].checked" label=""
+                                [items]="tipoClaseList" typeControl="model"
+                                [(controlModel)]="data[selectedSemana][selectedtDia][horario].type"
+                                padding="2px 4px"></app-select>
+                        </div>
+                    </div>
+                    <div class="flex flex-col w-12/20">
+                        <div class="flex justify-end">
+                            <span class="text-[16px] text-[#002B3E] font-bold">Revisa tu calendario</span>
+                            <div class="week-selector">
+                                <button (click)="changeWeek(-1)" [disabled]="semanaOffset === 0">⬅</button>
+                                <span>Semana {{ semanaCalendar }}</span>
+                                <button (click)="changeWeek(1)" [disabled]="semanaOffset === 3">➡</button>
+                            </div>
+                        </div>
+                        <div>
+                            <app-calendar [hours]="horariosList" [selectedSlots]="selectedSlots"></app-calendar>
+                        </div>
+                        <div class="flex flex-col h-[200px] border-[2px] border-solid border-[#002B3E] rounded-lg mt-4 p-4">
+                            <span class="text-[16px] text-[#002B3E] font-bold">Términos y Condiciones:</span>
+                            <div class="textTerminos">
+                                <span class="text-[12px] text-[#002B3E]">{{terminosCondiciones}}</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="flex flex-col border-[2px] border-solid border-[#002B3E] rounded-lg p-4">
-                <span class="text-[16px] text-[#002B3E] font-bold">Términos y Condiciones:</span>
-                <span class="text-[12px] text-[#002B3E]">{{terminosCondiciones}}</span>
-            </div>
-        </div>
-        <div class="flex flex-col w-12/20">
-            <div>
-                <!-- <div class="week-selector">
-                    <button (click)="changeWeek(-1)" [disabled]="weekOffset === 0">⬅</button>
-                    <span>Semana {{ currentWeekStart | date:'dd/MM/yyyy' }} - {{ currentWeekEnd | date:'dd/MM/yyyy' }}</span>
-                    <button (click)="changeWeek(1)" [disabled]="weekOffset === 3">➡</button>
-                </div> -->
-            </div>
-            <div>
-                <app-calendar [hours]="horariosList" [selectedSlots]="selectedSlots"></app-calendar>
-            </div>
-            <div>
-                <span class="text-[16px] text-[#002B3E] font-bold">Selecciona los cursos que enseñaras</span>
+            </mat-step>
+            <mat-step label="Seleccionar cursos">
+                <span class="text-[20px] text-[#002B3E] font-bold">Gestión de Cursos</span>
+
+                <div class="flex">
+                    <span class="w-1/2 text-[16px] text-[#002B3E] font-bold">Selecciona los cursos que enseñaras</span>
+                    <div *ngIf="!loadCursos" class="w-1/2 flex justify-end"><button (click)="guardarCursos()" class="w-[120px] bg-[#008C4B] text-[#FFFFFF] !rounded-lg py-2 px-4">GUARDAR</button></div>
+                </div>
+                
+                <div *ngIf="loadCursos" class="flex flex-col items-center mt-8">
+                    <app-spinner [diameter]="50"></app-spinner>
+                    <span class="text-[#DABC62] text-[18px] font-semibold">¡Cargando cursos!</span>
+                </div>
+
                 <div *ngFor="let curso of cursosSelect">
                     <app-checkbox [label]="curso.name" typeControl="model" [(controlModel)]="curso.select"></app-checkbox>
                 </div>
-            </div>
-        </div>
+            </mat-step>
+        </mat-stepper>
     </div>
-    <div>
-        <button (click)="guardarSeleccion()" class="w-full bg-[#008C4B] text-[#FFFFFF] !rounded-lg py-2 px-4">GUARDAR</button>
+
+    <div *ngIf="isSmallScreen">
+        <mat-stepper orientation="vertical" [linear]="isLinear" #stepper>
+            <mat-step label="Horarios">
+                <div class="flex flex-col">
+                    <div class="flex flex-col mb-4">
+                        <span class="text-[18px] text-[#002B3E] font-bold">Gestión de Horarios</span>
+                        <div class="w-full flex justify-end mt-4 mb-4">
+                            <button (click)="guardarHorarios()" class="w-[150px] bg-[#008C4B] text-[#FFFFFF] !rounded-lg py-1 px-2">
+                                GUARDAR
+                            </button>
+                        </div>
+                    </div>
+    
+                    <div class="flex flex-col w-full border-[2px] border-solid border-[#002B3E] rounded-lg p-4">
+                        <app-select class="mb-4" label="Selecciona la semana" [items]="semanasList"
+                            typeControl="model" [(controlModel)]="selectedSemana" color="#002B3E"></app-select>
+        
+                        <app-select class="mb-4" label="Selecciona el día" [items]="diasList"
+                            typeControl="model" [(controlModel)]="selectedtDia" color="#002B3E"></app-select>
+        
+                        <span class="text-[16px] text-[#002B3E] font-bold">Marca tus horarios disponibles</span>
+        
+                        <div *ngFor="let horario of horariosList" class="flex flex-col items-start">
+                            <app-checkbox [label]="horario" typeControl="model"
+                                [(controlModel)]="data[selectedSemana][selectedtDia][horario].checked"
+                                (changeSelect)="actualizarHorarios()"></app-checkbox>
+        
+                            <app-select *ngIf="data[selectedSemana][selectedtDia][horario].checked" label=""
+                                [items]="tipoClaseList" typeControl="model"
+                                [(controlModel)]="data[selectedSemana][selectedtDia][horario].type"
+                                padding="2px 4px"></app-select>
+                        </div>
+                    </div>
+                </div>
+            </mat-step>
+
+            <mat-step label="Calendario">
+                <div class="flex flex-col">
+                    <div class="flex flex-col justify-end">
+                        <span class="text-[16px] text-[#002B3E] font-bold">Revisa tu calendario</span>
+                        <div class="week-selector mt-4">
+                            <button (click)="changeWeek(-1)" [disabled]="semanaOffset === 0">⬅</button>
+                            <span class="text-[10px]!">Semana {{ semanaCalendar }}</span>
+                            <button (click)="changeWeek(1)" [disabled]="semanaOffset === 3">➡</button>
+                        </div>
+                    </div>
+                    <div>
+                        <app-calendar [hours]="horariosList" [selectedSlots]="selectedSlots" tipo="mobile" fontSize="10px"></app-calendar>
+                    </div>
+                    <div class="flex flex-col h-[200px] border-[2px] border-solid border-[#002B3E] rounded-lg mt-4 p-4">
+                        <span class="text-[16px] text-[#002B3E] font-bold">Términos y Condiciones:</span>
+                        <div class="textTerminos">
+                            <span class="text-[12px] text-[#002B3E]">{{terminosCondiciones}}</span>
+                        </div>
+                    </div>
+                </div>
+            </mat-step>
+
+            <mat-step label="Cursos">
+                <div class="flex flex-col">
+                    <span class="text-[18px] text-[#002B3E] font-bold">Gestión de Cursos</span>
+                    <span class="w-full text-[12px] text-[#002B3E] font-bold">Selecciona los cursos que enseñaras</span>
+                    
+                    <div *ngIf="!loadCursos" class="w-full flex justify-end mt-4 mb-4">
+                        <button (click)="guardarCursos()" class="w-[150px] bg-[#008C4B] text-[#FFFFFF] !rounded-lg py-1 px-2">
+                            GUARDAR
+                        </button>
+                    </div>
+                    
+                    <div *ngIf="loadCursos" class="flex flex-col items-center mt-8">
+                        <app-spinner [diameter]="50"></app-spinner>
+                        <span class="text-[#DABC62] text-[12px] font-semibold">¡Cargando cursos!</span>
+                    </div>
+    
+                    <div *ngFor="let curso of cursosSelect">
+                        <app-checkbox [label]="curso.name" typeControl="model" [(controlModel)]="curso.select"></app-checkbox>
+                    </div>
+                </div>
+            </mat-step>
+        </mat-stepper>
+
     </div>
+
 </div>

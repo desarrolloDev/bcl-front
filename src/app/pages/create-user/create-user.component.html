@@ -11,7 +11,12 @@
             <app-input color="#6C6C6C" bg="#FAFAFA" borderColor="#B3B3B3" label="Apellidos" placeholder="Ingresa tus apellidos" type="string" [control]="form.controls['apellido']" ></app-input>
             <div class="flex justify-between items-end w-full">
                 <app-select class="w-38/100" label="Tipo" [items]="this.listService.tiposDocumentos" [control]="form.controls['tipo_documento']"></app-select>
-                <app-input class="w-60/100" color="#6C6C6C" bg="#FAFAFA" borderColor="#B3B3B3" label="Número de documento del responsable de pago" placeholder="Coloca tu documento" type="number" [control]="form.controls['nro_documento']" [maxlength]="maxlengthTD"></app-input>
+                <ng-container *ngIf="this.form.get('tipo_documento')?.value == 'DNI'; else documentoCe">
+                    <app-input class="w-60/100" color="#6C6C6C" bg="#FAFAFA" borderColor="#B3B3B3" label="Número de documento del responsable de pago" placeholder="Coloca tu documento" type="number" [control]="form.controls['nro_documento']" [maxlength]="maxlengthTD"></app-input>
+                </ng-container>
+                <ng-template #documentoCe>
+                    <app-input class="w-60/100" color="#6C6C6C" bg="#FAFAFA" borderColor="#B3B3B3" label="Número de documento del responsable de pago" placeholder="Coloca tu documento" type="string" [control]="form.controls['nro_documento']"></app-input>
+                </ng-template>
             </div>
             <app-input color="#6C6C6C" bg="#FAFAFA" borderColor="#B3B3B3" label="Celular" placeholder="Ingresa tu celular" type="number" [control]="form.controls['celular']" [maxlength]="9"></app-input>
             <div class="grid gap-4 pt-4">

@@ -83,23 +83,6 @@ export class CreateUserComponent {
           this.modalService.openResultDialog(false, 'Hubo un error');
         });
       }
-      // ----------------------------------------------
-      // this.loading = true;
-
-      // const { correo, contraseña } = this.form.value;
-
-      // this.authService.registrarUsuario(correo!, contraseña!)
-      // .then(() => {
-      //   this.fs.addUser(this.form.value)
-      //     .then(() => {
-      //       console.log('Usuario registrado y datos guardados!');
-
-      //       this.form.reset();
-      //     }).catch(err => console.error('Error al guardar:', err));
-      // })
-      // .catch(err => {
-      //   console.error('Error al registrar:', err);
-      // });
     } else {
       console.log('Formulario inválido');
     }

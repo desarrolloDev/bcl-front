@@ -1,0 +1,45 @@
+<div class="px-4 py-2">
+    <span class="w-1/2 text-[20px] text-[#002B3E] font-bold">Horarios de Profesores</span>
+
+    <div class="flex justify-between" *ngIf="!isSmallScreen">
+        <div class="flex flex-col w-7/20">
+            <app-select class="mb-4" label="Selecciona el profesor" [items]="ProfesoresList"
+            typeControl="model" [(controlModel)]="selectedProf" color="#002B3E" (changeSelect)="changeProf()"></app-select>
+
+            <app-select class="mb-4" label="Selecciona la semana" [items]="semanasList"
+            typeControl="model" [(controlModel)]="selectedSemana" color="#002B3E" (changeSelect)="changeSemana()"></app-select>
+        </div>
+
+        <div class="w-12/20">
+            <app-calendar [hours]="horariosList" [selectedSlots]="selectedSlots"></app-calendar>
+
+            <div class="border-[2px] border-solid border-[#002B3E] rounded-lg mt-4 p-4">
+                <div class="text-[16px] text-[#002B3E] font-bold">Cursos que enseña:</div>
+                <div *ngFor="let curso of cursosSelect">
+                    <app-checkbox [label]="curso.name" typeControl="model" [(controlModel)]="curso.select"></app-checkbox>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex flex-col"  *ngIf="isSmallScreen">
+        <div class="flex flex-col">
+            <app-select class="mb-4" label="Selecciona el profesor" [items]="ProfesoresList"
+            typeControl="model" [(controlModel)]="selectedProf" color="#002B3E" (changeSelect)="changeProf()"></app-select>
+
+            <app-select class="mb-4" label="Selecciona la semana" [items]="semanasList"
+            typeControl="model" [(controlModel)]="selectedSemana" color="#002B3E" (changeSelect)="changeSemana()"></app-select>
+        </div>
+
+        <div class="flex flex-col">
+            <app-calendar [hours]="horariosList" [selectedSlots]="selectedSlots" tipo="mobile" fontSize="10px"></app-calendar>
+
+            <div class="border-[2px] border-solid border-[#002B3E] rounded-lg mt-4 p-4">
+                <div class="text-[16px] text-[#002B3E] font-bold">Cursos que enseña:</div>
+                <div *ngFor="let curso of cursosSelect">
+                    <app-checkbox [label]="curso.name" typeControl="model" [(controlModel)]="curso.select"></app-checkbox>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
