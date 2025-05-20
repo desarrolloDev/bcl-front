@@ -46,6 +46,11 @@ export class HomeComponent {
     '../../../../assets/images/BANNER_03_home.jpeg'
   ];
 
+  arrayPrecios: any = [
+    '../../../../assets/images/PRECIOS-01.jpg',
+    '../../../../assets/images/PRECIOS-02.jpg',
+    '../../../../assets/images/PRECIOS-03.jpg'
+  ];
 
   sidenavWidth = computed(() => {
     const state = this.sidenavService.state();
