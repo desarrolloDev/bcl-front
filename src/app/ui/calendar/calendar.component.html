@@ -1,8 +1,8 @@
 <table>
     <thead>
       <tr>
-        <th class="bg-[#002B3E] text-[12px] text-[#FFFFFF] font-light">Hora</th>
-        <th class="bg-[#002B3E] text-[12px] text-[#FFFFFF] font-light" *ngFor="let day of listService.diasSemana">
+        <th class="bg-[#002B3E] text-[13px] text-[#FFFFFF] font-bold">Hora</th>
+        <th class="bg-[#002B3E] text-[13px] text-[#FFFFFF] font-bold" *ngFor="let day of listService.diasSemana">
           {{ tipo == 'pc' ? day.nombre : (day.nombre ? (day.nombre).slice(0,1) : '') }}
         </th>
       </tr>
