@@ -7,6 +7,7 @@ import { AdminWebComponent } from './pages/admin-web/admin-web.component';
 import { CreateProfesorComponent } from './pages/create-profesor/create-profesor.component';
 import { RegistroHorariosComponent } from './pages/registro-horarios/registro-horarios.component';
 import { HorariosProfComponent } from './pages/horarios-prof/horarios-prof.component';
+import { ReservasClasesComponent } from './pages/reservas-clases/reservas-clases.component';
 import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
@@ -17,5 +18,6 @@ export const routes: Routes = [
     { path: 'gestion_web', component: AdminWebComponent, canActivate: [AuthGuard] },
     { path: 'createProfesorAdmin', component: CreateProfesorComponent, canActivate: [AuthGuard] },
     { path: 'registro_horarios', component: RegistroHorariosComponent, canActivate: [AuthGuard] },
-    { path: 'horarios_profesor', component: HorariosProfComponent, canActivate: [AuthGuard] }
+    { path: 'horarios_profesor', component: HorariosProfComponent, canActivate: [AuthGuard] },
+    { path: 'reservar_clases', component: ReservasClasesComponent, canActivate: [AuthGuard] }
 ];

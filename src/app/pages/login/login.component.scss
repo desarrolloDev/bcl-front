@@ -1,21 +1,19 @@
-@use '../../../styles.scss' as *;
-
 .custom-tab-group {
-    background: $base-color;
+    background: #FAFAFA;
   
     .mat-tab-label {
       background-color: transparent;
-      color: $base-color;
+      color: #FAFAFA;
       font-weight: normal;
       border-bottom: 4px solid transparent;
       transition: background-color 0.3s ease, color 0.3s ease;
     }
   
     .mat-tab-label-active {
-      background-color: $primary-color;
+      background-color: #DABC62;
       color: black;
       font-weight: bold;
-      border-bottom: 4px solid $secondary-color;
+      border-bottom: 4px solid #002B3E;
     }
   
     .mat-ink-bar {

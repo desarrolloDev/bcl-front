@@ -1,5 +1,3 @@
-@use '../../../styles.scss' as *;
-
 .tab-titles {
   display: flex;
   list-style: none;
@@ -11,11 +9,4 @@
   padding: 8px 20px;
   font-weight: bold;
   text-align: center;
-  // background: $base-color;
-  // color: $gray;
-}
-
-.tab-titles li.active {
-  // background: $primary-color;
-  // color: $black;
 }

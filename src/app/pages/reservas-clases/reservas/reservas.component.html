@@ -1,0 +1,92 @@
+<div class="w-9/10 bg-[#F5F5F5]">
+    <span class="text-[30px] text-[#002B3E] font-bold">Reserva tus clases aquí</span>
+    <div class="flex justify-between w-full">
+        <div class="flex flex-col w-7/20">
+            <div class="flex flex-col">
+                <app-select class="mb-4" label="Selecciona tu curso" [items]="listCurso" typeControl="model"
+                    [(controlModel)]="curso" color="#002B3E"></app-select>
+                <app-input color="#002B3E" bg="#F5F5F5" borderColor="#F5F5F5"
+                    label="Ingresa el nombre de tu colegio/universidad" placeholder="" type="string" typeControl="model"
+                    [(controlModel)]="colegio" [name]="colegio"></app-input>
+                <app-select class="mb-4" label="Selecciona grado/ciclo" [items]="listGradoCiclo" typeControl="model"
+                    [(controlModel)]="gradoCiclo" color="#002B3E"></app-select>
+                <app-input color="#002B3E" bg="#F5F5F5" borderColor="#F5F5F5"
+                    label="Ingresa el tema a revisar en la/las clases" placeholder="" type="string" typeControl="model"
+                    [(controlModel)]="tema" [name]="tema"></app-input>
+                <app-select class="mb-4" label="Selecciona tipo de clase" [items]="listTipoClase" typeControl="model"
+                    [(controlModel)]="tipoClase" color="#002B3E"></app-select>
+                <app-select class="mb-4" label="Selecciona paquete de clases" [items]="listPaqueteClase"
+                    typeControl="model" [(controlModel)]="paqueteClase" color="#002B3E"></app-select>
+                <app-select class="mb-4" label="Selecciona el profesor de tu preferencia" [items]="listProfesor"
+                    typeControl="model" [(controlModel)]="profesor" color="#002B3E"></app-select>
+            </div>
+            <div class="flex flex-col border-[2px] border-solid border-[#002B3E] rounded-lg mt-4 p-4">
+                <span class="text-[20px] text-[#002B3E] font-bold">Términos y Condiciones </span>
+                <div class="h-[160px] tc">
+                    <span class="text-[15px] text-[#002B3E]">
+                        . Para reservar una clase para el el día siguiente, la solicitud y el pago debe realizarse antes
+                        de
+                        las 7:00pm
+                        . Después de las 7:00 p.m., solo se podrán reservar clases a partir del día subsiguiente.
+                        . Cada clase puede reprogramarse una sola vez. Después de esto, no se realizará ninguna
+                        devolución.
+                    </span>
+                </div>
+
+            </div>
+        </div>
+        <div class=" w-12/20">
+            <span>Selecciona tus horarios en el calendario</span>
+            <div>
+                <!-- <div class="week-selector">
+                    <button (click)="changeWeek(-1)" [disabled]="semanaOffset === 0">⬅</button>
+                    <span class="text-[16px] text-[#002B3E] font-bold">Semana {{ semanaCalendar }}</span>
+                    <button (click)="changeWeek(1)" [disabled]="semanaOffset === 3">➡</button>
+                </div> -->
+                <span>Clases reservadas: 4 de 4 clases </span>
+            </div>
+            <div>calendario</div>
+            <div>
+                <span>Resumen</span>
+                <div>
+                    <div>
+                        <div>
+                            <span>Curso:</span>
+                            <span></span>
+                        </div>
+                        <div>
+                            <span>Colegio:</span>
+                            <span></span>
+                        </div>
+                        <div>
+                            <span>Tema:</span>
+                            <span></span>
+                        </div>
+                        <div>
+                            <span>Paquete:</span>
+                            <span></span>
+                        </div>
+                    </div>
+                    <div>
+                        <div>
+                            <span>Clases:</span>
+                            <span></span>
+                        </div>
+                        <div>
+                            <span>Tipo de clase:</span>
+                            <span></span>
+                        </div>
+                        <div>
+                            <span>Profesor:</span>
+                            <span></span>
+                        </div>
+                        <div>
+                            <span>Precio:</span>
+                            <span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

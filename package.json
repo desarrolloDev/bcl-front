@@ -8,7 +8,8 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "build:gh": "ng build --base-href /bcl-front/ && cp dist/bcl-front/browser/index.html dist/bcl-front/browser/404.html && npx angular-cli-ghpages --dir=dist/bcl-front"
   },
   "repository": {
     "type": "git",

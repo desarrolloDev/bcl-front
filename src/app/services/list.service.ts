@@ -79,7 +79,7 @@ export class ListService {
       newModulos.push({ image: '../../../../assets/images/modulo_horarios.PNG', title: 'Clases a dictar', redirect: '' });
     } else if (rol == 'ESTUDIANTE') {
       newModulos.push({ image: '../../../../assets/images/modulo_confirmacion.PNG', title: 'Historial de paquetes', redirect: '' });
-      newModulos.push({ image: '../../../../assets/images/modulo_horarios.PNG', title: 'Reserva de clases', redirect: '' });
+      newModulos.push({ image: '../../../../assets/images/modulo_horarios.PNG', title: 'Reserva de clases', redirect: '/reservar_clases' });
     }
     return newModulos;
   }
