@@ -1,15 +1,15 @@
 <div class="operation-selector w-auto">
-    <span [ngStyle]="{ 'color': color }" class="text-[12px] font-semibold text-left">{{label}}</span>
+    <span [ngStyle]="{ 'color': color, 'fontSize': textSize }" class="font-semibold text-left">{{label}}</span>
     
     <div class="select-wrapper" *ngIf="typeControl == 'form'">
-        <select [formControl]="control" [ngStyle]="{ 'padding': padding }">
+        <select [formControl]="control" [ngStyle]="{ 'padding': padding, 'height': heightSelect }">
             <option *ngFor="let item of items" [value]="item.id">{{ item.nombre }}</option>
         </select>
         <i class="fas fa-chevron-down"></i>
     </div>
 
     <div class="select-wrapper" *ngIf="typeControl == 'model'">
-        <select [(ngModel)]="controlModel" [ngStyle]="{ 'padding': padding }" (ngModelChange)="onModelChange($event)">
+        <select [(ngModel)]="controlModel" [ngStyle]="{ 'padding': padding, 'height': heightSelect }" (ngModelChange)="onModelChange($event)">
             <option *ngFor="let item of items" [value]="item.id">{{ item.nombre }}</option>
         </select>
         <i class="fas fa-chevron-down"></i>

@@ -1,11 +1,15 @@
 import { Injectable } from '@angular/core';
-import { Firestore, doc, setDoc, getDoc, collection, getDocs, updateDoc } from '@angular/fire/firestore';
+import {
+  Firestore, doc, setDoc, getDoc, collection, getDocs, updateDoc,
+  query, where, collectionData, addDoc
+} from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FirestoreService {
-  constructor(private firestore: Firestore) {}
+  constructor(private firestore: Firestore) { }
 
   // Añadir Usuario
   addUser(data: any) {
@@ -43,7 +47,7 @@ export class FirestoreService {
 
   updateSubColeccionData(coleccion: string, documento: string, newData: any, tipo: string | '') {
     const docRef = doc(this.firestore, coleccion, documento);
-    return updateDoc(docRef, documento !== 'paquete_clase' ? (tipo == '' ? { data: newData } : newData) : newData);
+    return updateDoc(docRef, documento !== 'paquete_clase' && documento !== 'ciclo_grado' ? (tipo == '' ? { data: newData } : newData) : newData);
   }
 
   // data de un usuario
@@ -58,16 +62,24 @@ export class FirestoreService {
     });
   }
 
+  async getTeachersByCourse(course: string): Promise<any[]> {
+    const usersRef = collection(this.firestore, 'user');
+    const q = query(usersRef, where('rol', '==', 'PROFESOR'), where('cursos', 'array-contains', course));
+
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  }
+
   async getAllReservasSemana(uid: string, semanas: any[]) {
     const dataSemal: any = {};
 
     for (let i = 0; i < semanas.length; i++) {
       await this.getReservas(uid, semanas[i].id.replaceAll('/', '|'))
-      .then(data => {
-        dataSemal[semanas[i].id] = data;
-      }).catch((error) => {
-        dataSemal[semanas[i].id] = [];
-      });
+        .then(data => {
+          dataSemal[semanas[i].id] = data;
+        }).catch((error) => {
+          dataSemal[semanas[i].id] = [];
+        });
     }
 
     return dataSemal;
@@ -76,20 +88,45 @@ export class FirestoreService {
   async getReservas(uid: string, periodo: string): Promise<any[]> {
     const docRef = doc(this.firestore, 'reservas_clase', uid);
     const snapshot = await getDoc(docRef);
-  
+
     if (!snapshot.exists()) {
       throw new Error('Documento no encontrado');
     }
-  
+
     const data = snapshot.data();
-  
+
     const reservas = data[periodo];
-  
+
     if (!reservas) {
       console.warn('No hay reservas en este periodo');
       return [];
     }
 
     return Object.values(reservas);
+  }
+
+  async getPaquetes(curso: string, tipo: string): Promise<any[]> {
+    const docRef = doc(this.firestore, 'data_alumnos', tipo);
+    const snapshot = await getDoc(docRef);
+
+    if (!snapshot.exists()) {
+      throw new Error('Documento no encontrado');
+    }
+
+    const data = snapshot.data();
+
+    const paquetes = data[curso];
+
+    if (!paquetes) {
+      console.warn('No hay reservas en este periodo');
+      return [];
+    }
+
+    return Object.values(paquetes);
+  }
+
+  async saveReservation(data: any): Promise<void> {
+    const reservationsRef = collection(this.firestore, 'reservaciones');
+    await addDoc(reservationsRef, data);
   }
 }

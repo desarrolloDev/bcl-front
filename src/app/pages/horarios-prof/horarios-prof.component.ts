@@ -94,7 +94,7 @@ export class HorariosProfComponent implements OnInit {
   }
 
   dataCursos() {
-    if (this.dataService.datosCursos.length == 0) {
+    if (this.dataService.datosCursosProf.length == 0) {
       this.fs.getSubColeccionData('data_profesor/cursos')
         .then((data) => {
           this.dataService.setDatosCursos(data.data);
@@ -102,7 +102,7 @@ export class HorariosProfComponent implements OnInit {
         })
         .catch((error) => { console.log('error', error); });
     } else {
-      this.cursosSelect = this.dataService.datosCursos.map((item: string) => ({ name: item, select: false }));
+      this.cursosSelect = this.dataService.datosCursosProf.map((item: string) => ({ name: item, select: false }));
     }
   }
 
@@ -113,10 +113,12 @@ export class HorariosProfComponent implements OnInit {
     }
     this.selectedSlots = newSlots;
 
-    this.fs.getSubColeccionData(`cursos_profe/${this.selectedProf}`)
+    this.fs.getSubColeccionData(`user/${this.selectedProf}`)
       .then((curso) => {
-        this.dataService.setDatosSelectCursosProf(curso.data);
-        this.cursosSelect = this.dataService.datosCursos.map((item: string) => ({ name: item, select: curso.data.includes(item) }));
+        let newCursos = curso.cursos !== undefined ? curso.cursos : [];
+
+        this.dataService.setDatosSelectCursosProf(newCursos);
+        this.cursosSelect = this.dataService.datosCursosProf.map((item: string) => ({ name: item, select: newCursos.includes(item) }));
       })
       .catch((error) => { console.log('error', error); });
   }

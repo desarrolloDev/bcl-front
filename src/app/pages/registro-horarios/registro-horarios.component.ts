@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatStepperModule } from '@angular/material/stepper';
+import { MatIconModule } from '@angular/material/icon';
 import { InputComponent } from '../../ui/input/input.component';
 import { SelectComponent } from '../../ui/select/select.component';
 import { CalendarComponent } from '../../ui/calendar/calendar.component';
@@ -16,6 +17,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
   standalone: true,
   imports: [
     CommonModule,
+    MatIconModule,
     InputComponent,
     SelectComponent,
     CalendarComponent,
@@ -122,12 +124,12 @@ export class RegistroHorariosComponent implements OnInit {
                     const horario = data.data[k];
 
                     if (searchSemana == undefined) {
-                      newData[semana[i].id][diaSemana[j].id][horario] = { checked: false, type: '' };
+                      newData[semana[i].id][diaSemana[j].id][horario] = { checked: false, type: 'Individual' };
                     } else {
                       const searchHorario = searchSemana.filter((item: string) => item.includes(`${this.diasList[i].id}|${horario}`));
 
                       if (searchHorario.length == 0) { 
-                        newData[semana[i].id][diaSemana[j].id][horario] = { checked: false, type: '' };
+                        newData[semana[i].id][diaSemana[j].id][horario] = { checked: false, type: 'Individual' };
                       } else {
                         const tipo = searchHorario[0].split('|');
                         newData[semana[i].id][diaSemana[j].id][horario] = { checked: true, type: tipo[2] };
@@ -148,23 +150,25 @@ export class RegistroHorariosComponent implements OnInit {
         });
     }
 
-    if (this.dataService.datosCursos.length == 0) {
+    if (this.dataService.datosCursosProf.length == 0) {
       this.fs.getSubColeccionData('data_profesor/cursos')
         .then((data) => {
           this.dataService.setDatosCursos(data.data);
 
           const correo = localStorage.getItem('correo');
-          this.fs.getSubColeccionData(`cursos_profe/${correo}`)
+          this.fs.getSubColeccionData(`user/${correo}`)
             .then((curso) => {
-              this.dataService.setDatosSelectCursosProf(curso.data);
-              this.cursosSelect = data.data.map((item: string) => ({ name: item, select: curso.data.includes(item) }));
+              let newCursos = curso.cursos !== undefined ? curso.cursos : [];
+
+              this.dataService.setDatosSelectCursosProf(newCursos);
+              this.cursosSelect = data.data.map((item: string) => ({ name: item, select: newCursos.includes(item) }));
               this.loadCursos = false;
             })
             .catch((error) => { console.log('error', error); });
         })
         .catch((error) => { console.log('error', error); });
     } else {
-      this.cursosSelect = this.dataService.datosCursos.map((item: string) => ({ name: item, select: this.dataService.datosSelectCursosProf.includes(item) }));
+      this.cursosSelect = this.dataService.datosCursosProf.map((item: string) => ({ name: item, select: this.dataService.datosSelectCursosProf.includes(item) }));
       this.loadCursos = false;
     }
 
@@ -201,7 +205,7 @@ export class RegistroHorariosComponent implements OnInit {
   guardarCursos() {
     const correo = localStorage.getItem('correo');
     const cursosSeleccionados = this.cursosSelect.filter((item) => item.select == true).map((item) => item.name);
-    this.fs.updateSubColeccionData('cursos_profe', correo ? correo : '', cursosSeleccionados, '');
+    this.fs.updateSubColeccionData('user', correo ? correo : '', { cursos: cursosSeleccionados }, 'cursos');
   }
 
   guardarHorarios() {

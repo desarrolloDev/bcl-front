@@ -19,6 +19,8 @@ export class SelectComponent {
   @Input() items: { id: string, nombre: string }[] = [];
   @Input() color: string = '#6C6C6C';
   @Input() padding: string = '8px';
+  @Input() textSize: string = '12px';
+  @Input() heightSelect: string = '38';
 
   @Input() typeControl: string = 'form'; // 'model'
   @Input() control = new FormControl<string | number>('', []);

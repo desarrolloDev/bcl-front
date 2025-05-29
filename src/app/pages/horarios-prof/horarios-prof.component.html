@@ -4,10 +4,10 @@
     <div class="flex justify-between" *ngIf="!isSmallScreen">
         <div class="flex flex-col w-7/20">
             <app-select class="mb-4" label="Selecciona el profesor" [items]="ProfesoresList"
-            typeControl="model" [(controlModel)]="selectedProf" color="#002B3E" (changeSelect)="changeProf()"></app-select>
+            typeControl="model" [(controlModel)]="selectedProf" color="#002B3E" (changeSelect)="changeProf()" textSize="15px" heightSelect="45px"></app-select>
 
             <app-select class="mb-4" label="Selecciona la semana" [items]="semanasList"
-            typeControl="model" [(controlModel)]="selectedSemana" color="#002B3E" (changeSelect)="changeSemana()"></app-select>
+            typeControl="model" [(controlModel)]="selectedSemana" color="#002B3E" (changeSelect)="changeSemana()" textSize="15px" heightSelect="45px"></app-select>
         </div>
 
         <div class="w-12/20">
@@ -25,10 +25,10 @@
     <div class="flex flex-col"  *ngIf="isSmallScreen">
         <div class="flex flex-col">
             <app-select class="mb-4" label="Selecciona el profesor" [items]="ProfesoresList"
-            typeControl="model" [(controlModel)]="selectedProf" color="#002B3E" (changeSelect)="changeProf()"></app-select>
+            typeControl="model" [(controlModel)]="selectedProf" color="#002B3E" (changeSelect)="changeProf()" textSize="13px"></app-select>
 
             <app-select class="mb-4" label="Selecciona la semana" [items]="semanasList"
-            typeControl="model" [(controlModel)]="selectedSemana" color="#002B3E" (changeSelect)="changeSemana()"></app-select>
+            typeControl="model" [(controlModel)]="selectedSemana" color="#002B3E" (changeSelect)="changeSemana()" textSize="13px"></app-select>
         </div>
 
         <div class="flex flex-col">

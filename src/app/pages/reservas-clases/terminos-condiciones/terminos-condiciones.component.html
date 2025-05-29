@@ -10,7 +10,7 @@
     </div>
     <div class="flex flex-col items-end mt-4">
         <app-checkbox label="He leído y acepto los términos y condiciones" typeControl="model" [(controlModel)]="checkTerminos"></app-checkbox>
-        <button (click)="continuar()" class="w-[150px] bg-[#002B3E] text-[#FFFFFF] !rounded-lg py-2 px-2">
+        <button (click)="continuar()" [disabled]="!checkTerminos" class="w-[150px] bg-[#002B3E] text-[#FFFFFF] !rounded-lg py-2 px-2">
             Continuar
         </button>
     </div>

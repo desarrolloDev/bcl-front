@@ -1,0 +1,37 @@
+<div>
+    <span>Historial de clases</span>
+    <div>
+        filtros
+    </div>
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Tipo de clase</th>
+                    <th>Paquete</th>
+                    <th>Profesor</th>
+                    <th>Tema</th>
+                    <th>Colegio/Universidad</th>
+                    <th>Estatus</th>
+                    <th>Completar Reserva</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let usuario of usuarios">
+                    <td>{{ usuario.id }}</td>
+                    <td>{{ usuario.nombre }}</td>
+                    <td>{{ usuario.correo }}</td>
+                    <td>{{ usuario.correo }}</td>
+                    <td>{{ usuario.correo }}</td>
+                    <td>{{ usuario.correo }}</td>
+                    <td>{{ usuario.correo }}</td>
+                    <td>{{ usuario.correo }}</td>
+                    <td>{{ usuario.correo }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+</div>

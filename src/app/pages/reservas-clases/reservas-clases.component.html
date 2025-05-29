@@ -1,16 +1,5 @@
-
-<mat-stepper [linear]="isLinear" #stepper>
-  <mat-step label="Términos y condiciones">
-    <div class="w-full px-4 py-8">
-        <app-terminos-condiciones class="flex justify-center"></app-terminos-condiciones>
-    </div>
-  </mat-step>
-  <mat-step label="Reservar clase">
-    <div class="w-full px-4 py-8">
-        <app-reservas class="flex justify-center"></app-reservas>
-    </div>
-  </mat-step>
-  <mat-step label="Confirmar clase">
-    <span>Hola</span>
-  </mat-step>
-</mat-stepper>
+<div class="w-full py-8">
+  <app-terminos-condiciones *ngIf="pageView == 1" class="flex justify-center" (cambiarVista)="cambiarVista($event)"></app-terminos-condiciones>
+  <app-reservas *ngIf="pageView == 2" class="flex justify-center"></app-reservas>
+  <app-confirmacion *ngIf="pageView == 3" class="flex justify-center"></app-confirmacion>
+</div>

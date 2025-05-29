@@ -43,7 +43,7 @@ export class CreateDataComponent {
 
   listCursos: { id: string, nombre: string }[] = [];
   cursoSelect: string = '';
-  data_paquete_precio: any = [];
+  data_paquete: any = [];
 
   selectItem(item: string, id: string) {
     this.itemSelect = item;
@@ -68,10 +68,9 @@ export class CreateDataComponent {
 
     } else if (listaSelectItem[0].type == 'personalizado') {
 
-      if (listaSelectItem[0].id == 'paquete_clase') {
-
-        this.typeData = 'paquete_precio';
-  
+      if (listaSelectItem[0].id == 'paquete_clase' || listaSelectItem[0].id == 'ciclo_grado') {
+        this.typeData = listaSelectItem[0].id;
+        
         const searchCursos = this.data.filter((itemList: any) => itemList.id == 'curso');
         if (searchCursos.length > 0) {
 
@@ -88,10 +87,9 @@ export class CreateDataComponent {
 
           }
   
-          this.data_paquete_precio = newDataPaquetePrecio;
+          this.data_paquete = newDataPaquetePrecio;
         } 
       }
-
     }
   }
 
@@ -103,8 +101,8 @@ export class CreateDataComponent {
         isNew: true,
         editing: true
       });
-    } else if (this.typeData == 'paquete_precio') {
-      this.data_paquete_precio.forEach((element: any) => {
+    } else if (this.typeData == 'paquete_clase') {
+      this.data_paquete.forEach((element: any) => {
         if (element.id == this.cursoSelect) {
           element.data = [...element.data, {
             id: uuidv4(),
@@ -123,13 +121,24 @@ export class CreateDataComponent {
         isNew: true,
         editing: true
       });
+    } else if (this.typeData == 'ciclo_grado') {
+      this.data_paquete.forEach((element: any) => {
+        if (element.id == this.cursoSelect) {
+          element.data = [...element.data, {
+            id: uuidv4(),
+            name: '',
+            isNew: true,
+            editing: true
+          }];
+        }
+      });
     }
   }
 
   deleteItem(item: any) {
     if (this.typeData == 'arrayString' || this.typeData == 'profesor_preferencia') this.dataList = this.dataList.filter((i: any) => i.id !== item.id);
-    else if (this.typeData == 'paquete_precio') {
-      this.data_paquete_precio.forEach((element: any) => {
+    else if (this.typeData == 'paquete_clase' || this.typeData == 'ciclo_grado') {
+      this.data_paquete.forEach((element: any) => {
         if (element.id == this.cursoSelect) {
           element.data = element.data.filter((curso: any) => curso.id !== item.id);
         }
@@ -169,8 +178,8 @@ export class CreateDataComponent {
           newData.push({ nombre: element.nombre, id: element.id });
         });
         this.fs.updateSubColeccionData(this.coleccion, this.itemId, newData, '');
-      } else if (this.typeData == 'paquete_precio') {
-        this.data_paquete_precio.forEach((element: any) => {
+      } else if (this.typeData == 'paquete_clase' || this.typeData == 'ciclo_grado') {
+        this.data_paquete.forEach((element: any) => {
           const newData: any = [];
           element.data.forEach((element: any) => {
             element.isNew = false;

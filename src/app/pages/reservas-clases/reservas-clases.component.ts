@@ -1,19 +1,25 @@
 import { Component } from '@angular/core';
-import { MatStepperModule } from '@angular/material/stepper';
+import { CommonModule } from '@angular/common';
 import { TerminosCondicionesComponent } from './terminos-condiciones/terminos-condiciones.component';
 import { ReservasComponent } from './reservas/reservas.component';
+import { ConfirmacionComponent } from './confirmacion/confirmacion.component';
 
 @Component({
   selector: 'app-reservas-clases',
   standalone: true,
   imports: [
-    MatStepperModule,
+    CommonModule,
     TerminosCondicionesComponent,
-    ReservasComponent
+    ReservasComponent,
+    ConfirmacionComponent
   ],
   templateUrl: './reservas-clases.component.html',
   styleUrl: './reservas-clases.component.scss'
 })
 export class ReservasClasesComponent {
-  isLinear: boolean = false;
+  pageView: number = 3;
+
+  cambiarVista(nroVista: number) {
+    this.pageView = nroVista;
+  }
 }
