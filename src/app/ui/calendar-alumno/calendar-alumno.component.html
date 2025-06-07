@@ -1,15 +1,15 @@
 <table>
   <thead>
     <tr>
-      <th class="bg-[#002B3E] text-[13px] text-[#FFFFFF] font-bold">Hora</th>
-      <th class="bg-[#002B3E] text-[13px] text-[#FFFFFF] font-bold" *ngFor="let dia of dias">
+      <th class="bg-[#002B3E] text-[12px] text-[#FFFFFF] font-bold">Hora</th>
+      <th class="bg-[#002B3E] text-[12px] text-[#FFFFFF] font-bold" *ngFor="let dia of dias">
         {{ tipo == 'pc' ? dia.nombre : (dia.nombre ? (dia.nombre).slice(0,1) : '') }}
       </th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let hora of horas">
-      <td class="bg-[#FFFFFF]" [ngStyle]="{ 'width': widthHora, 'font-size': fontSize }">{{ hora }}</td>
+      <td class="bg-[#FFFFFF] text-[#002B3E] font-bold" [ngStyle]="{ 'width': widthHora, 'font-size': fontSize }">{{ hora }}</td>
       <td *ngFor="let dia of dias" 
           [ngClass]="getClase(selectedSlots[hora][dia.id])"
           (click)="clicSlot(hora, dia.id)">

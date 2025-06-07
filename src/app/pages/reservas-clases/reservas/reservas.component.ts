@@ -67,7 +67,7 @@ export class ReservasComponent implements OnInit {
 
   async ngOnInit() {
     // LISTAR DATOS DEL USUARIO | SI ES SU 1RA CLASE 
-      this.listTipoClase = [{ nombre: 'Individual', id: 'individual' }, { nombre: 'Grupal', id: 'grupal' }];
+      this.listTipoClase = [];
       this.listRecompensa = [{ nombre: 'No', id: 'no' }, { nombre: 'Si', id: 'si' }];
 
       // this.listTipoClase = [{ nombre: 'Promo mi primera clase', id: 'Promo mi primera clase' }];
@@ -101,15 +101,21 @@ export class ReservasComponent implements OnInit {
     const profesores = await this.getDataService.dataProfesoresXcurso(this.curso);
     this.listProfesor = profesores;
 
-        const grados = await this.getDataService.getPaquetes(this.curso, 'ciclo_grado');
-    this.listGradoCiclo = grados.length > 0 ? grados.map((item: any) => ({ nombre: item, id: item })) : [];
+    // ****************************
+    //  const data = await this.fs.getAllReservasSemana(this.profesor, this.semanasList);
 
+    const grados = await this.getDataService.getPaquetes(this.curso, 'ciclo_grado');
+    this.listGradoCiclo = grados.length > 0 ? grados.map((item: any) => ({ nombre: item.name, id: item.name })) : [];
+
+    this.gradoCiclo = ''; this.tipoClase = ''; this.recompensa = 'no'; this.paqueteClase = ''; this.profesor = ''; this.precio = 0;
   }
 
   async changeTipoClase(): Promise<void> {
     const paquetes = await this.getDataService.getPaquetes(this.curso, 'paquete_clase');
     this.listBasePaqueteClase = paquetes;
     this.listPaqueteClase = paquetes.length > 0 ? paquetes.filter((item) => Number(item[this.tipoClase]) > 0).map((item: any) => ({ nombre: item.name, id: item.name })) : [];
+
+    this.paqueteClase = ''; this.profesor = ''; this.precio = 0;
   }
 
   changeWeek(offset: number) {
@@ -121,12 +127,26 @@ export class ReservasComponent implements OnInit {
     }
   }
 
+  updateReservas(tipoAccion: string) {
+    if (tipoAccion == 'suma') this.clasesReservadas += 1;
+    else if (tipoAccion == 'resta') this.clasesReservadas -= 1;
+  }
+
   async searchHorarios(): Promise<void> {
     const data = await this.fs.getAllReservasSemana(this.profesor, this.semanasList);
 
     // data de las 4 semanas
-    const reserva: any[] = [];
+    const reserva: any[] = []; // ACTUALIZAR VALOR CON DATA
+
     let newDataSemanales: any = {};
+
+    const semana_actual = this.listService.obtenerRangoActual();
+    const semana_posterior = this.listService.obtenerSemanaSiguiente(semana_actual);
+    const dia_actual = this.listService.obtenerDiaActual();
+    const ahora = new Date();
+    const ahoraHora = ahora.getHours();
+    const horaLimite = 1;
+    const matrizAccesos = this.listService.obtenerCondicional();
 
     for (let semana of this.semanasList) {
 
@@ -147,16 +167,37 @@ export class ReservasComponent implements OnInit {
             newDataSemanales[semana.id][dia.id][hora] = 'reservado'; // El alumno ya reservó
           } else {
 
-            const buscarHorario = dataSemana.filter((item: any) => item.includes(dia.id) && item.includes(hora) && (item.toLowerCase()).includes(this.tipoClase));
-            
-            if (buscarHorario.length == 0) newDataSemanales[semana.id][dia.id][hora] = 'bloqueado';
-            else newDataSemanales[semana.id][dia.id][hora] = 'disponible'
+            let puedeReservar = true;
 
+            // Validar si se puede reservar
+            const esSemanaActual = semana.id === semana_actual;
+
+            if (esSemanaActual) {
+              const valorMatriz = matrizAccesos[this.listService.diasIndice(dia_actual)][this.listService.diasIndice(dia.id)];
+
+              if (valorMatriz == 'NO') puedeReservar = false;
+              else if (valorMatriz == 'CONSULTAR') puedeReservar = ahoraHora < horaLimite;
+            }
+
+            const esSemanaPosterior = semana.id === semana_posterior;
+            if (esSemanaPosterior && dia_actual == 'DOMINGO' && dia.id == 'LUNES') puedeReservar = ahoraHora < horaLimite;
+
+            if (!puedeReservar) {
+              newDataSemanales[semana.id][dia.id][hora] = 'bloqueado';
+            } else {
+              // **********************
+              const buscarHorario = dataSemana.filter((item: any) => item.includes(dia.id) && item.includes(hora) && item.toLowerCase().includes(this.tipoClase));
+              if (buscarHorario.length === 0) {
+                newDataSemanales[semana.id][dia.id][hora] = 'bloqueado';
+              } else {
+                const splitHorario = buscarHorario[0].split('|');
+                newDataSemanales[semana.id][dia.id][hora] = splitHorario.length > 3 ? 'bloqueado' : 'disponible';
+              }
+            }
           }
         }
       }
     }
-
 
     this.data = newDataSemanales;
 
@@ -221,30 +262,35 @@ export class ReservasComponent implements OnInit {
 
   confirmar() {
     console.log('this.data', this.data);
+    console.log('this.selectedSlots', this.selectedSlots);
     const correo = localStorage.getItem('correo');
 
     const horariosSeleccionados = [];
-    // for (let hora of this.horariosList) {
-    //   for (let dia of this.listService.diasSemana) { // LUNES|8:00am - 9:25am|Individual
-    //     const buscarHorario = dataSemanaSelect.filter((item: any) => item.includes(dia.id) && item.includes(hora) && (item.toLowerCase()).includes(this.tipoClase));
-    //     if (buscarHorario.length == 0) newData[hora][dia.id] = 'bloqueado';
-    //     else newData[hora][dia.id] = 'disponible';
-    //   }
-    // }
 
-    // this.getDataService.saveReservation({
-    //   curso: this.curso,
-    //   colegio: this.colegio,
-    //   gradoCiclo: this.gradoCiclo,
-    //   tema: this.tema,
-    //   tipoClase: this.tipoClase,
-    //   recompensa: this.recompensa,
-    //   paqueteClase: this.paqueteClase,
-    //   profesor: this.profesor,
-    //   precio: this.precio,
-    //   alumno: correo,
-    //   horarios: []
-    // });
+    for (let semana of this.semanasList) {
+      for (let dia of this.listService.diasSemana) {
+        for (let hora of this.horariosList) {
+          const horario = this.data[semana.id][dia.id][hora];
+
+          if (horario == 'seleccionado') horariosSeleccionados.push(`${semana.id}|${dia.id}|${hora}`)
+        }
+      }
+    }
+
+    this.getDataService.saveReservation({
+      fechaReserva: new Date(),
+      curso: this.curso,
+      colegio: this.colegio,
+      gradoCiclo: this.gradoCiclo,
+      tema: this.tema,
+      tipoClase: this.tipoClase,
+      recompensa: this.recompensa,
+      paqueteClase: this.paqueteClase,
+      profesor: this.profesor,
+      precio: this.precio,
+      alumno: correo,
+      horarios: horariosSeleccionados
+    });
     // this.cambiarVista.emit(3);
   }
 }

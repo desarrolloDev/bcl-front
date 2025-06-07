@@ -1,11 +1,11 @@
 <div class="w-full p-4 
-    border border-solid border-[#DABC62] bg-[#F5F5F5]
+    border-3 border-solid border-[#DABC62] bg-[#F5F5F5]
     flex justify-between">
     <div class="w-3/10 flex flex-col gap-4">
         <div *ngFor="let item of data" (click)="selectItem(item.name, item.id)"
         class="border-2 border-solid border-[#002B3E] rounded-sm px-2 py-3 flex justify-between items-center"
         [ngStyle]="{ 'background-color': itemSelect == item.name ? '#002B3E' : '#FFFFFF', 'color': itemSelect == item.name ? '#FFFFFF' : '#002B3E' }">
-            <span class="font-normal">{{item.name}}</span>
+            <span class="text-[15px] font-normal">{{item.name}}</span>
             <mat-icon class="!text-[14px] !w-[14px] !h-[14px]" aria-hidden="false" aria-label="Example home icon" fontIcon="arrow_forward_ios"
             [ngStyle]="{ 'color': itemSelect == item.name ? '#FFFFFF' : '#002B3E' }"
             ></mat-icon>
@@ -15,9 +15,9 @@
     border-[2px] border-solid border-[#002B3E] rounded-lg 
     flex flex-col justify-between">
         <div *ngIf="typeData == 'arrayString'">
-            <div class="mb-4"><span class="text-[24px] text-[#002B3E] font-bold">Lista desplegable:</span></div>
+            <div class="mt-4 mb-4"><span class="text-[24px] text-[#002B3E] font-bold">Lista desplegable:</span></div>
             <div>
-                <div *ngFor="let option of dataList; let i = index" class="flex items-center">
+                <div *ngFor="let option of dataList; let i = index" class="flex items-center mb-2">
                     <mat-icon (click)="deleteItem(option)" class="!text-[18px] !text-[#002B3E] !w-[18px] !h-[18px] mr-2" aria-hidden="false" aria-label="Example home icon" fontIcon="delete"></mat-icon>
     
                     <ng-container *ngIf="option.editing; else displayText">
@@ -36,26 +36,26 @@
             </div>
         </div>
         <div *ngIf="typeData == 'paquete_clase'">
-            <app-select label="Selecciona tu curso" [items]="listCursos" typeControl="model" [(controlModel)]="cursoSelect"></app-select>
+            <app-select label="Selecciona tu curso" [items]="listCursos" typeControl="model" [(controlModel)]="cursoSelect" color="#002B3E"></app-select>
             
             <div *ngFor="let option of data_paquete; let i = index">
                 <div *ngIf="option.id == cursoSelect">
                     <div class="flex flex-col w-full mb-4">
-                        <div class="mb-2 flex w-full">
+                        <div class="mt-4 mb-4 flex w-full">
                             <span class="w-6/10 text-[20px] text-[#002B3E] font-bold text-left">Lista desplegable:</span>
                             <span class="w-2/10 text-[20px] text-[#002B3E] font-bold text-right">Individual</span>
                             <span class="w-2/10 text-[20px] text-[#002B3E] font-bold text-right">Grupal</span>
                         </div>
-                        <div *ngFor="let item of option.data; let i = index" class="flex">
+                        <div *ngFor="let item of option.data; let i = index" class="flex mb-2">
                             <div class="w-6/10 flex items-center">
-                                <mat-icon (click)="deleteItem(item)" class="!text-[16px] !text-[#002B3E] !w-[16px] !h-[16px] mr-2" aria-hidden="false" aria-label="Example home icon" fontIcon="delete"></mat-icon>
+                                <mat-icon (click)="deleteItem(item)" class="!text-[18px] !text-[#002B3E] !w-[18px] !h-[18px] mr-2" aria-hidden="false" aria-label="Example home icon" fontIcon="delete"></mat-icon>
             
                                 <ng-container *ngIf="item.editing; else displayText">
                                     <app-input color="#002B3E" bg="#F5F5F5" borderColor="#F5F5F5" label="" placeholder="" type="string" typeControl="model" [(controlModel)]="item.name" [name]="item.id"></app-input>
                                 </ng-container>
                             
                                 <ng-template #displayText>
-                                    <mat-icon (click)="editItem(item)" class="!text-[16px] !text-[#002B3E] !w-[16px] !h-[16px] mr-2" aria-hidden="false" aria-label="Example home icon" fontIcon="edit"></mat-icon>
+                                    <mat-icon (click)="editItem(item)" class="!text-[18px] !text-[#002B3E] !w-[18px] !h-[18px] mr-2" aria-hidden="false" aria-label="Example home icon" fontIcon="edit"></mat-icon>
                                     <span class="text-[16px] text-[#002B3E]">{{item.name}}</span>
                                 </ng-template>
                             </div>
@@ -77,7 +77,7 @@
             </div>
         </div>
         <div *ngIf="typeData == 'profesor_preferencia'">
-            <div class="mb-4"><span class="text-[24px] text-[#002B3E] font-bold">Lista desplegable:</span></div>
+            <div class="mt-4 mb-4"><span class="text-[24px] text-[#002B3E] font-bold">Lista desplegable:</span></div>
             <div>
                 <div class="mb-2 flex w-full">
                     <span class="w-6/10 text-left text-[20px] text-[#002B3E] font-bold">nombre</span>
@@ -85,7 +85,7 @@
                 </div>
 
                 <div *ngFor="let option of dataList; let i = index" class="flex items-center">
-                    <ng-container *ngIf="option.editing; else displayText">
+                    <ng-container *ngIf="option.editing; else displayText" class="mb-2">
                         <div class="flex items-center w-6/10">
                             <mat-icon (click)="deleteItem(option)" class="!text-[18px] !text-[#002B3E] !w-[18px] !h-[18px] mr-2" aria-hidden="false" aria-label="Example home icon" fontIcon="delete"></mat-icon>
                             <app-input color="#002B3E" bg="#F5F5F5" borderColor="#F5F5F5" label="" placeholder="" type="string" typeControl="model" [(controlModel)]="option.nombre" [name]="option.nombre"></app-input>
@@ -113,24 +113,24 @@
             </div>
         </div>
         <div *ngIf="typeData == 'ciclo_grado'">
-            <app-select label="Selecciona tu curso" [items]="listCursos" typeControl="model" [(controlModel)]="cursoSelect"></app-select>
+            <app-select label="Selecciona tu curso" [items]="listCursos" typeControl="model" [(controlModel)]="cursoSelect" color="#002B3E"></app-select>
             
             <div *ngFor="let option of data_paquete; let i = index">
                 <div *ngIf="option.id == cursoSelect">
                     <div class="flex flex-col w-full mb-4">
-                        <div class="mb-2 flex w-full">
+                        <div class="mt-4 mb-4 flex w-full">
                             <span class="w-6/10 text-[20px] text-[#002B3E] font-bold text-left">Lista desplegable:</span>
                         </div>
                         <div *ngFor="let item of option.data; let i = index" class="flex">
-                            <div class="w-6/10 flex items-center">
-                                <mat-icon (click)="deleteItem(item)" class="!text-[16px] !text-[#002B3E] !w-[16px] !h-[16px] mr-2" aria-hidden="false" aria-label="Example home icon" fontIcon="delete"></mat-icon>
+                            <div class="w-6/10 flex items-center mb-2">
+                                <mat-icon (click)="deleteItem(item)" class="!text-[18px] !text-[#002B3E] !w-[18px] !h-[18px] mr-2" aria-hidden="false" aria-label="Example home icon" fontIcon="delete"></mat-icon>
             
                                 <ng-container *ngIf="item.editing; else displayText">
                                     <app-input color="#002B3E" bg="#F5F5F5" borderColor="#F5F5F5" label="" placeholder="" type="string" typeControl="model" [(controlModel)]="item.name" [name]="item.id"></app-input>
                                 </ng-container>
                             
                                 <ng-template #displayText>
-                                    <mat-icon (click)="editItem(item)" class="!text-[16px] !text-[#002B3E] !w-[16px] !h-[16px] mr-2" aria-hidden="false" aria-label="Example home icon" fontIcon="edit"></mat-icon>
+                                    <mat-icon (click)="editItem(item)" class="!text-[18px] !text-[#002B3E] !w-[18px] !h-[18px] mr-2" aria-hidden="false" aria-label="Example home icon" fontIcon="edit"></mat-icon>
                                     <span class="text-[16px] text-[#002B3E]">{{item.name}}</span>
                                 </ng-template>
                             </div>

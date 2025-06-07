@@ -1,32 +1,36 @@
 <div class="w-9/10">
-    <div>
+    <div class="flex justify-between mb-6">
         <span class="text-[30px] text-[#002B3E] font-bold">Reserva tus clases aquí</span>
+        <button (click)="confirmar()" class="w-[150px] bg-[#008C4B] text-[#FFFFFF] text-[14px] font-bold !rounded-lg"
+        [disabled]="curso == '' || colegio == '' || gradoCiclo  == '' || tema  == '' || tipoClase == '' || recompensa == '' || paqueteClase == '' || profesor == ''">
+            CONFIRMAR
+        </button>
     </div>
     <div class="flex justify-between w-full bg-[#F5F5F5] p-4">
-        <div class="flex flex-col justify-between w-7/20">
+        <div class="flex flex-col justify-between w-35/100">
             <div class="flex flex-col">
                 <app-select class="mb-4" label="Selecciona tu curso" [items]="listCurso" typeControl="model"
-                    [(controlModel)]="curso" color="#002B3E" (changeSelect)="changeCursos()"></app-select>
+                    [(controlModel)]="curso" color="#002B3E" (changeSelect)="changeCursos()" textSize="15px" heightSelect="45px"></app-select>
                 <app-input color="#002B3E" bg="#F5F5F5" borderColor="#F5F5F5"
                     label="Ingresa el nombre de tu colegio/universidad" placeholder="" type="string" typeControl="model"
-                    [(controlModel)]="colegio" [name]="colegio" borderColor="#B3B3B3" bg="#FAFAFA" class="mb-3"></app-input>
+                    [(controlModel)]="colegio" [name]="colegio" borderColor="#B3B3B3" bg="#FAFAFA" class="mb-4" textSize="15px" heightSelect="45px"></app-input>
                 <app-select class="mb-4" label="Selecciona grado/ciclo" [items]="listGradoCiclo" typeControl="model"
-                    [(controlModel)]="gradoCiclo" color="#002B3E"></app-select>
+                    [(controlModel)]="gradoCiclo" color="#002B3E" textSize="15px" heightSelect="45px"></app-select>
                 <app-input color="#002B3E" bg="#F5F5F5" borderColor="#F5F5F5"
                     label="Ingresa el tema a revisar en la/las clases" placeholder="" type="string" typeControl="model"
-                    [(controlModel)]="tema" [name]="tema"  borderColor="#B3B3B3" bg="#FAFAFA" class="mb-3"></app-input>
+                    [(controlModel)]="tema" [name]="tema"  borderColor="#B3B3B3" bg="#FAFAFA" class="mb-4" textSize="15px" heightSelect="45px"></app-input>
                 <app-select class="mb-4" label="Selecciona tipo de clase" [items]="listTipoClase" typeControl="model"
-                    [(controlModel)]="tipoClase" color="#002B3E" (changeSelect)="changeTipoClase()"></app-select>
+                    [(controlModel)]="tipoClase" color="#002B3E" (changeSelect)="changeTipoClase()" textSize="15px" heightSelect="45px"></app-select>
                 <app-select class="mb-4" label="Recompensa de referidos" [items]="listRecompensa" typeControl="model"
-                    [(controlModel)]="recompensa" color="#002B3E" (changeSelect)="changeTipo('recompensa')"></app-select>
+                    [(controlModel)]="recompensa" color="#002B3E" (changeSelect)="changeTipo('recompensa')" textSize="15px" heightSelect="45px"></app-select>
                 <app-select class="mb-4" label="Selecciona paquete de clases" [items]="listPaqueteClase"
-                    typeControl="model" [(controlModel)]="paqueteClase" color="#002B3E" (changeSelect)="changeTipo('paquete')"></app-select>
+                    typeControl="model" [(controlModel)]="paqueteClase" color="#002B3E" (changeSelect)="changeTipo('paquete')" textSize="15px" heightSelect="45px"></app-select>
                 <app-select class="mb-4" label="Selecciona el profesor de tu preferencia" [items]="listProfesor"
-                    typeControl="model" [(controlModel)]="profesor" color="#002B3E" (changeSelect)="searchHorarios()"></app-select>
+                    typeControl="model" [(controlModel)]="profesor" color="#002B3E" (changeSelect)="searchHorarios()" textSize="15px" heightSelect="45px"></app-select>
             </div>
-            <div class="flex flex-col border-[2px] border-solid border-[#002B3E] rounded-lg mt-4 p-4">
+            <div class="flex flex-col border-[2px] border-solid border-[#002B3E] rounded-lg mt-4 p-2">
                 <span class="text-[20px] text-[#002B3E] font-bold">Términos y Condiciones </span>
-                <div class="h-[160px] tc flex flex-col">
+                <div class="h-[140px] tc flex flex-col">
                     <span class="text-[12px] text-[#002B3E]">. Para reservar una clase para el el día siguiente, la solicitud y el pago debe realizarse antes de las 7:00pm</span>
                     <span class="text-[12px] text-[#002B3E]">. Después de las 7:00 p.m., solo se podrán reservar clases a partir del día subsiguiente.</span>
                     <span class="text-[12px] text-[#002B3E]">. Cada clase puede reprogramarse una sola vez. Después de esto, no se realizará ninguna devolución.</span>
@@ -35,30 +39,37 @@
 
             </div>
         </div>
-        <div class="flex flex-col justify-between w-12/20">
-            <span class="text-[16px] text-[#002B3E] font-bold">Selecciona tus horarios en el calendario</span>
-            <div class="flex justify-between items-center mt-4 mb-4">
-                <div class="week-selector">
-                    <button (click)="changeWeek(-1)" [disabled]="semanaOffset === 0" class="flex">
-                        <mat-icon aria-hidden="false" aria-label="arrow_back_ios" fontIcon="arrow_back_ios" class="!text-[18px] !text-[#FFFFFF] !w-[18px] !h-[18px]"></mat-icon>
-                    </button>
-                    <div class="flex flex-col ml-2 mr-2">
-                        <span class="text-[8px] text-[#7A7A7A] font-normal">Semana</span>
-                        <span class="text-[12px] text-[#7A7A7A] font-normal">{{ semanaCalendar }}</span>
+        <div class="flex flex-col justify-between w-63/100">
+            <div class="flex flex-col">
+                <span class="text-[16px] text-[#002B3E] font-bold">Selecciona tus horarios en el calendario</span>
+                <div class="flex justify-between items-center mt-4 mb-4">
+                    <div class="flex flex-col">
+                        <div class="pl-12">
+                            <span class="text-[10px] text-[#002B3E] font-normal">{{ semanaCalendar !== '' ? 'Semana' : '' }}</span>
+                        </div>
+                        <div class="week-selector">
+                            <button (click)="changeWeek(-1)" [disabled]="semanaOffset === 0" class="flex">
+                                <mat-icon aria-hidden="false" aria-label="arrow_back_ios" fontIcon="arrow_back_ios" class="!text-[18px] !text-[#FFFFFF] !w-[18px] !h-[18px]"></mat-icon>
+                            </button>
+                            <div class="flex flex-col ml-2 mr-2">
+                                <span class="text-[16px] text-[#002B3E] font-bold">{{ semanaCalendar }}</span>
+                            </div>
+                            <button (click)="changeWeek(1)" [disabled]="semanaOffset === 3" class="flex">
+                                <mat-icon aria-hidden="false" aria-label="arrow_forward_ios" fontIcon="arrow_forward_ios" class="!text-[18px] !text-[#FFFFFF] !w-[18px] !h-[18px]"></mat-icon>
+                            </button>
+                        </div>
                     </div>
-                    <button (click)="changeWeek(1)" [disabled]="semanaOffset === 3" class="flex">
-                        <mat-icon aria-hidden="false" aria-label="arrow_forward_ios" fontIcon="arrow_forward_ios" class="!text-[18px] !text-[#FFFFFF] !w-[18px] !h-[18px]"></mat-icon>
-                    </button>
+                    <div class="flex">
+                        <span class="text-[16px] text-[#D01E21] font-bold">Clases reservadas:</span>
+                        <span class="text-[16px] text-[#002B3E] font-bold ml-2"> {{clasesReservadas}} de {{clasesTotal}} clases </span>
+                    </div>
                 </div>
-                <div class="flex">
-                    <span class="text-[12px] text-[#D01E21] font-bold">Clases reservadas:</span>
-                    <span class="text-[12px] text-[#002B3E] font-bold ml-2"> {{clasesReservadas}} de {{clasesTotal}} clases </span>
-                </div>
+                <app-calendar-alumno [maxSelect]="clasesTotal" [clicNumber]="clasesReservadas" (updateReservas)="updateReservas($event)" [horas]="horariosList" [selectedSlots]="selectedSlots" (actualizarHorario)="actualizarHorario($event)"
+                fontSize="11px"></app-calendar-alumno>
             </div>
-            <app-calendar-alumno [horas]="horariosList" [selectedSlots]="selectedSlots" (actualizarHorario)="actualizarHorario($event)"></app-calendar-alumno>
-            <div class="flex flex-col border-[2px] border-solid border-[#002B3E] rounded-lg mt-4 p-4">
+            <div class="flex flex-col border-[2px] border-solid border-[#002B3E] rounded-lg mt-4 p-2">
                 <span class="text-[20px] text-[#002B3E] font-bold">Resumen</span>
-                <div class="h-[160px] tc flex w-full">
+                <div class="h-[140px] tc flex w-full">
                     <div class="flex flex-col w-5/10">
                         <div class="flex">
                             <span class="text-[16px] text-[#002B3E] font-bold mr-2">Curso:</span>
@@ -95,12 +106,6 @@
                             <span class="text-[16px] text-[#002B3E] font-light">S/ {{precio}}</span>
                         </div>
                     </div>
-                </div>
-                <div class="flex justify-end">
-                    <button (click)="confirmar()" class="w-[150px] bg-[#008C4B] text-[#FFFFFF] font-bold !rounded-lg py-2 px-2"
-                    [disabled]="curso == '' || colegio == '' || gradoCiclo  == '' || tema  == '' || tipoClase == '' || recompensa == '' || paqueteClase == '' || profesor == ''">
-                        CONFIRMAR
-                    </button>
                 </div>
             </div>
         </div>

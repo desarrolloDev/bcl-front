@@ -16,7 +16,7 @@ import { CommonModule } from '@angular/common';
             'border-radius': borderR,
             'background': bgActive,
             'color': colorActive,
-            'border-width': '1px',
+            'border-width': '2px 2px 0 2px',
             'border-style': 'solid',
             'border-color': borderColor
           }
@@ -25,7 +25,7 @@ import { CommonModule } from '@angular/common';
             'border-radius': borderR,
             'background': bg,
             'color': color,
-            'border-width': '1px',
+            'border-width': '2px 2px 0 2px',
             'border-style': 'solid',
             'border-color': borderColorActive
           }"

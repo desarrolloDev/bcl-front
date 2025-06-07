@@ -25,6 +25,8 @@ export class InputComponent {
   @Input() borderColor: string = '#FFFFFF';
   @Input() name: string = '';
   @Input() maxlength: number | null = null;
+  @Input() textSize: string = '12px';
+  @Input() heightSelect: string = '38';
 
   @Input() typeControl: string = 'form'; // 'model'
   @Input() control = new FormControl<string | number>('', []);

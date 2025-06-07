@@ -1,11 +1,11 @@
 <div class="flex flex-col relative">
-    <span [ngStyle]="{ 'color': color }" class="text-[12px] font-semibold text-left">{{ label }}</span>
+    <span [ngStyle]="{ 'color': color, 'fontSize': textSize }" class="text-[12px] font-semibold text-left">{{ label }}</span>
 
     <!-- Control por formControl -->
     <div *ngIf="typeControl == 'form'" class="relative">
         <input [type]="showPassword ? 'text' : type" [placeholder]="placeholder" [formControl]="control"
             name="ngModelValue"
-            [ngStyle]="{ 'background-color': bg, 'border-width': '1px', 'border-style': 'solid', 'border-color': borderColor }"
+            [ngStyle]="{ 'background-color': bg, 'border-width': '1px', 'border-style': 'solid', 'border-color': borderColor, 'height': heightSelect }"
             class="!rounded-lg py-2 px-2 w-full"
             [maxlength]="maxlength ? maxlength : null"
             (input)="handleInput($event)"
@@ -21,7 +21,7 @@
     <div *ngIf="typeControl == 'model'" class="relative">
         <input [type]="showPassword ? 'text' : type" [placeholder]="placeholder" [(ngModel)]="controlModel"
             (ngModelChange)="onModelChange($event)" [name]="name"
-            [ngStyle]="{ 'background-color': bg, 'border-width': '1px', 'border-style': 'solid', 'border-color': borderColor }"
+            [ngStyle]="{ 'background-color': bg, 'border-width': '1px', 'border-style': 'solid', 'border-color': borderColor, 'height': heightSelect }"
             class="!rounded-lg py-2 px-2 w-full"
             [maxlength]="maxlength ? maxlength : null"
             (input)="handleInput($event)"

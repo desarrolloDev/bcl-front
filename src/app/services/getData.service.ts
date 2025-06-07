@@ -106,4 +106,8 @@ export class GetDataService {
         .then(data => { response = 'Guardado'; })
         .catch((error) => { response = 'Error'; });
     }
+
+    async getReservation(profesorId: string, alumnoId: string, fechaInicio: Date, fechaFin: Date): Promise<void> {
+        
+    }
 }

@@ -129,4 +129,19 @@ export class FirestoreService {
     const reservationsRef = collection(this.firestore, 'reservaciones');
     await addDoc(reservationsRef, data);
   }
+
+  async getReservation(profesorId: string, alumnoId: string, fechaInicio: Date, fechaFin: Date): Promise<void> {
+    // const reservationsRef = collection(this.firestore, 'reservaciones');
+    // const q = query(
+    //     reservationsRef,
+    //     where('alumno', '==', alumnoId),
+    //     // where('profesor', '==', profesorId),
+    //     // where('fechaReserva', '>=', fechaInicio),
+    //     // where('fechaReserva', '<=', fechaFin)
+    //     where('horarios', 'array-contains', )
+    // );
+
+    // const snapshot = await getDocs(q);
+    // return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  }
 }
