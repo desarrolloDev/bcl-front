@@ -47,8 +47,8 @@ export class HomeComponent {
   ];
 
   arrayPrecios: any = [
-    '../../../../assets/images/PRECIOS-01.jpg',
-    '../../../../assets/images/PRECIOS-02.jpg',
+    '../../../../assets/images/PRECIOS-01.jpeg',
+    '../../../../assets/images/PRECIOS-02.jpeg',
     '../../../../assets/images/PRECIOS-03.jpg'
   ];
 
