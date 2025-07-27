@@ -1,6 +1,6 @@
 <div *ngIf="pageView == 1" class="flex flex-col gap-4 px-4 py-4">
     <div>
-        <span class="text-[20px] text-[#002B3E] font-bold">Historial de clases</span>
+        <span class="text-[20px] text-[#002B3E] font-bold">Confirmación de Reservas</span>
     </div>
     <div class="flex justify-between items-center">
         <div class="flex items-end gap-4 mb-4">
@@ -17,7 +17,7 @@
                 [maxDate]="maxDate"
             ></app-calendar-input>
             <app-input color="#6C6C6C" bg="#FAFAFA" borderColor="#B3B3B3" label="Profesor" placeholder="" type="string" [control]="form.controls['profesor']" ></app-input>
-            <app-input color="#6C6C6C" bg="#FAFAFA" borderColor="#B3B3B3" label="Curso" placeholder="" type="string" [control]="form.controls['profesor']" ></app-input>
+            <app-input color="#6C6C6C" bg="#FAFAFA" borderColor="#B3B3B3" label="Alumno" placeholder="" type="string" [control]="form.controls['alumno']" ></app-input>
             <button (click)="buscar()" class="w-[65px] h-[38.71px] bg-[#008C4B] text-[#FFFFFF] !rounded-lg py-1 px-1">Buscar</button>
         </div>
         <div>
@@ -36,13 +36,15 @@
                     <th class="text-[16px] text-[#002B3E] font-semibold !bg-[#D9D9D9]">Fecha</th>
                     <th class="text-[16px] text-[#002B3E] font-semibold !bg-[#D9D9D9]">Hora</th>
                     <th class="text-[16px] text-[#002B3E] font-semibold !bg-[#D9D9D9]">Tipo de clase</th>
-                    <th class="text-[16px] text-[#002B3E] font-semibold !bg-[#D9D9D9]">Paquete</th>
+                    <th class="text-[16px] text-[#002B3E] font-semibold !bg-[#D9D9D9]">Alumno</th>
                     <th class="text-[16px] text-[#002B3E] font-semibold !bg-[#D9D9D9]">Profesor</th>
+                    <th class="text-[16px] text-[#002B3E] font-semibold !bg-[#D9D9D9]">Paquete</th>
                     <th class="text-[16px] text-[#002B3E] font-semibold !bg-[#D9D9D9]">Curso</th>
                     <th class="text-[16px] text-[#002B3E] font-semibold !bg-[#D9D9D9]">Tema</th>
                     <th class="text-[16px] text-[#002B3E] font-semibold !bg-[#D9D9D9]">Colegio/Universidad</th>
                     <th class="text-[16px] text-[#002B3E] font-semibold !bg-[#D9D9D9]">Estatus</th>
-                    <th class="text-[16px] text-[#002B3E] font-semibold !bg-[#D9D9D9]">Completar Reserva</th>
+                    <th class="text-[16px] text-[#002B3E] font-semibold !bg-[#D9D9D9]">Clases dictadas</th>
+                    <th class="text-[16px] text-[#002B3E] font-semibold !bg-[#D9D9D9]">Reprogramación</th>
                 </tr>
             </thead>
             <tbody>
@@ -50,19 +52,20 @@
                     <td class="text-[13px] text-[#000000] text-center bg-[#F5F5F5]">{{ usuario.fecha }}</td>
                     <td class="text-[13px] text-[#000000] text-center bg-[#F5F5F5]">{{ usuario.hora }}</td>
                     <td class="text-[13px] text-[#000000] text-center bg-[#F5F5F5]">{{ usuario.tipo }}</td>
-                    <td class="text-[13px] text-[#000000] text-center bg-[#F5F5F5]">{{ usuario.paquete }}</td>
+                    <td class="text-[13px] text-[#000000] text-center bg-[#F5F5F5]">{{ usuario.alumno }}</td>
                     <td class="text-[13px] text-[#000000] text-center bg-[#F5F5F5]">{{ usuario.profesor }}</td>
+                    <td class="text-[13px] text-[#000000] text-center bg-[#F5F5F5]">{{ usuario.paquete }}</td>
                     <td class="text-[13px] text-[#000000] text-center bg-[#F5F5F5]">{{ usuario.curso }}</td>
                     <td class="text-[13px] text-[#000000] text-center bg-[#F5F5F5]">{{ usuario.tema }}</td>
                     <td class="text-[13px] text-[#000000] text-center bg-[#F5F5F5]">{{ usuario.colegio }}</td>
                     <td class="text-[13px] text-center bg-[#F5F5F5]" [ngClass]="{ 'text-gray-500': usuario.estatus === 'Pendiente', 'text-green-600': usuario.estatus === 'Confirmado', 'text-red-500': usuario.estatus === 'Cancelado' }">
                         {{ usuario.estatus }}
                     </td>
+                    <td class="text-[13px] text-[#000000] text-center bg-[#F5F5F5]">{{ usuario.estatusCompleto }}</td>
                     <td class="text-[13px] text-[#000000] text-center bg-[#F5F5F5]">
                         <div class="flex items-center justify-center gap-2">
-                            {{ usuario.estatusCompleto }}
-                            <button  *ngIf="usuario.estatusCompleto !== 'No disponible'" (click)="actualizarReserva()" class="">
-                                <mat-icon aria-hidden="false" aria-label="calendar_month" fontIcon="calendar_month" class="!text-[18px] !text-[#DABC62] !w-[18px] !h-[18px]"></mat-icon>
+                            <button (click)="actualizarReserva()" class="">
+                                <mat-icon aria-hidden="false" aria-label="edit" fontIcon="edit" class="!text-[18px] !text-[#002B3E] !w-[18px] !h-[18px]"></mat-icon>
                             </button>
                         </div>
                     </td>
@@ -71,4 +74,4 @@
         </table>
     </div>
 </div>
-<app-actualizar-reserva class="flex justify-center" *ngIf="pageView == 2" (cambiarVista)="cambiarVista($event)"></app-actualizar-reserva>
+<app-gestion-horarios class="flex justify-center" *ngIf="pageView == 2"></app-gestion-horarios>

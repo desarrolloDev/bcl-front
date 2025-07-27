@@ -141,20 +141,28 @@ export class ListService {
 
   modulosDashboard(rol: string): any {
     const newModulos = [];
+    newModulos.push({ image: '../../../../assets/images/modulo_confirmacion.PNG', title: 'Historial de paquetes', redirect: '/historial_clases' });
+    newModulos.push({ image: '../../../../assets/images/modulo_horarios.PNG', title: 'Reserva de clases', redirect: '/reservar_clases' });
+    newModulos.push({ image: '../../../../assets/images/modulo_horarios.PNG', title: 'Clases a dictar (P)', redirect: '/clases_dictar' });
+    newModulos.push({ image: '../../../../assets/images/modulo_horarios.PNG', title: 'Registro de Horarios (P)', redirect: '/registro_horarios' });
+    newModulos.push({ image: '../../../../assets/images/modulo_confirmacion.PNG', title: 'Confirmación de Reservas (A)', redirect: '/confirmacion_reservas' });
+    newModulos.push({ image: '../../../../assets/images/modulo_horarios.PNG', title: 'Horario de Profesores (A)', redirect: '/horarios_profesor' });
+    newModulos.push({ image: '../../../../assets/images/modulo_crear_usuario.png', title: 'Crear Usuario (A)', redirect: '/createProfesorAdmin' });
+    newModulos.push({ image: '../../../../assets/images/modulo_gestion.PNG', title: 'Gestión de web (A)', redirect: '/gestion_web' });
 
-    if (rol == 'ADMIN') {
-      newModulos.push({ image: '../../../../assets/images/modulo_horarios.PNG', title: 'Horario de Profesores', redirect: '/horarios_profesor' });
-      newModulos.push({ image: '../../../../assets/images/modulo_crear_usuario.png', title: 'Crear Usuario', redirect: '/createProfesorAdmin' });
-      newModulos.push({ image: '../../../../assets/images/modulo_confirmacion.PNG', title: 'Confirmación de Reservas', redirect: '' });
-      newModulos.push({ image: '../../../../assets/images/modulo_reporte.PNG', title: 'Reportes', redirect: '' });
-      newModulos.push({ image: '../../../../assets/images/modulo_gestion.PNG', title: 'Gestión de web', redirect: '/gestion_web' });
-    } else if (rol == 'PROFESOR') {
-      newModulos.push({ image: '../../../../assets/images/modulo_horarios.PNG', title: 'Registro de Horarios', redirect: '/registro_horarios' });
-      newModulos.push({ image: '../../../../assets/images/modulo_horarios.PNG', title: 'Clases a dictar', redirect: '' });
-    } else if (rol == 'ESTUDIANTE') {
-      newModulos.push({ image: '../../../../assets/images/modulo_confirmacion.PNG', title: 'Historial de paquetes', redirect: '' });
-      newModulos.push({ image: '../../../../assets/images/modulo_horarios.PNG', title: 'Reserva de clases', redirect: '/reservar_clases' });
-    }
+    // if (rol == 'ADMIN') {
+    //   newModulos.push({ image: '../../../../assets/images/modulo_horarios.PNG', title: 'Horario de Profesores', redirect: '/horarios_profesor' });
+    //   newModulos.push({ image: '../../../../assets/images/modulo_crear_usuario.png', title: 'Crear Usuario', redirect: '/createProfesorAdmin' });
+    //   newModulos.push({ image: '../../../../assets/images/modulo_confirmacion.PNG', title: 'Confirmación de Reservas', redirect: '/confirmacion_reservas' });
+    //   newModulos.push({ image: '../../../../assets/images/modulo_reporte.PNG', title: 'Reportes', redirect: '' });
+    //   newModulos.push({ image: '../../../../assets/images/modulo_gestion.PNG', title: 'Gestión de web', redirect: '/gestion_web' });
+    // } else if (rol == 'PROFESOR') {
+    //   newModulos.push({ image: '../../../../assets/images/modulo_horarios.PNG', title: 'Registro de Horarios', redirect: '/registro_horarios' });
+    //   newModulos.push({ image: '../../../../assets/images/modulo_horarios.PNG', title: 'Clases a dictar', redirect: '/clases_dictar' });
+    // } else if (rol == 'ESTUDIANTE') {
+    //   newModulos.push({ image: '../../../../assets/images/modulo_confirmacion.PNG', title: 'Historial de paquetes', redirect: '/historial_clases' });
+    //   newModulos.push({ image: '../../../../assets/images/modulo_horarios.PNG', title: 'Reserva de clases', redirect: '/reservar_clases' });
+    // }
     return newModulos;
   }
 }

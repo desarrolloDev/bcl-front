@@ -7,6 +7,7 @@ import { CalendarAlumnoComponent } from '../../../ui/calendar-alumno/calendar-al
 import { GetDataService } from '../../../services/getData.service';
 import { ListService } from '../../../services/list.service';
 import { FirestoreService } from '../../../services/firestore.service';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-reservas',
@@ -23,6 +24,8 @@ import { FirestoreService } from '../../../services/firestore.service';
 })
 export class ReservasComponent implements OnInit {
   @Output() cambiarVista = new EventEmitter<number>();
+
+  isSmallScreen: boolean = false;
 
   curso: string = '';
   colegio: string = '';
@@ -62,8 +65,15 @@ export class ReservasComponent implements OnInit {
   constructor(
     public listService: ListService,
     private getDataService: GetDataService,
-    private fs: FirestoreService
-  ) { }
+    private fs: FirestoreService,
+    private breakpointObserver: BreakpointObserver
+  ) {
+    this.breakpointObserver
+      .observe([`(max-width: 1364px)`])
+      .subscribe(result => {
+        this.isSmallScreen = result.matches;
+      });
+  }
 
   async ngOnInit() {
     // LISTAR DATOS DEL USUARIO | SI ES SU 1RA CLASE 
@@ -263,34 +273,34 @@ export class ReservasComponent implements OnInit {
   confirmar() {
     console.log('this.data', this.data);
     console.log('this.selectedSlots', this.selectedSlots);
-    const correo = localStorage.getItem('correo');
+    // const correo = localStorage.getItem('correo');
 
-    const horariosSeleccionados = [];
+    // const horariosSeleccionados = [];
 
-    for (let semana of this.semanasList) {
-      for (let dia of this.listService.diasSemana) {
-        for (let hora of this.horariosList) {
-          const horario = this.data[semana.id][dia.id][hora];
+    // for (let semana of this.semanasList) {
+    //   for (let dia of this.listService.diasSemana) {
+    //     for (let hora of this.horariosList) {
+    //       const horario = this.data[semana.id][dia.id][hora];
 
-          if (horario == 'seleccionado') horariosSeleccionados.push(`${semana.id}|${dia.id}|${hora}`)
-        }
-      }
-    }
+    //       if (horario == 'seleccionado') horariosSeleccionados.push(`${semana.id}|${dia.id}|${hora}`)
+    //     }
+    //   }
+    // }
 
-    this.getDataService.saveReservation({
-      fechaReserva: new Date(),
-      curso: this.curso,
-      colegio: this.colegio,
-      gradoCiclo: this.gradoCiclo,
-      tema: this.tema,
-      tipoClase: this.tipoClase,
-      recompensa: this.recompensa,
-      paqueteClase: this.paqueteClase,
-      profesor: this.profesor,
-      precio: this.precio,
-      alumno: correo,
-      horarios: horariosSeleccionados
-    });
-    // this.cambiarVista.emit(3);
+    // this.getDataService.saveReservation({
+    //   fecha_reserva: new Date(),
+    //   curso: this.curso,
+    //   colegio: this.colegio,
+    //   gradoCiclo: this.gradoCiclo,
+    //   tema: this.tema,
+    //   tipoClase: this.tipoClase,
+    //   recompensa: this.recompensa,
+    //   paqueteClase: this.paqueteClase,
+    //   profesor: this.profesor,
+    //   precio: this.precio,
+    //   alumno: correo,
+    //   horarios: horariosSeleccionados
+    // });
+    this.cambiarVista.emit(3);
   }
 }

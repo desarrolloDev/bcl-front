@@ -1,0 +1,11 @@
+<div class="flex justify-center gap-2">
+    <span>{{ currentPage }} - {{ currentPage }} de {{ totalPages }} resultados</span>
+
+    <button (click)="previousPage()" [disabled]="currentPage === 1">
+      <mat-icon aria-hidden="false" aria-label="arrow_back_ios" fontIcon="arrow_back_ios" class="!text-[18px] !text-[#002B3E] !w-[18px] !h-[18px]"></mat-icon>
+    </button>
+
+    <button (click)="nextPage()" [disabled]="currentPage === totalPages">
+      <mat-icon aria-hidden="false" aria-label="arrow_forward_ios" fontIcon="arrow_forward_ios" class="!text-[18px] !text-[#002B3E] !w-[18px] !h-[18px]"></mat-icon>
+    </button>
+</div>

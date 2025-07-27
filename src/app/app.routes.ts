@@ -8,6 +8,9 @@ import { CreateProfesorComponent } from './pages/create-profesor/create-profesor
 import { RegistroHorariosComponent } from './pages/registro-horarios/registro-horarios.component';
 import { HorariosProfComponent } from './pages/horarios-prof/horarios-prof.component';
 import { ReservasClasesComponent } from './pages/reservas-clases/reservas-clases.component';
+import { HistorialClasesComponent } from './pages/historial-clases/historial-clases.component';
+import { ClasesDictarComponent } from './pages/clases-dictar/clases-dictar.component';
+import { ConfirmarReservasComponent } from './pages/confirmar-reservas/confirmar-reservas.component';
 import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
@@ -19,5 +22,8 @@ export const routes: Routes = [
     { path: 'createProfesorAdmin', component: CreateProfesorComponent, canActivate: [AuthGuard] },
     { path: 'registro_horarios', component: RegistroHorariosComponent, canActivate: [AuthGuard] },
     { path: 'horarios_profesor', component: HorariosProfComponent, canActivate: [AuthGuard] },
-    { path: 'reservar_clases', component: ReservasClasesComponent, canActivate: [AuthGuard] }
+    { path: 'reservar_clases', component: ReservasClasesComponent, canActivate: [AuthGuard] },
+    { path: 'historial_clases', component: HistorialClasesComponent, canActivate: [AuthGuard] },
+    { path: 'clases_dictar', component: ClasesDictarComponent, canActivate: [AuthGuard] },
+    { path: 'confirmacion_reservas', component: ConfirmarReservasComponent, canActivate: [AuthGuard] }
 ];

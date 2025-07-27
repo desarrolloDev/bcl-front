@@ -1,0 +1,136 @@
+<!-- Calendar Input Component -->
+<div class="relative w-[230px]">
+  <!-- Label -->
+  <label *ngIf="label" class="block text-[12px] text-[#6C6C6C] font-semibold">
+    {{ label }}
+  </label>
+
+  <!-- Input Field -->
+  <div class="relative">
+    <input
+      type="text"
+      readonly
+      [value]="formatSelectedDate()"
+      [placeholder]="placeholder"
+      [disabled]="disabled"
+      (click)="toggleCalendar()"
+      class="w-full px-3 py-2 border rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 cursor-pointer disabled:bg-gray-100 disabled:cursor-not-allowed"
+      [style.background-color]="'#FAFAFA'"
+      [style.border-color]="control?.invalid && control?.touched ? '#ef4444' : '#B3B3B3'"
+      [style.color]="'#6C6C6C'"
+      [class.border-red-500]="control?.invalid && control?.touched"
+    />
+    
+    <!-- Calendar Icon -->
+    <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+      <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="control?.invalid && control?.touched" class="mt-1 text-sm text-red-600">
+    <span *ngIf="control?.errors?.['required']">Este campo es requerido</span>
+  </div>
+
+  <!-- Calendar Dropdown -->
+  <div 
+    *ngIf="isOpen" 
+    class="absolute z-50 mt-1 w-80 bg-white border border-gray-300 rounded-lg shadow-lg"
+    (click)="$event.stopPropagation()"
+  >
+    <!-- Calendar Header -->
+    <div class="flex items-center justify-between p-4 border-b border-gray-200">
+      <button 
+        type="button"
+        (click)="previousMonth()"
+        class="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+      >
+        <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+        </svg>
+      </button>
+      
+      <div class="text-lg font-semibold text-gray-900">
+        {{ monthNames[currentMonth] }} {{ currentYear }}
+      </div>
+      
+      <button 
+        type="button"
+        (click)="nextMonth()"
+        class="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+      >
+        <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Calendar Body -->
+    <div class="p-4">
+      <!-- Day Names Header -->
+      <div class="grid grid-cols-7 gap-1 mb-2">
+        <div 
+          *ngFor="let dayName of dayNames" 
+          class="text-center text-sm font-medium text-gray-500 py-2"
+        >
+          {{ dayName }}
+        </div>
+      </div>
+
+      <!-- Calendar Days -->
+      <div class="grid grid-cols-7 gap-1">
+        <button
+          *ngFor="let day of daysInMonth"
+          type="button"
+          [disabled]="isDateDisabled(day)"
+          (click)="selectDate(day)"
+          class="relative h-10 text-sm font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+          [ngClass]="{
+            'invisible': day === 0,
+            'bg-blue-600 text-white': isDateSelected(day),
+            'bg-blue-100 text-blue-600': isToday(day) && !isDateSelected(day),
+            'text-gray-900 hover:bg-gray-100': day > 0 && !isDateSelected(day) && !isToday(day) && !isDateDisabled(day),
+            'text-gray-400 cursor-not-allowed': isDateDisabled(day),
+            'cursor-pointer': !isDateDisabled(day) && day > 0
+          }"
+        >
+          {{ day > 0 ? day : '' }}
+          
+          <!-- Today indicator -->
+          <div 
+            *ngIf="isToday(day) && !isDateSelected(day)" 
+            class="absolute bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-blue-600 rounded-full"
+          ></div>
+        </button>
+      </div>
+    </div>
+
+    <!-- Calendar Footer -->
+    <div class="flex justify-end gap-2 p-4 border-t border-gray-200">
+      <button 
+        type="button"
+        (click)="closeCalendar()"
+        class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      >
+        Cancelar
+      </button>
+      <button 
+        type="button"
+        *ngIf="selectedDate"
+        (click)="closeCalendar()"
+        class="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      >
+        Seleccionar
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Backdrop para cerrar el calendario -->
+<div 
+  *ngIf="isOpen"
+  class="fixed inset-0 z-40"
+  (click)="closeCalendar()"
+></div>

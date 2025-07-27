@@ -1,0 +1,76 @@
+<div class="flex flex-col gap-4 px-4 py-4">
+    <div class="flex gap-4">
+        <button (click)="cambiarVista(1)" class="w-[150px] bg-[#002B3E] text-[#FFFFFF] text-[14px] font-bold !rounded-lg px-4 py-2">
+            Estatus de clases
+        </button>
+        <button (click)="cambiarVista(2)" class="w-[150px] bg-[#FFFFFF] text-[#002B3E] text-[14px] font-bold !rounded-lg px-4 py-2 border-[2px] border-solid border-[#002B3E]">
+            Mi calendario
+        </button>
+    </div>
+    <div *ngIf="pageView == 1">
+        <div class="flex justify-between items-center">
+            <div class="flex items-end gap-4 mb-4">
+                <app-calendar-input 
+                    label="Fecha de inicio" 
+                    placeholder="Selecciona tu fecha de inicio"
+                    [control]="form.controls['fecha_inicio']"
+                    [maxDate]="maxDate"
+                ></app-calendar-input>
+                <app-calendar-input 
+                    label="Fecha de fin" 
+                    placeholder="Selecciona tu fecha de fin"
+                    [control]="form.controls['fecha_fin']"
+                    [maxDate]="maxDate"
+                ></app-calendar-input>
+                <app-input color="#6C6C6C" bg="#FAFAFA" borderColor="#B3B3B3" label="Alumno" placeholder="" type="string" [control]="form.controls['profesor']" ></app-input>
+                <app-input color="#6C6C6C" bg="#FAFAFA" borderColor="#B3B3B3" label="Estatus" placeholder="" type="string" [control]="form.controls['status']" ></app-input>
+                <button (click)="buscar()" class="w-[65px] h-[38.71px] bg-[#008C4B] text-[#FFFFFF] !rounded-lg py-1 px-1">Buscar</button>
+            </div>
+            <div>
+                <app-pagination
+                    [totalItems]="totalItems"
+                    [pageSize]="pageSize"
+                    [currentPage]="currentPage"
+                    (pageChange)="onPageChange($event)">
+                </app-pagination>
+            </div>
+        </div>
+        <div class="overflow-x-auto">
+            <table>
+                <thead class="border-[1px] border-solid border-[#D9D9D9]">
+                    <tr>
+                        <th class="text-[16px] text-[#002B3E] font-semibold !bg-[#D9D9D9]">Fecha</th>
+                        <th class="text-[16px] text-[#002B3E] font-semibold !bg-[#D9D9D9]">Hora</th>
+                        <th class="text-[16px] text-[#002B3E] font-semibold !bg-[#D9D9D9]">Tipo de clase</th>
+                        <th class="text-[16px] text-[#002B3E] font-semibold !bg-[#D9D9D9]">Alumno</th>
+                        <th class="text-[16px] text-[#002B3E] font-semibold !bg-[#D9D9D9]">Paquete</th>
+                        <th class="text-[16px] text-[#002B3E] font-semibold !bg-[#D9D9D9]">Curso</th>
+                        <th class="text-[16px] text-[#002B3E] font-semibold !bg-[#D9D9D9]">Tema</th>
+                        <th class="text-[16px] text-[#002B3E] font-semibold !bg-[#D9D9D9]">Colegio/Universidad</th>
+                        <th class="text-[16px] text-[#002B3E] font-semibold !bg-[#D9D9D9]">Estatus</th>
+                        <th class="text-[16px] text-[#002B3E] font-semibold !bg-[#D9D9D9]">Completar Reserva</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let usuario of usuarios" class="border-[1px] border-solid border-[#D9D9D9]">
+                        <td class="text-[13px] text-[#000000] text-center bg-[#F5F5F5]">{{ usuario.fecha }}</td>
+                        <td class="text-[13px] text-[#000000] text-center bg-[#F5F5F5]">{{ usuario.hora }}</td>
+                        <td class="text-[13px] text-[#000000] text-center bg-[#F5F5F5]">{{ usuario.tipo }}</td>
+                        <td class="text-[13px] text-[#000000] text-center bg-[#F5F5F5]">{{ usuario.alumno }}</td>
+                        <td class="text-[13px] text-[#000000] text-center bg-[#F5F5F5]">{{ usuario.paquete }}</td>
+                        <td class="text-[13px] text-[#000000] text-center bg-[#F5F5F5]">{{ usuario.curso }}</td>
+                        <td class="text-[13px] text-[#000000] text-center bg-[#F5F5F5]">{{ usuario.tema }}</td>
+                        <td class="text-[13px] text-[#000000] text-center bg-[#F5F5F5]">{{ usuario.colegio }}</td>
+                        <td class="text-[13px] text-center bg-[#F5F5F5]" [ngClass]="{ 'text-gray-500': usuario.estatus === 'Pendiente', 'text-green-600': usuario.estatus === 'Confirmado', 'text-red-500': usuario.estatus === 'Cancelado' }">
+                            {{ usuario.estatus }}
+                        </td>
+                        <td class="text-[13px] text-[#000000] text-center bg-[#F5F5F5]">{{ usuario.estatusCompleto }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div *ngIf="pageView == 2">
+        <app-calendario-horarios class="flex justify-center" ></app-calendario-horarios>
+    </div>
+</div>

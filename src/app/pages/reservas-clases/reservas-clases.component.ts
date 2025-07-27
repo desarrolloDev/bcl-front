@@ -17,7 +17,7 @@ import { ConfirmacionComponent } from './confirmacion/confirmacion.component';
   styleUrl: './reservas-clases.component.scss'
 })
 export class ReservasClasesComponent {
-  pageView: number = 2;
+  pageView: number = 1;
 
   cambiarVista(nroVista: number) {
     this.pageView = nroVista;
