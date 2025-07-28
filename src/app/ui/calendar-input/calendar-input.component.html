@@ -1,5 +1,5 @@
 <!-- Calendar Input Component -->
-<div class="relative w-[230px]">
+<div class="relative" [ngStyle]="{ 'width': maxWidth }">
   <!-- Label -->
   <label *ngIf="label" class="block text-[12px] text-[#6C6C6C] font-semibold">
     {{ label }}

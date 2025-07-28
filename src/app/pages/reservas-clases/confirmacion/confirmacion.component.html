@@ -1,6 +1,6 @@
-<div class="w-full flex justify-center">
-    <div class="w-8/10">
-        <div>
+<div class="flex justify-center w-screen">
+    <div *ngIf="!isSmallScreen" class="w-8/10">
+        <div class="flex justify-between mb-6">
             <button (click)="volverMenu()" class="w-[150px] bg-[#002B3E] text-[#FFFFFF] text-[14px] font-bold !rounded-lg">
                 Volver a Menú 
             </button>
@@ -66,6 +66,29 @@
                         <span class="text-[12px] text-[#002B3E]"></span>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="isSmallScreen" class="w-9/10">
+        <div class="flex justify-between mb-6">
+            <button (click)="volverMenu()" class="w-[150px] bg-[#002B3E] text-[#FFFFFF] text-[14px] font-bold !rounded-lg">
+                Volver a Menú 
+            </button>
+        </div>
+        <span class="text-[16px] text-[#002B3E] font-bold">Para confirmar tu reserva por favor realiza los siguientes pasos:</span>
+        <div class="flex flex-col w-full mt-6">
+            <div class="flex flex-col mb-2">
+                <span class="text-[12px] text-[#002B3E] mb-2">1. Realiza el pago de tus clases en nuestras cuentas en BCP o Interbank.</span>
+                <span class="text-[12px] text-[#002B3E] mb-2">2. Envía la confirmación de transferencia a nuestra Coordinadora Académica vía WhatsApp (986 664 761).</span>
+                <span class="text-[12px] text-[#002B3E] mb-2">3. Nuestra Coordinadora Académica confirmará la recepción del pago y la reserva de tus clases.</span>
+            </div>
+            <img src="../../../../assets/images/cuenta_bancaria.png" alt="" class="w-[450px] h-[300px]">
+            <div class="flex flex-col mt-2">
+                <span class="text-[16px] text-[#DABC62] font-bold">Importante:</span>
+                <span class="text-[12px] text-[#002B3E] font-bold">En caso no pudiste reservar todos tus sesiones
+                    debido a que aún no sabes tu disponibilidad o debido a que los horarios del profesor aún no
+                    están disponibles, recuerda que después podrás terminar de reservar el resto de tus clases en el
+                    módulo de historial de paquetes.</span>
             </div>
         </div>
     </div>

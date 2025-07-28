@@ -23,6 +23,7 @@ export class CalendarInputComponent implements OnInit, ControlValueAccessor {
   @Input() minDate: Date | null = null;
   @Input() maxDate: Date | null = null;
   @Input() control?: FormControl;
+  @Input() maxWidth: string | null = '230px';
 
   @Output() dateSelected = new EventEmitter<Date>();
 

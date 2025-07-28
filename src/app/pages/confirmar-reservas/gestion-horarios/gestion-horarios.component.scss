@@ -1,0 +1,23 @@
+.week-selector {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.week-selector button {
+  background: #00394f;
+  color: white;
+  border: none;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.week-selector button[disabled] {
+  background: #cccccc;
+  cursor: not-allowed;
+}
+
+.week-selector span {
+  margin: 0 8px 0 8px;
+}

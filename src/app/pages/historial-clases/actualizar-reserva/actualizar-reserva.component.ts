@@ -1,6 +1,8 @@
 import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { MatStepperModule } from '@angular/material/stepper';
 import { SelectComponent } from '../../../ui/select/select.component';
 import { InputComponent } from '../../../ui/input/input.component';
 import { CalendarAlumnoComponent } from '../../../ui/calendar-alumno/calendar-alumno.component';
@@ -14,13 +16,17 @@ import { GetDataService } from '../../../services/getData.service';
     MatIconModule,
     SelectComponent,
     InputComponent,
-    CalendarAlumnoComponent
+    CalendarAlumnoComponent,
+    MatStepperModule
   ],
   templateUrl: './actualizar-reserva.component.html',
   styleUrl: './actualizar-reserva.component.scss'
 })
 export class ActualizarReservaComponent implements OnInit {
   @Output() cambiarVista = new EventEmitter<number>();
+
+  isSmallScreen: boolean = false;
+  isLinear = false;
 
   curso: string = 'IB MATH SL';
   colegio: string = 'Colegio A';
@@ -58,8 +64,15 @@ export class ActualizarReservaComponent implements OnInit {
   } = {};
 
   constructor(
-    private getDataService: GetDataService
-  ) { }
+    private getDataService: GetDataService,
+    private breakpointObserver: BreakpointObserver
+  ) {
+    this.breakpointObserver
+      .observe([`(max-width: 1364px)`])
+      .subscribe(result => {
+        this.isSmallScreen = result.matches;
+      });
+  }
 
   async ngOnInit() {
     this.listTipoClase = [];

@@ -21,3 +21,11 @@
 .tc {
   overflow-y: auto;
 }
+
+.mat-horizontal-stepper-wrapper {
+  display: flex;
+  align-items: center; 
+  .mat-horizontal-stepper-header-container {
+    width: 300px;
+  }
+}

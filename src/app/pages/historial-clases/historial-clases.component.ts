@@ -2,6 +2,8 @@ import { Component, inject } from '@angular/core';
 import { NonNullableFormBuilder, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { Router } from '@angular/router';
 import { InputComponent } from '../../ui/input/input.component';
 import { CalendarInputComponent } from '../../ui/calendar-input/calendar-input.component';
 import { PaginationComponent } from '../../ui/pagination/pagination.component';
@@ -24,6 +26,8 @@ import { ActualizarReservaComponent } from './actualizar-reserva/actualizar-rese
 })
 export class HistorialClasesComponent {
   private _fb = inject(NonNullableFormBuilder);
+
+  isSmallScreen: boolean = false;
   
   maxDate = new Date(); // Fecha máxima para los calendarios (hoy)
 
@@ -46,8 +50,16 @@ export class HistorialClasesComponent {
   ];
 
   constructor(
-    private modalService: ModalService
-  ) {}
+    private modalService: ModalService,
+    private breakpointObserver: BreakpointObserver,
+    private router: Router
+  ) {
+    this.breakpointObserver
+      .observe([`(max-width: 1364px)`])
+      .subscribe(result => {
+        this.isSmallScreen = result.matches;
+      });
+  }
 
   buscar() {
     if (this.form.valid) {
@@ -80,5 +92,9 @@ export class HistorialClasesComponent {
 
   cambiarVista(nroVista: number) {
     this.pageView = nroVista;
+  }
+
+  home() {
+    this.router.navigate(['/dashboard'])
   }
 }

@@ -1,5 +1,5 @@
-<div class="px-4 py-2">
-    <div *ngIf="!isSmallScreen">
+<div class="w-9/10">
+    <div *ngIf="!isSmallScreen" class="w-full flex flex-col mt-8 px-4 py-2">
         <div class="flex mb-4">
             <span class="w-1/2 text-[20px] text-[#002B3E] font-bold">Gestión de Horarios y Cursos</span>
             <div class="w-1/2 flex justify-end"><button (click)="guardarHorarios()"
@@ -16,9 +16,9 @@
 
                 <span class="text-[16px] text-[#002B3E] font-bold mb-4">Marca tus horarios disponibles</span>
 
-                <div *ngFor="let horario of horariosList" class="flex justify-between items-center mb-2">
+                <div *ngFor="let horario of horariosList" class="flex justify-between items-center mb-1">
                     <app-checkbox [label]="horario" typeControl="model"
-                        [(controlModel)]="data[selectedSemana][selectedtDia][horario].checked"
+                        [(controlModel)]="checked"
                         (changeSelect)="actualizarHorarios()"></app-checkbox>
                 </div>
             </div>
@@ -39,8 +39,46 @@
         </div>
     </div>
 
-    <div *ngIf="isSmallScreen">
+    <div *ngIf="isSmallScreen" class="w-full">
+        <mat-stepper orientation="vertical" [linear]="isLinear" #stepper>
+            <mat-step label="Horarios">
+                <div class="flex flex-col">
+                    <span class="text-[16px] text-[#002B3E] font-bold">Gestión de Horarios y Cursos</span>
+                    <div class="flex justify-end mt-4">
+                        <button (click)="guardarHorarios()" class="w-[150px] h-[40px] bg-[#008C4B] text-[#FFFFFF] font-bold !rounded-lg py-2 px-4">GUARDAR</button>
+                    </div>
+                </div>
+                <div class="flex flex-col w-full mt-4">
+                    <app-select class="mb-4" label="Selecciona la semana" [items]="semanasList" typeControl="model"
+                        [(controlModel)]="selectedSemana" color="#002B3E" textSize="15px" heightSelect="35px"></app-select>
 
+                    <app-select class="mb-4" label="Selecciona el día" [items]="diasList" typeControl="model"
+                        [(controlModel)]="selectedtDia" color="#002B3E" textSize="15px" heightSelect="35px"></app-select>
+
+                    <span class="text-[16px] text-[#002B3E] font-bold mb-4">Marca tus horarios disponibles</span>
+
+                    <div *ngFor="let horario of horariosList" class="flex justify-between items-center mb-1">
+                        <app-checkbox [label]="horario" typeControl="model"
+                            [(controlModel)]="checked"
+                            (changeSelect)="actualizarHorarios()"></app-checkbox>
+                    </div>
+                </div>
+            </mat-step>
+            <mat-step label="Calendario">
+                <div class="flex flex-col">
+                    <div class="flex justify-start mt-4 mb-6 week-selector">
+                        <button (click)="changeWeek(-1)" [disabled]="semanaOffset === 0" class="flex !pl-[12px]">
+                            <mat-icon aria-hidden="false" aria-label="arrow_back_ios" fontIcon="arrow_back_ios" class="!text-[18px] !text-[#FFFFFF] !w-[18px] !h-[18px]"></mat-icon>
+                        </button>
+                        <span class="text-[12px] text-[#002B3E] font-bold">{{ semanaCalendar }}</span>
+                        <button (click)="changeWeek(1)" [disabled]="semanaOffset === 3" class="flex !pl-[8px] !pr-[8px]">
+                            <mat-icon aria-hidden="false" aria-label="arrow_forward_ios" fontIcon="arrow_forward_ios" class="!text-[18px] !text-[#FFFFFF] !w-[18px] !h-[18px]"></mat-icon>
+                        </button>
+                    </div>
+                    <app-calendar [hours]="horariosList" [selectedSlots]="selectedSlots" tipo="mobile" fontSize="10px"></app-calendar>
+                </div>
+            </mat-step>
+        </mat-stepper>
     </div>
 
 </div>

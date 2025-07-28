@@ -1,12 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { MatStepperModule } from '@angular/material/stepper';
 import { SelectComponent } from '../../../ui/select/select.component';
 import { InputComponent } from '../../../ui/input/input.component';
 import { CalendarComponent } from '../../../ui/calendar/calendar.component';
 import { CheckboxComponent } from '../../../ui/checkbox/checkbox.component';
 import { GetDataService } from '../../../services/getData.service';
 import { ListService } from '../../../services/list.service';
+import { DataService } from '../../../services/data.service';
+import { FirestoreService } from '../../../services/firestore.service';
 
 @Component({
   selector: 'app-gestion-horarios',
@@ -17,13 +21,17 @@ import { ListService } from '../../../services/list.service';
     SelectComponent,
     InputComponent,
     CalendarComponent,
-     CheckboxComponent,
+    CheckboxComponent,
+    MatStepperModule
   ],
   templateUrl: './gestion-horarios.component.html',
   styleUrl: './gestion-horarios.component.scss'
 })
 export class GestionHorariosComponent implements OnInit {
   isSmallScreen = false;
+  isLinear = false;
+
+  checked = false;
 
   horariosList: string[] = []; // horarios de clase
   diasList: { id: string, nombre: string }[] = this.listService.diasSemana;
@@ -37,26 +45,86 @@ export class GestionHorariosComponent implements OnInit {
   data: {
     [semana: string]: {
       [dia: string]: {
-        [time: string]: { checked: boolean, type: string }
+        [time: string]: { checked: boolean }
       }
     }
   } = {};
 
   constructor(
     private getDataService: GetDataService,
-    public listService: ListService
-  ) { }
+    public listService: ListService,
+    private breakpointObserver: BreakpointObserver,
+    private dataService: DataService,
+    private fs: FirestoreService
+  ) {
+    this.breakpointObserver
+      .observe([`(max-width: 1364px)`])
+      .subscribe(result => {
+        this.isSmallScreen = result.matches;
+      });
+  }
 
   async ngOnInit() {
     const semana = this.listService.intervaloSemana();
     this.semanasList = semana;
 
-    const horarios = await this.getDataService.horariosList();
-    this.horariosList = horarios;
+    // const horarios = await this.getDataService.horariosList();
+    // this.horariosList = horarios;
 
-    this.semanaBloqueado();
+    // this.semanaBloqueado();
+    this.dataHorarios();
   }
 
+  dataHorarios() {
+    if (this.dataService.datosHorarios.length == 0) {
+      this.fs.getSubColeccionData('data_profesor/horarios')
+        .then(data => {
+          this.dataService.setDatosHorarios(data.data);
+          this.horariosList = data.data;
+
+          const newSlots: any[] = [];
+          for (let i = 0; i > data.data; i++) {
+            newSlots.push([false, false, false, false, false, false, false]);
+          }
+          this.selectedSlots = newSlots;
+        })
+        .catch((error) => {
+          console.log('error', error);
+        });
+    } else {
+      this.horariosList = this.dataService.datosHorarios;
+
+      const newSlots: any[] = [];
+      for (let i = 0; i > this.dataService.datosHorarios; i++) {
+        newSlots.push([false, false, false, false, false, false, false]);
+      }
+      this.selectedSlots = newSlots;
+    }
+
+    // ---------------------------------------------------------------
+    const semana = this.listService.intervaloSemana();
+    this.semanaCalendar = semana[0].id;
+    const diaSemana = this.listService.diasSemana;
+
+    let newData: any = {};
+    for (let i = 0; i < semana.length; i++) {
+
+      newData[semana[i].id] = {};
+
+      for (let j = 0; j < diaSemana.length; j++) {
+
+        newData[semana[i].id][diaSemana[j].id] = {};
+
+        for (let k = 0; k < this.horariosList.length; k++) {
+          newData[semana[i].id][diaSemana[j].id][this.horariosList[k]] = { checked: false };
+        }
+
+      }
+    }
+    this.data = newData;
+    // ---------------------------------------------------------------
+  }
+  
   semanaBloqueado() {
     const newData: any = {};
     for (let hora of this.horariosList) {

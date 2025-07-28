@@ -2,6 +2,8 @@ import { Component, inject } from '@angular/core';
 import { NonNullableFormBuilder, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
+import { Router } from '@angular/router';
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { InputComponent } from '../../ui/input/input.component';
 import { CalendarInputComponent } from '../../ui/calendar-input/calendar-input.component';
 import { PaginationComponent } from '../../ui/pagination/pagination.component';
@@ -23,6 +25,8 @@ import { GestionHorariosComponent } from './gestion-horarios/gestion-horarios.co
 })
 export class ConfirmarReservasComponent {
 private _fb = inject(NonNullableFormBuilder);
+
+  isSmallScreen: boolean = false;
   
   maxDate = new Date(); // Fecha máxima para los calendarios (hoy)
 
@@ -45,7 +49,16 @@ private _fb = inject(NonNullableFormBuilder);
     { fecha: '15/05/2025', hora: '10:00', tipo: 'Individual', alumno: 'Juan Pérez', profesor: 'Judith Portocarrero', paquete: '4 Clases', curso: 'IB MATH SL', tema: 'Matemáticas', colegio: 'Colegio A', estatus: 'Cancelado', estatusCompleto: 'No disponible' },
   ];
 
-  constructor( ) {}
+  constructor(
+      private breakpointObserver: BreakpointObserver,
+      private router: Router
+    ) {
+      this.breakpointObserver
+        .observe([`(max-width: 1364px)`])
+        .subscribe(result => {
+          this.isSmallScreen = result.matches;
+        });
+    }
 
   buscar() {
     if (this.form.valid) {
@@ -67,5 +80,9 @@ private _fb = inject(NonNullableFormBuilder);
 
   cambiarVista(nroVista: any) {
     this.pageView = nroVista;
+  }
+
+  home() {
+    this.router.navigate(['/dashboard'])
   }
 }
