@@ -12,8 +12,8 @@ import { CarouselComponent } from '../../ui/carousel/carousel.component';
 })
 export class HomeComponent {
   arrayImage: any = [
-    '../../../../assets/images/BANNER_01_home.jpeg',
-    '../../../../assets/images/BANNER_02_home.jpeg',
-    '../../../../assets/images/BANNER_03_home.jpeg'
+    'assets/BANNER_01_home.jpeg',
+    'assets/BANNER_02_home.jpeg',
+    'assets/BANNER_03_home.jpeg'
   ];
 }
