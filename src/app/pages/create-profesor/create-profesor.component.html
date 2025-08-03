@@ -1,4 +1,4 @@
-<div class="mx-auto w-full lg:w-7/10 max-w-full max-h-9/10 px-4 pt-4 lg:pt-8 containerForm">
+<div class="mx-auto w-full lg:w-[70%] max-w-full max-h-[90%] px-4 pt-4 lg:pt-8 containerForm">
     <span class="text-[#002B3E] text-[24px] font-semibold font-inter">Bienvenido a Better Call Leo Academy</span>
     <div class="pt-4">
         <div class="flex flex-col">
@@ -11,13 +11,13 @@
             <app-input color="#6C6C6C" bg="#FAFAFA" borderColor="#B3B3B3" label="Nombres" placeholder="Ingresa tu nombre" type="string" [control]="form.controls['nombre']" ></app-input>
             <app-input color="#6C6C6C" bg="#FAFAFA" borderColor="#B3B3B3" label="Apellidos" placeholder="Ingresa tus apellidos" type="string" [control]="form.controls['apellido']" ></app-input>
             <div class="flex justify-between items-end w-full">
-                <app-select class="w-38/100" label="Tipo" [items]="this.listService.tiposDocumentos" [control]="form.controls['tipo_documento']"></app-select>
+                <app-select class="w-[38%]" label="Tipo" [items]="this.listService.tiposDocumentos" [control]="form.controls['tipo_documento']"></app-select>
                 
                 <ng-container *ngIf="this.form.get('tipo_documento')?.value == 'DNI'; else documentoCe">
-                    <app-input class="w-60/100" color="#6C6C6C" bg="#FAFAFA" borderColor="#B3B3B3" label="Número de documento del responsable de pago" placeholder="Coloca tu documento" type="number" [control]="form.controls['nro_documento']" [maxlength]="maxlengthTD"></app-input>
+                    <app-input class="w-[60%]" color="#6C6C6C" bg="#FAFAFA" borderColor="#B3B3B3" label="Número de documento del responsable de pago" placeholder="Coloca tu documento" type="number" [control]="form.controls['nro_documento']" [maxlength]="maxlengthTD"></app-input>
                 </ng-container>
                 <ng-template #documentoCe>
-                    <app-input class="w-60/100" color="#6C6C6C" bg="#FAFAFA" borderColor="#B3B3B3" label="Número de documento del responsable de pago" placeholder="Coloca tu documento" type="string" [control]="form.controls['nro_documento']"></app-input>
+                    <app-input class="w-[60%]" color="#6C6C6C" bg="#FAFAFA" borderColor="#B3B3B3" label="Número de documento del responsable de pago" placeholder="Coloca tu documento" type="string" [control]="form.controls['nro_documento']"></app-input>
                 </ng-template>
             </div>
             <app-input color="#6C6C6C" bg="#FAFAFA" borderColor="#B3B3B3" label="Celular" placeholder="Ingresa tu celular" type="number" [control]="form.controls['celular']" [maxlength]="9"></app-input>

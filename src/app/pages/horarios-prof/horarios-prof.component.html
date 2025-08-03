@@ -2,7 +2,7 @@
     <span class="w-1/2 text-[20px] text-[#002B3E] font-bold">Horarios de Profesores</span>
 
     <div class="flex justify-between" *ngIf="!isSmallScreen">
-        <div class="flex flex-col w-7/20">
+        <div class="flex flex-col w-[35%]">
             <app-select class="mb-4" label="Selecciona el profesor" [items]="ProfesoresList"
             typeControl="model" [(controlModel)]="selectedProf" color="#002B3E" (changeSelect)="changeProf()" textSize="15px" heightSelect="45px"></app-select>
 
@@ -10,7 +10,7 @@
             typeControl="model" [(controlModel)]="selectedSemana" color="#002B3E" (changeSelect)="changeSemana()" textSize="15px" heightSelect="45px"></app-select>
         </div>
 
-        <div class="w-12/20">
+        <div class="w-[60%]">
             <app-calendar [hours]="horariosList" [selectedSlots]="selectedSlots"></app-calendar>
 
             <div class="border-[2px] border-solid border-[#002B3E] rounded-lg mt-4 p-4">

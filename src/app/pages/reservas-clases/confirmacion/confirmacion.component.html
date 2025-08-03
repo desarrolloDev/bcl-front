@@ -1,5 +1,5 @@
 <div class="flex justify-center w-screen">
-    <div *ngIf="!isSmallScreen" class="w-8/10">
+    <div *ngIf="!isSmallScreen" class="w-[80%]">
         <div class="flex justify-between mb-6">
             <button (click)="volverMenu()" class="w-[150px] bg-[#002B3E] text-[#FFFFFF] text-[14px] font-bold !rounded-lg">
                 Volver a Menú 
@@ -69,7 +69,7 @@
             </div>
         </div>
     </div>
-    <div *ngIf="isSmallScreen" class="w-9/10">
+    <div *ngIf="isSmallScreen" class="w-[90%]">
         <div class="flex justify-between mb-6">
             <button (click)="volverMenu()" class="w-[150px] bg-[#002B3E] text-[#FFFFFF] text-[14px] font-bold !rounded-lg">
                 Volver a Menú 

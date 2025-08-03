@@ -16,4 +16,10 @@ export class HomeComponent {
     'assets/BANNER_02_home.jpeg',
     'assets/BANNER_03_home.jpeg'
   ];
+
+  arrayPrecios: any = [
+    'assets/PRECIOS-01.jpeg',
+    'assets/PRECIOS-02.jpeg',
+    'assets/PRECIOS-03.jpg'
+  ];
 }

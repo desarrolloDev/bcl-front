@@ -1,7 +1,7 @@
 <div class="w-full p-4 
     border-3 border-solid border-[#DABC62] bg-[#F5F5F5]
     flex justify-between">
-    <div class="w-3/10 flex flex-col gap-4">
+    <div class="w-[30%] flex flex-col gap-4">
         <div *ngFor="let item of data" (click)="selectItem(item.name, item.id)"
         class="border-2 border-solid border-[#002B3E] rounded-sm px-2 py-3 flex justify-between items-center"
         [ngStyle]="{ 'background-color': itemSelect == item.name ? '#002B3E' : '#FFFFFF', 'color': itemSelect == item.name ? '#FFFFFF' : '#002B3E' }">
@@ -11,7 +11,7 @@
             ></mat-icon>
         </div>
     </div>
-    <div class="w-6/10 p-4
+    <div class="w-[60%] p-4
     border-[2px] border-solid border-[#002B3E] rounded-lg 
     flex flex-col justify-between">
         <div *ngIf="typeData == 'arrayString'">
@@ -42,12 +42,12 @@
                 <div *ngIf="option.id == cursoSelect">
                     <div class="flex flex-col w-full mb-4">
                         <div class="mt-4 mb-4 flex w-full">
-                            <span class="w-6/10 text-[20px] text-[#002B3E] font-bold text-left">Lista desplegable:</span>
-                            <span class="w-2/10 text-[20px] text-[#002B3E] font-bold text-right">Individual</span>
-                            <span class="w-2/10 text-[20px] text-[#002B3E] font-bold text-right">Grupal</span>
+                            <span class="w-[60%] text-[20px] text-[#002B3E] font-bold text-left">Lista desplegable:</span>
+                            <span class="w-[20%] text-[20px] text-[#002B3E] font-bold text-right">Individual</span>
+                            <span class="w-[20%] text-[20px] text-[#002B3E] font-bold text-right">Grupal</span>
                         </div>
                         <div *ngFor="let item of option.data; let i = index" class="flex mb-2">
-                            <div class="w-6/10 flex items-center">
+                            <div class="w-[60%] flex items-center">
                                 <mat-icon (click)="deleteItem(item)" class="!text-[18px] !text-[#002B3E] !w-[18px] !h-[18px] mr-2" aria-hidden="false" aria-label="Example home icon" fontIcon="delete"></mat-icon>
             
                                 <ng-container *ngIf="item.editing; else displayText">
@@ -59,13 +59,13 @@
                                     <span class="text-[16px] text-[#002B3E]">{{item.name}}</span>
                                 </ng-template>
                             </div>
-                            <div class="flex w-2/10 justify-end items-center">
+                            <div class="flex w-[20%] justify-end items-center">
                                 <span class="text-[16px] text-[#002B3E]">S/.</span>
-                                <app-input class="w-2/3" color="#002B3E" bg="#F5F5F5" borderColor="#F5F5F5" label="" placeholder="" type="number" typeControl="model" [(controlModel)]="item.individual" [name]="item.id"></app-input>
+                                <app-input class="w-[66%]" color="#002B3E" bg="#F5F5F5" borderColor="#F5F5F5" label="" placeholder="" type="number" typeControl="model" [(controlModel)]="item.individual" [name]="item.id"></app-input>
                             </div>
-                            <div class="flex w-2/10 justify-end items-center">
+                            <div class="flex w-[20%] justify-end items-center">
                                 <span class="text-[16px] text-[#002B3E]">S/.</span>
-                                <app-input class="w-2/3" color="#002B3E" bg="#F5F5F5" borderColor="#F5F5F5" label="" placeholder="" type="number" typeControl="model" [(controlModel)]="item.grupal" [name]="item.id"></app-input>
+                                <app-input class="w-[66%]" color="#002B3E" bg="#F5F5F5" borderColor="#F5F5F5" label="" placeholder="" type="number" typeControl="model" [(controlModel)]="item.grupal" [name]="item.id"></app-input>
                             </div>
                         </div>
                     </div>
@@ -80,29 +80,29 @@
             <div class="mt-4 mb-4"><span class="text-[24px] text-[#002B3E] font-bold">Lista desplegable:</span></div>
             <div>
                 <div class="mb-2 flex w-full">
-                    <span class="w-6/10 text-left text-[20px] text-[#002B3E] font-bold">nombre</span>
-                    <span class="w-4/10 text-left text-[20px] text-[#002B3E] font-bold">correo</span>
+                    <span class="w-[60%] text-left text-[20px] text-[#002B3E] font-bold">nombre</span>
+                    <span class="w-[40%] text-left text-[20px] text-[#002B3E] font-bold">correo</span>
                 </div>
 
                 <div *ngFor="let option of dataList; let i = index" class="flex items-center">
                     <ng-container *ngIf="option.editing; else displayText" class="mb-2">
-                        <div class="flex items-center w-6/10">
+                        <div class="flex items-center w-[60%]">
                             <mat-icon (click)="deleteItem(option)" class="!text-[18px] !text-[#002B3E] !w-[18px] !h-[18px] mr-2" aria-hidden="false" aria-label="Example home icon" fontIcon="delete"></mat-icon>
                             <app-input color="#002B3E" bg="#F5F5F5" borderColor="#F5F5F5" label="" placeholder="" type="string" typeControl="model" [(controlModel)]="option.nombre" [name]="option.nombre"></app-input>
                         </div>
-                        <div class="w-4/10">
+                        <div class="w-[40%]">
                             <app-input color="#002B3E" bg="#F5F5F5" borderColor="#F5F5F5" label="" placeholder="" type="string" typeControl="model" [(controlModel)]="option.id" [name]="option.id"></app-input>
                         </div>
                     </ng-container>
 
                     <ng-template #displayText>
-                        <div class="flex items-center w-6/10">
+                        <div class="flex items-center w-[60%]">
                             <mat-icon (click)="deleteItem(option)" class="!text-[18px] !text-[#002B3E] !w-[18px] !h-[18px] mr-2" aria-hidden="false" aria-label="Example home icon" fontIcon="delete"></mat-icon>
                             <mat-icon (click)="editItem(option)" class="!text-[18px] !text-[#002B3E] !w-[18px] !h-[18px] mr-2" aria-hidden="false" aria-label="Example home icon" fontIcon="edit"></mat-icon>
-                            <span class="w-5/10 text-left text-[12px] text-[#002B3E]">{{option.nombre}}</span>
+                            <span class="w-[50%] text-left text-[12px] text-[#002B3E]">{{option.nombre}}</span>
                         </div>
-                        <div class="w-4/10">
-                            <span class="w-5/10 text-left text-[12px] text-[#002B3E]">{{option.id}}</span>
+                        <div class="w-[40%]">
+                            <span class="w-[50%] text-left text-[12px] text-[#002B3E]">{{option.id}}</span>
                         </div>
                     </ng-template>
                 </div>
@@ -119,10 +119,10 @@
                 <div *ngIf="option.id == cursoSelect">
                     <div class="flex flex-col w-full mb-4">
                         <div class="mt-4 mb-4 flex w-full">
-                            <span class="w-6/10 text-[20px] text-[#002B3E] font-bold text-left">Lista desplegable:</span>
+                            <span class="w-[60%] text-[20px] text-[#002B3E] font-bold text-left">Lista desplegable:</span>
                         </div>
                         <div *ngFor="let item of option.data; let i = index" class="flex">
-                            <div class="w-6/10 flex items-center mb-2">
+                            <div class="w-[60%] flex items-center mb-2">
                                 <mat-icon (click)="deleteItem(item)" class="!text-[18px] !text-[#002B3E] !w-[18px] !h-[18px] mr-2" aria-hidden="false" aria-label="Example home icon" fontIcon="delete"></mat-icon>
             
                                 <ng-container *ngIf="item.editing; else displayText">

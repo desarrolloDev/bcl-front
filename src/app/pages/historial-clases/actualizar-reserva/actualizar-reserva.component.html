@@ -1,5 +1,5 @@
 <div class="flex justify-center">
-    <div *ngIf="!isSmallScreen" class="w-9/10 pt-4">
+    <div *ngIf="!isSmallScreen" class="w-[90%] pt-4">
         <div class="flex justify-between mb-6">
             <span class="text-[35px] text-[#002B3E] font-bold">Reserva tus clases aquí</span>
             <button (click)="confirmar()" class="w-[150px] bg-[#008C4B] text-[#FFFFFF] text-[14px] font-bold !rounded-lg"
@@ -8,7 +8,7 @@
             </button>
         </div>
         <div class="flex justify-between w-full bg-[#F5F5F5] p-4">
-            <div class="flex flex-col justify-between w-35/100">
+            <div class="flex flex-col justify-between w-[35%]">
                 <div class="flex flex-col">
                     <app-input color="#002B3E" bg="#F5F5F5" borderColor="#F5F5F5"
                         label="Selecciona tu curso" placeholder="" type="string" typeControl="model"
@@ -46,7 +46,7 @@
 
                 </div>
             </div>
-            <div class="flex flex-col justify-between w-63/100">
+            <div class="flex flex-col justify-between w-[63%]">
                 <div class="flex flex-col">
                     <span class="text-[16px] text-[#002B3E] font-bold">Selecciona tus horarios en el calendario</span>
                     <div class="flex justify-between items-center mt-4 mb-4">
@@ -77,7 +77,7 @@
                 <div class="flex flex-col border-[2px] border-solid border-[#002B3E] rounded-lg mt-4 p-2">
                     <span class="text-[20px] text-[#002B3E] font-bold">Resumen</span>
                     <div class="h-[140px] tc flex w-full">
-                        <div class="flex flex-col w-5/10">
+                        <div class="flex flex-col w-[50%]">
                             <div class="flex">
                                 <span class="text-[16px] text-[#002B3E] font-bold mr-2">Curso:</span>
                                 <span class="text-[16px] text-[#002B3E] font-light">{{curso}}</span>
@@ -95,7 +95,7 @@
                                 <span class="text-[16px] text-[#002B3E] font-light">{{paqueteClase}}</span>
                             </div>
                         </div>
-                        <div class="flex flex-col w-5/10">
+                        <div class="flex flex-col w-[50%]">
                             <div class="flex">
                                 <span class="text-[16px] text-[#002B3E] font-bold mr-2">Clases:</span>
                                 <span class="text-[16px] text-[#002B3E] font-light">{{tema}}</span>
