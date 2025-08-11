@@ -42,6 +42,8 @@ export class DashboardComponent implements OnInit {
         localStorage.setItem('nombre', dataUser.nombre);
         localStorage.setItem('apellido', dataUser.apellido);
         localStorage.setItem('rol', dataUser.rol);
+        localStorage.setItem('terminos_cond_reservas', dataUser.terminos_cond_reservas);
+        localStorage.setItem('reserva_primera_clase', dataUser.reserva_primera_clase);
 
         this.rol = dataUser.rol;
         this.modulos = this.listService.modulosDashboard(dataUser.rol);

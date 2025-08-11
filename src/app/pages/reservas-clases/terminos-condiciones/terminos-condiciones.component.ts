@@ -2,7 +2,7 @@ import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { CheckboxComponent } from '../../../ui/checkbox/checkbox.component';
-import { GetDataService } from '../../../services/getData.service';
+import { FirestoreService } from '../../../services/firestore.service';
 
 @Component({
   selector: 'app-terminos-condiciones',
@@ -56,7 +56,8 @@ export class TerminosCondicionesComponent implements OnInit {
   `;
 
   constructor(
-    private breakpointObserver: BreakpointObserver
+    private breakpointObserver: BreakpointObserver,
+    private fs: FirestoreService
   ) {
     this.breakpointObserver
       .observe([`(max-width: 1364px)`])
@@ -66,9 +67,13 @@ export class TerminosCondicionesComponent implements OnInit {
   }
 
   ngOnInit() {
+    const terminos_cond_reservas = localStorage.getItem('terminos_cond_reservas');
+    this.checkTerminos = String(terminos_cond_reservas) == 'true' ? true :  false;
   }
 
   continuar() {
+    this.fs.updateSubColeccionData('user', localStorage.getItem('correo') || '', { terminos_cond_reservas: true }, 'terminos_cond_reservas');
+    localStorage.setItem('terminos_cond_reservas', 'true');
     this.cambiarVista.emit(2);
   }
 }

@@ -6,7 +6,8 @@ import { CheckboxComponent } from '../../ui/checkbox/checkbox.component';
 import { ListService } from '../../services/list.service';
 import { DataService } from '../../services/data.service';
 import { FirestoreService } from '../../services/firestore.service';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { AwsService } from '../../services/aws.service';
 
 @Component({
   selector: 'app-horarios-prof',
@@ -40,7 +41,8 @@ export class HorariosProfComponent implements OnInit {
     public listService: ListService,
     private dataService: DataService,
     private fs: FirestoreService,
-    private breakpointObserver: BreakpointObserver
+    private breakpointObserver: BreakpointObserver,
+    private awsService: AwsService
   ) {
     this.breakpointObserver
       .observe([`(max-width: 1364px)`])
@@ -124,22 +126,36 @@ export class HorariosProfComponent implements OnInit {
   }
 
   async changeSemana(): Promise<void> {
-    const data = await this.fs.getAllReservasSemana(this.selectedProf, [{ id: this.selectedSemana }]);
-    console.log('data', data);
+    const data = await this.getHorariosProfesor(this.selectedProf, this.selectedSemana);
 
     // ---------------------------------------------------------------
-    const searchSemanaInicial = data[this.selectedSemana];
+    const searchSemanaInicial = data.length > 0 ? data[0].horarios : {};
               
     const newSlots: any[] = [];
     for (let j = 0; j < this.dataService.datosHorarios.length; j++) {
       newSlots[j] = [];
       for (let i = 0; i < this.diasList.length; i++) {
-        const searchHorario = searchSemanaInicial.filter((item: string) => item.includes(`${this.diasList[i].id}|${this.dataService.datosHorarios[j]}`))
-        if (searchHorario.length == 0) newSlots[j][i] = false;
-        else newSlots[j][i] = true;
+        const searchHorario = searchSemanaInicial[`${this.diasList[i].id}|${this.horariosList[j]}`] ?? null;
+
+        if (searchHorario?.tipo) newSlots[j][i] = true;
+        else newSlots[j][i] = false;
       }
     }
     this.selectedSlots = newSlots;
     // ---------------------------------------------------------------
+  }
+
+  async getHorariosProfesor(profesor: string, semana: string)  {
+    let dataHorarios: any[] = [];
+
+    await this.awsService.get(`items?tipo=horario_profesor&profesor=${profesor}&semanas=${semana}`)
+      .then((response: any) => {
+        dataHorarios = JSON.parse(response.body);
+      })
+      .catch((error: any) => {
+        console.error('Error al guardar cursos', error);
+      });
+
+    return dataHorarios;
   }
 }

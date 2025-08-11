@@ -48,30 +48,6 @@ export class GetDataService {
         return paquete;
     }
 
-    async dataProfesoresXcurso(curso: string) {
-        let profesoresList: any[] = [];
-
-        await this.fs.getTeachersByCourse(curso)
-            .then(data => {
-                if (data.length > 0) {
-                    const newLista = data.map((item) => {
-                        return { nombre: `${item.nombre} ${item.apellido}`, id: item.id }
-                    })
-                    profesoresList = newLista
-                }
-            }).catch((error) => { profesoresList = []; });
-
-        const profesores = await this.dataProfesores();
-
-        const profesoresValidos: any[] = [];
-        for (let i = 0; i < profesoresList.length; i++) {
-            const searchProf = profesores.filter((item) => item.id == profesoresList[i].id);
-            if (searchProf.length > 0) profesoresValidos.push(searchProf[0]);
-        }
-
-        return profesoresValidos;
-    }
-
     async dataProfesores() {
         let profesoresList: any[] = [];
         if (this.dataService.listaProf.length == 0) {
@@ -100,14 +76,27 @@ export class GetDataService {
         return lista;
     }
 
-    async saveReservation(data: any): Promise<void> {
-        let response = '';
-        await this.fs.saveReservation(data)
-        .then(data => { response = 'Guardado'; })
-        .catch((error) => { response = 'Error'; });
+    async terminos_condiciones_prof() {
+        let terminos_condiciones: string = '';
+        if (this.dataService.termCondProf.length == 0) {
+            await this.fs.getSubColeccionData('data_profesor/terminos_condiciones')
+                .then(data => {
+                    this.dataService.setTermCondProf(data.data);
+                    terminos_condiciones = data.data;
+                }).catch((error) => { terminos_condiciones = ''; });
+        } else terminos_condiciones = this.dataService.termCondProf;
+        return terminos_condiciones;
     }
 
-    async getReservation(profesorId: string, alumnoId: string, fechaInicio: Date, fechaFin: Date): Promise<void> {
-        
+    async data_cursos_prof() {
+        let lista: any[] = [];
+        if (this.dataService.datosCursosProf.length == 0) {
+            await this.fs.getSubColeccionData('data_profesor/cursos')
+                .then(data => {
+                    this.dataService.setDatosCursos(data.data);
+                    lista = data.data;
+                }).catch((error) => { lista = []; });
+        } else lista = this.dataService.datosCursosProf;
+        return lista;
     }
 }

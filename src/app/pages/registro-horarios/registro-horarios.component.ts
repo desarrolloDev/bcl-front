@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatIconModule } from '@angular/material/icon';
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { InputComponent } from '../../ui/input/input.component';
 import { SelectComponent } from '../../ui/select/select.component';
 import { CalendarComponent } from '../../ui/calendar/calendar.component';
@@ -9,8 +10,9 @@ import { CheckboxComponent } from '../../ui/checkbox/checkbox.component';
 import { SpinnerComponent } from '../../ui/spinner/spinner.component';
 import { ListService } from '../../services/list.service';
 import { DataService } from '../../services/data.service';
-import { FirestoreService } from '../../services/firestore.service';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { AwsService } from '../../services/aws.service';
+import { GetDataService } from '../../services/getData.service';
+import { ModalService } from '../../ui/modal/modal.service';
 
 @Component({
   selector: 'app-registro-horarios',
@@ -44,7 +46,7 @@ export class RegistroHorariosComponent implements OnInit {
   data: {
     [semana: string]: {
       [dia: string]: {
-        [time: string]: { checked: boolean, type: string }
+        [time: string]: { checked: boolean, isDisabled: boolean, type: string }
       }
     }
   } = {};
@@ -58,11 +60,17 @@ export class RegistroHorariosComponent implements OnInit {
   cursosSelect: { name: string, select: boolean }[] = [];
   loadCursos: boolean = true;
 
+  loadCalendar: boolean = true;
+
+  loadChange: boolean = false;
+
   constructor(
     public listService: ListService,
     private dataService: DataService,
-    private fs: FirestoreService,
-    private breakpointObserver: BreakpointObserver
+    private breakpointObserver: BreakpointObserver,
+    private awsService: AwsService,
+    private getDataService: GetDataService,
+    private modalService: ModalService
   ) {
     this.breakpointObserver
       .observe([`(max-width: 1364px)`])
@@ -72,114 +80,154 @@ export class RegistroHorariosComponent implements OnInit {
   }
 
   async ngOnInit() {
-    if (this.dataService.datosHorarios.length == 0) {
-      this.fs.getSubColeccionData('data_profesor/horarios')
-        .then(data => {
-          this.dataService.setDatosHorarios(data.data);
+    
+    const semana = this.listService.intervaloSemanaMes();
+    this.semanasList = semana;
+    this.selectedSemana = semana[0].id;
+    this.semanaCalendar = semana[0].id;
 
-          const correo = localStorage.getItem('correo');
-          this.fs.getSubColeccionData(`reservas_clase/${correo}`)
-            .then((reserva) => {
+    const diaSemana = this.listService.diasSemana;
+    this.selectedtDia = diaSemana[0].id;
 
-              const semana = this.listService.intervaloSemana();
-              this.semanasList = semana;
-              this.selectedSemana = semana[0].id;
-              this.semanaCalendar = semana[0].id;
+    this.horariosList = await this.getDataService.horariosList();
 
-              const diaSemana = this.listService.diasSemana;
-              this.selectedtDia = diaSemana[0].id;
+    this.terminosCondiciones = await this.getDataService.terminos_condiciones_prof();
 
-              // ---------------------------------------------------------------
-              const searchSemanaInicial = reserva[this.semanaCalendar.replaceAll('/', '|')];
-              
-              const newSlots: any[] = [];
-              if (searchSemanaInicial == undefined) {
-                for (let i = 0; i > data.data; i++) {
-                  newSlots.push([false, false, false, false, false, false, false]);
-                }
-              } else {
-                for (let j = 0; j < data.data.length; j++) {
-                  newSlots[j] = [];
-                  for (let i = 0; i < this.diasList.length; i++) {
-                    const searchHorario = searchSemanaInicial.filter((item: string) => item.includes(`${this.diasList[i].id}|${data.data[j]}`))
-                    if (searchHorario.length == 0) newSlots[j][i] = false;
-                    else newSlots[j][i] = true;
-                  }
-                }
-              }
-              this.selectedSlots = newSlots;
-              // ---------------------------------------------------------------
-              let newData: any = {};
-              for (let i = 0; i < semana.length; i++) { // 12|05|2025 - 18|05|2025
+    let horarioReserva = await this.getHorariosProfesor(semana);
 
-                const searchSemana = reserva[semana[i].id.replaceAll('/', '|')];
-                newData[semana[i].id] = {};
+    const semana_actual = this.listService.obtenerRangoActual();
+    const semana_posterior = this.listService.obtenerSemanaSiguiente(semana_actual);
+    const ahora = new Date();
+    const diasSemanaNombre = ['DOMINGO', 'LUNES', 'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES', 'SABADO'];
+    const diaActualNombre = diasSemanaNombre[ahora.getDay()];
+    const ahoraHora = ahora.getHours();
+    const horaLimite = 9; // 9:00am
 
-                for (let j = 0; j < diaSemana.length; j++) { // LUNES
+    // Marcar en gris y blanco todos los slots del calendario (Se toma en cuenta la semana actual al ser la semana 0)
+    const newSlots: any[] = [];
 
-                  newData[semana[i].id][diaSemana[j].id] = {};
+    const buscarReservaSemana = horarioReserva.filter((item: any) => {
+      if (!item?.semana_profesor) return false;
+      return item.semana_profesor.includes(semana[0].id);
+    });
 
-                  for (let k = 0; k < data.data.length; k++) { // 8:00am - 9:25am
-                    
-                    const horario = data.data[k];
+    for (let j = 0; j < this.horariosList.length; j++) {
+      newSlots[j] = [];
+      for (let i = 0; i < this.diasList.length; i++) {
 
-                    if (searchSemana == undefined) {
-                      newData[semana[i].id][diaSemana[j].id][horario] = { checked: false, type: 'Individual' };
-                    } else {
-                      const searchHorario = searchSemana.filter((item: string) => item.includes(`${this.diasList[i].id}|${horario}`));
+        if (buscarReservaSemana.length > 0 && Object.keys(buscarReservaSemana[0].horarios).length > 0) {
+          const searchHorario = buscarReservaSemana[0].horarios[`${this.diasList[i].id}|${this.horariosList[j]}`] ?? null;
 
-                      if (searchHorario.length == 0) { 
-                        newData[semana[i].id][diaSemana[j].id][horario] = { checked: false, type: 'Individual' };
-                      } else {
-                        const tipo = searchHorario[0].split('|');
-                        newData[semana[i].id][diaSemana[j].id][horario] = { checked: true, type: tipo[2] };
-                      }
-                    }
-                  }
-                }
-              }
-              this.data = newData;
-              // ---------------------------------------------------------------
+          if (searchHorario?.tipo) newSlots[j][i] = true;
+          else newSlots[j][i] = false;
 
-              this.horariosList = data.data;
-            })
-            .catch((error) => { console.log('error', error); });
-        })
-        .catch((error) => {
-          console.log('error', error);
-        });
+        } else newSlots[j][i] = false;
+      }
     }
 
-    if (this.dataService.datosCursosProf.length == 0) {
-      this.fs.getSubColeccionData('data_profesor/cursos')
-        .then((data) => {
-          this.dataService.setDatosCursos(data.data);
+    this.selectedSlots = newSlots;
 
-          const correo = localStorage.getItem('correo');
-          this.fs.getSubColeccionData(`user/${correo}`)
-            .then((curso) => {
-              let newCursos = curso.cursos !== undefined ? curso.cursos : [];
+    // ------------------------------------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------------------------------
 
-              this.dataService.setDatosSelectCursosProf(newCursos);
-              this.cursosSelect = data.data.map((item: string) => ({ name: item, select: newCursos.includes(item) }));
-              this.loadCursos = false;
-            })
-            .catch((error) => { console.log('error', error); });
-        })
-        .catch((error) => { console.log('error', error); });
-    } else {
-      this.cursosSelect = this.dataService.datosCursosProf.map((item: string) => ({ name: item, select: this.dataService.datosSelectCursosProf.includes(item) }));
-      this.loadCursos = false;
+    // Reiniciar data de los checkboxes para el calendario
+    let newData: any = {};
+    for (let i = 0; i < semana.length; i++) { // 12|05|2025 - 18|05|2025
+      newData[semana[i].id] = {};
+
+      const buscarSemana = horarioReserva.filter((item: any) => {
+        if (!item?.semana_profesor) return false;
+        return item.semana_profesor.includes(semana[i].id);
+      });
+
+      for (let j = 0; j < diaSemana.length; j++) { // LUNES
+        newData[semana[i].id][diaSemana[j].id] = {};
+
+        for (let k = 0; k < this.horariosList.length; k++) { // 8:00am - 9:25am
+          const horario = this.horariosList[k];
+
+          // Validar si se puede seleccionar el horario ---------------------------------------
+          let puedeReservar = true;
+
+          if (semana[i].id === semana_actual) {
+            puedeReservar = false;
+          } else if (semana[i].id === semana_posterior) {
+            
+            if (diaActualNombre == 'LUNES') {
+              puedeReservar = ahoraHora < horaLimite;
+            } else puedeReservar = false;
+          }
+
+          // ----------------------------------------------------------------------------------
+
+          let checked = false;
+          let tipo = 'Individual';
+
+          if (buscarSemana.length > 0 && Object.keys(buscarSemana[0].horarios).length > 0) {
+            const searchHorario = buscarSemana[0].horarios[`${diaSemana[j].id}|${horario}`] ?? null;
+            
+            if (searchHorario !== null) {
+              checked = true;
+              tipo = searchHorario.tipo;
+
+              if (searchHorario.alumno !== '') { // Si hay un alumno asignado, no se puede eliminar el horario
+                puedeReservar = false;
+              }
+            }
+          }
+
+          newData[semana[i].id][diaSemana[j].id][horario] = {
+            checked: checked,
+            isDisabled: !puedeReservar ? true : false,
+            type: tipo
+          };
+        }
+      }
     }
 
-    if (this.dataService.termCondProf.length == 0) {
-      this.fs.getSubColeccionData('data_profesor/terminos_condiciones')
-        .then(data => {
-          this.dataService.setTermCondProf(data.data);
-          this.terminosCondiciones = data.data;
-        })
-        .catch((error) => { console.log('error', error); });
-    } else this.terminosCondiciones = this.dataService.termCondProf;
+    this.data = newData;
+    this.loadCalendar = false;
+
+    // ------------------------------------------------------------------------------------------------------------
+    await this.getCursosProfesor();
+    // ------------------------------------------------------------------------------------------------------------
+  }
+
+  async getHorariosProfesor(semanas: any)  {
+    const semanaString = semanas.map((item: any) => item.id).join(',');
+
+    let dataHorarios: any[] = [];
+
+    const correo = localStorage.getItem('correo');
+    await this.awsService.get(`items?tipo=horario_profesor&profesor=${correo}&semanas=${semanaString}`)
+      .then((response: any) => {
+        dataHorarios = JSON.parse(response.body);
+      })
+      .catch((error) => {
+        console.error('Error al guardar cursos', error);
+      });
+
+    return dataHorarios;
+  }
+
+  async getCursosProfesor() {
+    const data_cursos_prof = await this.getDataService.data_cursos_prof();
+
+    const correo = localStorage.getItem('correo');
+    this.awsService.get(`items?tipo=cursos_profesor&profesor=${correo}`)
+      .then((response: any) => {
+        const responseData = JSON.parse(response.body);
+        let newCursos = responseData.length !== undefined ? responseData.map((item: any) => item.curso) : [];
+        this.dataService.setDatosSelectCursosProf(newCursos);
+
+        this.cursosSelect = data_cursos_prof.map((item: string) => ({ name: item, select: newCursos.includes(item) }));
+        this.loadCursos = false;
+      })
+      .catch((error) => {
+        console.error('Error al guardar cursos', error);
+        this.cursosSelect = data_cursos_prof.map((item: string) => ({ name: item, select: false }));
+        this.loadCursos = false;
+      });
   }
 
   changeWeek(offset: number) {
@@ -202,32 +250,87 @@ export class RegistroHorariosComponent implements OnInit {
     this.selectedSlots = newData;
   }
 
-  guardarCursos() {
-    const correo = localStorage.getItem('correo');
-    const cursosSeleccionados = this.cursosSelect.filter((item) => item.select == true).map((item) => item.name);
-    this.fs.updateSubColeccionData('user', correo ? correo : '', { cursos: cursosSeleccionados }, 'cursos');
+  async guardarCursos() {
+    const confirmed = await this.modalService.openConfirmDialog({ 
+      titulo: '¿Está seguro de guardar los cursos?',
+      mensaje: '',
+      type: '',
+      load: this.loadChange,
+      msgBtnAceptar: 'Sí, Guardar',
+      msgBtCerrar: 'Cancelar'
+    }).toPromise();
+
+    if (confirmed) {
+      const loadingRef = this.modalService.openLoadingDialog('Guardando...');
+
+      this.loadChange = true;
+
+      const cursosSeleccionados = this.cursosSelect.filter((item) => item.select == true).map((item) => item.name);
+
+      const body = {
+        tipo: 'guardarCursos',
+        profesor: localStorage.getItem('correo'),
+        cursos: cursosSeleccionados
+      };
+
+      this.awsService.post('items', body)
+        .then((response) => {
+          loadingRef.close();
+          this.modalService.openResultDialog(true, 'Tu data fue guardada');
+        })
+        .catch((error) => {
+          console.error('Error al guardar cursos', error);
+          loadingRef.close();
+          this.modalService.openResultDialog(false, 'Error al guardar cursos, intenta nuevamente más tarde.');
+        });
+    }
   }
 
-  guardarHorarios() {
-    const dataSemana: any = {};
-    for (let semana = 0; semana < this.semanasList.length; semana++) {
-      const dataHorario: any[] = [];
-      for (let dia = 0; dia < this.diasList.length; dia++) {
-        for (let horario = 0; horario < this.horariosList.length; horario++) {
-          const valueHorario = this.data[this.semanasList[semana].id][this.diasList[dia].id][this.horariosList[horario]];
-          if (valueHorario.checked) {
-            dataHorario.push(`${this.diasList[dia].id}|${this.horariosList[horario]}|${valueHorario.type}`);
+  async guardarHorarios() {
+    const confirmed = await this.modalService.openConfirmDialog({ 
+      titulo: '¿Está seguro de guardar estos horarios?',
+      mensaje: '',
+      type: '',
+      load: this.loadChange,
+      msgBtnAceptar: 'Sí, Guardar',
+      msgBtCerrar: 'Cancelar'
+    }).toPromise();
+
+    if (confirmed) {
+      const loadingRef = this.modalService.openLoadingDialog('Guardando...');
+
+      this.loadChange = true;
+
+      const dataSemana: any = {};
+      for (let semana = 0; semana < this.semanasList.length; semana++) {
+        const dataHorario: any[] = [];
+        for (let dia = 0; dia < this.diasList.length; dia++) {
+          for (let horario = 0; horario < this.horariosList.length; horario++) {
+            const valueHorario = this.data[this.semanasList[semana].id][this.diasList[dia].id][this.horariosList[horario]];
+            if (valueHorario.checked) {
+              dataHorario.push(`${this.diasList[dia].id}|${this.horariosList[horario]}|${valueHorario.type}`);
+            }
           }
         }
+        dataSemana[this.semanasList[semana].id] = dataHorario;
       }
-      dataSemana[this.semanasList[semana].id] = dataHorario;
-    }
 
-    for (const clave in dataSemana) {
-      const valor = dataSemana[clave];
-      const correo = localStorage.getItem('correo');
-      const fecha = clave.replaceAll("/", "|");
-      this.fs.updateSubColeccionData('reservas_clase', correo ? correo : '', { [fecha]: valor }, 'individual');
+      const body = {
+        tipo: 'guardarHorarios',
+        profesor: localStorage.getItem('correo'),
+        horarios: dataSemana
+      };
+
+      this.awsService.post('items', body)
+        .then((response) => {
+          loadingRef.close();
+          this.modalService.openResultDialog(true, 'Tu data fue guardada');
+        })
+        .catch((error) => {
+          console.error('Error al guardar horarios', error);
+          loadingRef.close();
+          this.modalService.openResultDialog(false, 'Error al guardar horarios, intenta nuevamente más tarde.');
+        });
     }
   }
 

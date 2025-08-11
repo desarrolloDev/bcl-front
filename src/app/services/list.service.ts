@@ -29,7 +29,7 @@ export class ListService {
     { id: 'DOMINGO', nombre: 'Domingo' },
   ];
 
-  obtenerRangoActual() {
+  obtenerRangoActual(): string {
     const fecha = new Date();
 
     let diaSemana = fecha.getDay();
@@ -41,7 +41,12 @@ export class ListService {
     const domingo = new Date(lunes);
     domingo.setDate(lunes.getDate() + 6);
 
-    const formato = (f: Date) => f.toISOString().split("T")[0].split("-").reverse().join("/");
+    const formato = (f: Date): string => {
+      const dia = String(f.getDate()).padStart(2, "0");
+      const mes = String(f.getMonth() + 1).padStart(2, "0");
+      const anio = f.getFullYear();
+      return `${dia}/${mes}/${anio}`;
+    };
 
     return `${formato(lunes)} - ${formato(domingo)}`;
   }
@@ -77,6 +82,18 @@ export class ListService {
     const dias = ["DOMINGO", "LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES", "SABADO"];
 
     return dias[diaSemana]; 
+  }
+
+  obtenerCondicionalProfesor() {
+    return [
+      ['CONSULTAR', 'NO', 'NO', 'NO', 'NO', 'NO', 'NO'],
+      ['NO', 'NO', 'NO', 'NO', 'NO', 'NO', 'NO'],
+      ['NO', 'NO', 'NO', 'NO', 'NO', 'NO', 'NO'],
+      ['NO', 'NO', 'NO', 'NO', 'NO', 'NO', 'NO'],
+      ['NO', 'NO', 'NO', 'NO', 'NO', 'NO', 'NO'],
+      ['NO', 'NO', 'NO', 'NO', 'NO', 'NO', 'NO'],
+      ['NO', 'NO', 'NO', 'NO', 'NO', 'NO', 'NO'],
+    ];
   }
 
   obtenerCondicional() {
@@ -131,9 +148,49 @@ export class ListService {
     return weeks;
   }
 
+  intervaloSemanaMes() {
+    const today = new Date();
+
+    const startDate = new Date();
+    // startDate.setMonth(today.getMonth() - 1); // Rango de fechas: 1 mes antes
+
+    const endDate = new Date(today);
+    endDate.setMonth(today.getMonth() + 1); // Rango de fechas: 1 mes después
+
+    // Asegurar que empiece desde el lunes más cercano anterior o actual
+    const startDay = startDate.getDay();
+    const diffToMonday = (startDay === 0 ? -6 : 1) - startDay;
+    const firstMonday = new Date(startDate);
+    firstMonday.setDate(startDate.getDate() + diffToMonday);
+
+    const weeks = [];
+
+    for (
+      let currentMonday = new Date(firstMonday);
+      currentMonday <= endDate;
+      currentMonday.setDate(currentMonday.getDate() + 7)
+    ) {
+      const monday = new Date(currentMonday);
+      const sunday = new Date(monday);
+      sunday.setDate(monday.getDate() + 6);
+
+      const format = (date: Date) => {
+        const d = String(date.getDate()).padStart(2, '0');
+        const m = String(date.getMonth() + 1).padStart(2, '0');
+        const y = date.getFullYear();
+        return `${d}/${m}/${y}`;
+      };
+
+      const semana = `${format(monday)} - ${format(sunday)}`;
+      weeks.push({ id: semana, nombre: semana });
+    }
+
+    return weeks;
+  }
+
   tipoClase: any[] = [
     { id: 'Individual', nombre: 'Individual' },
-    { id: 'Grupo hasta 5', nombre: 'Grupal hasta 5' },
+    { id: 'Grupal hasta 5', nombre: 'Grupal hasta 5' },
     { id: 'Promo Primera Clase', nombre: 'Promo Primera Clase' },
     { id: 'Clase Individual Gratuita', nombre: 'Clase Individual Gratuita' },
     { id: 'Clase Grupal Gratuita', nombre: 'Clase Grupal Gratuita' },

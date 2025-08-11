@@ -44,6 +44,8 @@ export class CreateUserComponent {
     rep_contraseña: this._fb.control<string>('', [Validators.required, Validators.minLength(8)]),
     terminos_cond: this._fb.control<boolean>(false, [Validators.required]),
     politicas_priv: this._fb.control<boolean>(false, [Validators.required]),
+    terminos_cond_reservas: this._fb.control<boolean>(false, [Validators.required]),
+    reserva_primera_clase: this._fb.control<boolean>(false, [Validators.required]),
     rol: this._fb.control<string>('ESTUDIANTE', [Validators.required]),
   });
 

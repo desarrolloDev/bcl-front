@@ -42,7 +42,7 @@ export class ActualizarReservaComponent implements OnInit {
 
   listCurso: any = [];
   listGradoCiclo: any = [];
-  listTipoClase: any = []; // data_alumnos/tipo_clase
+  listTipoClase: any = [];
   listRecompensa: any = [];
   listPaqueteClase: any = [];
   listProfesor: any = [];

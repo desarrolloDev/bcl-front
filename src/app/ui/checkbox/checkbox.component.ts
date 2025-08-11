@@ -22,6 +22,7 @@ export class CheckboxComponent {
   @Input() typeControl: string = 'form'; // 'model'
   @Input() control = new FormControl<boolean>(false);
   @Input() controlModel: boolean = false;
+  @Input() isDisabled: boolean = false;
 
   @Output() controlModelChange = new EventEmitter<any>();
 

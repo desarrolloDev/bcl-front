@@ -4,8 +4,10 @@
             <mat-step label="Seleccionar horarios">
                 <div class="flex mb-4">
                     <span class="w-1/2 text-[20px] text-[#002B3E] font-bold">Gestión de Horarios</span>
-                    <div class="w-1/2 flex justify-end"><button (click)="guardarHorarios()"
-                            class="w-[150px] bg-[#008C4B] text-[#FFFFFF] font-bold !rounded-lg py-2 px-4">GUARDAR</button>
+                    <div class="w-1/2 flex justify-end">
+                        <button (click)="guardarHorarios()" class="w-[150px] bg-[#008C4B] text-[#FFFFFF] font-bold !rounded-lg py-2 px-4">
+                            GUARDAR
+                        </button>
                     </div>
                 </div>
 
@@ -22,7 +24,8 @@
                         <div *ngFor="let horario of horariosList" class="flex justify-between items-center mb-2">
                             <app-checkbox [label]="horario" typeControl="model"
                                 [(controlModel)]="data[selectedSemana][selectedtDia][horario].checked"
-                                (changeSelect)="actualizarHorarios()"></app-checkbox>
+                                (changeSelect)="actualizarHorarios()"
+                                [isDisabled]="data[selectedSemana][selectedtDia][horario].isDisabled"></app-checkbox>
 
                             <app-select *ngIf="data[selectedSemana][selectedtDia][horario].checked" label=""
                                 [items]="tipoClaseList" typeControl="model"
@@ -102,7 +105,8 @@
                         <div *ngFor="let horario of horariosList" class="flex flex-col items-start">
                             <app-checkbox [label]="horario" typeControl="model"
                                 [(controlModel)]="data[selectedSemana][selectedtDia][horario].checked"
-                                (changeSelect)="actualizarHorarios()"></app-checkbox>
+                                (changeSelect)="actualizarHorarios()"
+                                [isDisabled]="data[selectedSemana][selectedtDia][horario].isDisabled"></app-checkbox>
 
                             <div class="ml-[45px]" *ngIf="data[selectedSemana][selectedtDia][horario].checked">
                                 <app-select class="w-[150px]" label="" [items]="tipoClaseList" typeControl="model"

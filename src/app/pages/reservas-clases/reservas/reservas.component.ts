@@ -7,8 +7,8 @@ import { InputComponent } from '../../../ui/input/input.component';
 import { CalendarAlumnoComponent } from '../../../ui/calendar-alumno/calendar-alumno.component';
 import { GetDataService } from '../../../services/getData.service';
 import { ListService } from '../../../services/list.service';
-import { FirestoreService } from '../../../services/firestore.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { AwsService } from '../../../services/aws.service';
 
 @Component({
   selector: 'app-reservas',
@@ -41,10 +41,11 @@ export class ReservasComponent implements OnInit {
   precio: number = 0; // ***********************
 
   listBasePaqueteClase: any = [];
+  listBaseProfesores: any = [];
 
   listCurso: any = [];
   listGradoCiclo: any = [];
-  listTipoClase: any = []; // data_alumnos/tipo_clase
+  listTipoClase: any = [];
   listRecompensa: any = [];
   listPaqueteClase: any = [];
   listProfesor: any = [];
@@ -65,11 +66,24 @@ export class ReservasComponent implements OnInit {
     }
   } = {};
 
+  dataBase: {
+    [tipoClase: string]: {
+      [profesor: string]: {
+        [semana: string]: {
+          [dia: string]: {
+            [time: string]: string
+          }
+        }
+      }
+    }
+  } = {};
+
   constructor(
     public listService: ListService,
     private getDataService: GetDataService,
-    private fs: FirestoreService,
-    private breakpointObserver: BreakpointObserver
+    private breakpointObserver: BreakpointObserver,
+    private awsService: AwsService
+
   ) {
     this.breakpointObserver
       .observe([`(max-width: 1364px)`])
@@ -79,14 +93,6 @@ export class ReservasComponent implements OnInit {
   }
 
   async ngOnInit() {
-    // LISTAR DATOS DEL USUARIO | SI ES SU 1RA CLASE 
-      this.listTipoClase = [];
-      this.listRecompensa = [{ nombre: 'No', id: 'no' }, { nombre: 'Si', id: 'si' }];
-
-      // this.listTipoClase = [{ nombre: 'Promo mi primera clase', id: 'Promo mi primera clase' }];
-      // this.listRecompensa = [{ nombre: 'No', id: 'no' }];
-    // ---------------------------------------------
-
     const cursos = await this.getDataService.getCursosAlumnos();
     this.listCurso = cursos.length > 0 ? cursos.map((item: any) => ({ nombre: item, id: item })) : [];
 
@@ -111,11 +117,169 @@ export class ReservasComponent implements OnInit {
   }
 
   async changeCursos(): Promise<void> {
-    const profesores = await this.getDataService.dataProfesoresXcurso(this.curso);
-    this.listProfesor = profesores;
+    const profesoresLista = await this.getDataService.dataProfesores();
 
-    // ****************************
-    //  const data = await this.fs.getAllReservasSemana(this.profesor, this.semanasList);
+    let CursosProfesores: any[] = [];
+    await this.awsService.get(`items?tipo=profesores_por_curso&curso=${this.curso}`)
+    .then((response: any) => {
+      CursosProfesores = JSON.parse(response.body);
+    })
+    .catch((error) => {
+      console.error('Error al guardar cursos', error);
+    });
+
+    const profesoresValidos: any[] = [];
+    for (let i = 0; i < profesoresLista.length; i++) {
+      const searchProf = CursosProfesores.filter((item: any) => item.profesor.includes(profesoresLista[i].id));
+      if (searchProf.length > 0) profesoresValidos.push(profesoresLista[i]);
+    }
+
+    this.listBaseProfesores = profesoresValidos;
+
+    // *************************************************************************************
+
+    const semanaString = this.semanasList.map((item: any) => item.id).join(',');
+
+    const dataHorariosProfesor: any[] = [];
+    for (let i = 0; i < profesoresValidos.length; i++) {
+      await this.awsService.get(`items?tipo=horario_profesor&profesor=${profesoresValidos[i].id}&semanas=${semanaString}`)
+      .then((response: any) => {
+        dataHorariosProfesor.push(...JSON.parse(response.body));
+      })
+      .catch((error) => {
+        console.error('Error al guardar cursos', error);
+      });
+    }
+
+    // console.log('dataHorariosProfesor', dataHorariosProfesor);
+
+    const semana_actual = this.listService.obtenerRangoActual();
+    const semana_posterior = this.listService.obtenerSemanaSiguiente(semana_actual);
+    const dia_actual = this.listService.obtenerDiaActual();
+    const ahora = new Date();
+    const ahoraHora = ahora.getHours();
+    const horaLimite = 9;
+    const matrizAccesos = this.listService.obtenerCondicional();
+
+    const dataNewHorarios: any = {};
+    for (let itemProfHorario of dataHorariosProfesor) {
+
+      if (itemProfHorario.semana_profesor) {
+        const semana = itemProfHorario.semana_profesor.split('#')[0];
+        const profesor = itemProfHorario.semana_profesor.split('#')[1];
+            
+        if (itemProfHorario.horarios) {
+          const horarios = itemProfHorario.horarios;
+          for (const clave of Object.keys(horarios)) {
+      
+            const dia = clave.split('|')[0];
+            const hora = clave.split('|')[1];
+            
+            // **************************************************************************
+            // VALIDACIÓN PARA RESERVAR
+            // 'disponible' | 'reservado' | 'seleccionado' | 'bloqueado'
+            const alumnosReserva = horarios[clave].alumno;
+            
+            let status = '';
+
+            if (alumnosReserva.length > 0) {
+              const alumnosReservaSplit = alumnosReserva.split('|');
+              
+              if (((horarios[clave].tipo == 'Individual' || 
+                horarios[clave].tipo == 'Promo Primera Clase' ||
+                horarios[clave].tipo == 'Clase Individual Gratuita'
+              ) && alumnosReservaSplit.length == 1) 
+              ||
+              ((horarios[clave].tipo == 'Grupal hasta 5' ||
+                horarios[clave].tipo == 'Clase Grupal Gratuita'
+              ) && alumnosReservaSplit.length == 5)) {
+                status = 'reservado';
+              } else if ((horarios[clave].tipo == 'Grupal hasta 5' ||
+                horarios[clave].tipo == 'Clase Grupal Gratuita'
+              ) && alumnosReservaSplit.length > 1 && alumnosReservaSplit.length < 5) {
+                status = 'disponible';
+              }
+            } else {
+              let puedeReservar = true;
+
+              // Validar si se puede reservar
+              const esSemanaActual = semana === semana_actual;
+
+              if (esSemanaActual) {
+                const valorMatriz = matrizAccesos[this.listService.diasIndice(dia_actual)][this.listService.diasIndice(dia)];
+
+                if (valorMatriz == 'NO') puedeReservar = false;
+                else if (valorMatriz == 'CONSULTAR') puedeReservar = ahoraHora < horaLimite;
+              }
+
+              const esSemanaPosterior = semana === semana_posterior;
+              if (esSemanaPosterior && dia_actual == 'DOMINGO' && dia == 'LUNES') puedeReservar = ahoraHora < horaLimite;
+
+              if (!puedeReservar) {
+                status = 'bloqueado';
+              } else {
+                status = 'disponible';
+              }
+            }
+            
+            // console.log('status', status);
+            // **************************************************************************
+      
+            if (!dataNewHorarios[horarios[clave].tipo]) {
+              dataNewHorarios[horarios[clave].tipo] = {  
+                [profesor]: {}
+              };
+              dataNewHorarios[horarios[clave].tipo][profesor][semana] = {};
+              dataNewHorarios[horarios[clave].tipo][profesor][semana][dia] = {};
+              dataNewHorarios[horarios[clave].tipo][profesor][semana][dia][hora] = status;
+            } else {
+              const buscandoProf = dataNewHorarios[horarios[clave].tipo][profesor];
+
+              if (typeof buscandoProf !== 'object' || Object.keys(buscandoProf).length == 0) {
+                dataNewHorarios[horarios[clave].tipo][profesor] = {};
+                dataNewHorarios[horarios[clave].tipo][profesor][semana] = {};
+                dataNewHorarios[horarios[clave].tipo][profesor][semana][dia] = {};
+                dataNewHorarios[horarios[clave].tipo][profesor][semana][dia][hora] = status;
+              } else {
+                const buscandoSemana = dataNewHorarios[horarios[clave].tipo][profesor][semana];
+                
+                if (typeof buscandoSemana !== 'object' || Object.keys(buscandoSemana).length == 0) {
+                  dataNewHorarios[horarios[clave].tipo][profesor][semana] = {};
+                  dataNewHorarios[horarios[clave].tipo][profesor][semana][dia] = {};
+                  dataNewHorarios[horarios[clave].tipo][profesor][semana][dia][hora] = status;
+                } else {
+                  const buscandoDia = dataNewHorarios[horarios[clave].tipo][profesor][semana][dia];
+                  
+                  if (typeof buscandoDia !== 'object') {
+                    dataNewHorarios[horarios[clave].tipo][profesor][semana][dia] = {};
+                    dataNewHorarios[horarios[clave].tipo][profesor][semana][dia][hora] = status;
+                  } else {
+                    const buscadoHorario = dataNewHorarios[horarios[clave].tipo][profesor][semana][dia][hora];
+                    
+                    if (typeof buscadoHorario !== 'string') {
+                      dataNewHorarios[horarios[clave].tipo][profesor][semana][dia][hora] = status;
+                    }
+                  }
+                }
+              }
+            }
+
+          }
+        }   
+      }
+    }
+    console.log('dataNewHorarios', JSON.stringify(dataNewHorarios));
+    this.dataBase = dataNewHorarios;
+
+    // ----------------------------------------------------------------------------------------------------
+
+    const ListaTipoClaseProfesores: any[] = [];
+    for (const horario of Object.keys(this.dataBase)) {
+      ListaTipoClaseProfesores.push({ id: horario, nombre: horario });
+    }
+    this.listTipoClase = ListaTipoClaseProfesores;
+
+    // ----------------------------------------------------------------------------------------------------
 
     const grados = await this.getDataService.getPaquetes(this.curso, 'ciclo_grado');
     this.listGradoCiclo = grados.length > 0 ? grados.map((item: any) => ({ nombre: item.name, id: item.name })) : [];
@@ -124,11 +288,71 @@ export class ReservasComponent implements OnInit {
   }
 
   async changeTipoClase(): Promise<void> {
-    const paquetes = await this.getDataService.getPaquetes(this.curso, 'paquete_clase');
-    this.listBasePaqueteClase = paquetes;
-    this.listPaqueteClase = paquetes.length > 0 ? paquetes.filter((item) => Number(item[this.tipoClase]) > 0).map((item: any) => ({ nombre: item.name, id: item.name })) : [];
+    const ListaProfesores: any[] = [];
+    const searchProfesores = this.dataBase[this.tipoClase];
+    for (const profesor of Object.keys(searchProfesores)) {
+      const searchProf = this.listBaseProfesores.filter((item: any) => item.id == profesor);
+      if (searchProf.length > 0) ListaProfesores.push(searchProf[0]);
+    }
+    console.log('ListaTipoClaseProfesores', ListaProfesores);
+    this.listProfesor = ListaProfesores;
+
+    // ----------------------------------------------------------------------------------------------------
+
+    const reserva_primera_clase = localStorage.getItem('reserva_primera_clase');
+    const validacion_promo_primera_clase = String(reserva_primera_clase) == 'true' ? true :  false;
+
+    if (!validacion_promo_primera_clase && (this.tipoClase == 'Promo Primera Clase' || this.tipoClase == 'Clase Individual Gratuita' || this.tipoClase == 'Clase Grupal Gratuita')) {
+      this.listRecompensa = [{ nombre: 'No', id: 'no' }];
+    } else {
+      this.listRecompensa = [{ nombre: 'No', id: 'no' }, { nombre: 'Si', id: 'si' }];
+    }
+
+    // ----------------------------------------------------------------------------------------------------
+
+    if (this.tipoClase == 'Promo Primera Clase' || this.tipoClase == 'Clase Individual Gratuita' || this.tipoClase == 'Clase Grupal Gratuita') {
+      this.listPaqueteClase = [{ nombre: '1 clase', id: '1 clase'}]
+    } else if (this.tipoClase == 'Individual' || this.tipoClase == 'Grupal hasta 5') {
+      const tipo = this.tipoClase == 'Individual' ? 'individual' : 'grupal';
+
+      const paquetes = await this.getDataService.getPaquetes(this.curso, 'paquete_clase');
+      this.listBasePaqueteClase = paquetes;
+
+      this.listPaqueteClase = paquetes.length > 0
+      ? paquetes.filter((item) => Number(item[tipo]) > 0).map((item: any) => ({ nombre: item.name, id: item.name }))
+      : [];
+    }
 
     this.paqueteClase = ''; this.profesor = ''; this.precio = 0;
+  }
+
+  changeTipo(tipo: string) { // recompensa - paquete
+    this.clasesReservadas = 0;
+
+    if (tipo == 'recompensa') {
+      this.clasesTotal = 1;
+      this.precio = 0;
+    } else {
+      if (this.tipoClase == 'Promo Primera Clase') {
+        this.clasesTotal = 1;
+        this.precio = 70;
+      } else if (this.tipoClase == 'Clase Individual Gratuita' || this.tipoClase == 'Clase Grupal Gratuita') {
+        this.clasesTotal = 1;
+        this.precio = 0;
+      } else if (this.tipoClase == 'Individual' || this.tipoClase == 'Grupal hasta 5') {
+        const searchPaquete = this.listBasePaqueteClase.filter((paquete: any) => paquete.name == this.paqueteClase);
+
+        if (searchPaquete.length > 0) {
+          this.precio = Number(searchPaquete[0][this.tipoClase]);
+
+          const numeroEntero = parseInt(this.paqueteClase.split(' ')[0]);
+          this.clasesTotal = numeroEntero;
+        } else {
+          this.precio = 0;
+          this.clasesTotal = 0;
+        }
+      }
+    }
   }
 
   changeWeek(offset: number) {
@@ -146,82 +370,24 @@ export class ReservasComponent implements OnInit {
   }
 
   async searchHorarios(): Promise<void> {
-    const data = await this.fs.getAllReservasSemana(this.profesor, this.semanasList);
 
-    // data de las 4 semanas
-    const reserva: any[] = []; // ACTUALIZAR VALOR CON DATA
+    this.data = this.dataBase[this.tipoClase][this.profesor];
 
-    let newDataSemanales: any = {};
-
-    const semana_actual = this.listService.obtenerRangoActual();
-    const semana_posterior = this.listService.obtenerSemanaSiguiente(semana_actual);
-    const dia_actual = this.listService.obtenerDiaActual();
-    const ahora = new Date();
-    const ahoraHora = ahora.getHours();
-    const horaLimite = 1;
-    const matrizAccesos = this.listService.obtenerCondicional();
-
-    for (let semana of this.semanasList) {
-
-      newDataSemanales[semana.id] = {};
-
-      const dataSemana = data[semana.id];
-
-      for (let dia of this.listService.diasSemana) {
-
-        newDataSemanales[semana.id][dia.id] = {};
-
-        for (let hora of this.horariosList) {
-
-          const horario = `${semana.id}|${dia.id}|${hora}`;
-          const searchHorarioReserva = reserva.filter((item) => item == horario);
-
-          if (searchHorarioReserva.length > 0) {
-            newDataSemanales[semana.id][dia.id][hora] = 'reservado'; // El alumno ya reservó
-          } else {
-
-            let puedeReservar = true;
-
-            // Validar si se puede reservar
-            const esSemanaActual = semana.id === semana_actual;
-
-            if (esSemanaActual) {
-              const valorMatriz = matrizAccesos[this.listService.diasIndice(dia_actual)][this.listService.diasIndice(dia.id)];
-
-              if (valorMatriz == 'NO') puedeReservar = false;
-              else if (valorMatriz == 'CONSULTAR') puedeReservar = ahoraHora < horaLimite;
-            }
-
-            const esSemanaPosterior = semana.id === semana_posterior;
-            if (esSemanaPosterior && dia_actual == 'DOMINGO' && dia.id == 'LUNES') puedeReservar = ahoraHora < horaLimite;
-
-            if (!puedeReservar) {
-              newDataSemanales[semana.id][dia.id][hora] = 'bloqueado';
-            } else {
-              // **********************
-              const buscarHorario = dataSemana.filter((item: any) => item.includes(dia.id) && item.includes(hora) && item.toLowerCase().includes(this.tipoClase));
-              if (buscarHorario.length === 0) {
-                newDataSemanales[semana.id][dia.id][hora] = 'bloqueado';
-              } else {
-                const splitHorario = buscarHorario[0].split('|');
-                newDataSemanales[semana.id][dia.id][hora] = splitHorario.length > 3 ? 'bloqueado' : 'disponible';
-              }
-            }
-          }
-        }
-      }
-    }
-
-    this.data = newDataSemanales;
-
-    const dataSemanaSelect = newDataSemanales[this.semanaCalendar];
+    const dataSemanaSelect = this.data[this.semanaCalendar];
 
     if (dataSemanaSelect) {
       const newData: any = {};
       for (let hora of this.horariosList) {
         newData[hora] = {};
         for (let dia of this.listService.diasSemana) {
-          newData[hora][dia.id] = dataSemanaSelect[dia.id][hora];
+          const buscarDia = dataSemanaSelect[dia.id];
+          if (!buscarDia) {
+            newData[hora][dia.id] = 'bloqueado';
+          } else if (buscarDia[hora]) {
+            newData[hora][dia.id] = buscarDia[hora];
+          } else {
+            newData[hora][dia.id] = 'bloqueado';
+          }
         }
       }
 
@@ -239,7 +405,14 @@ export class ReservasComponent implements OnInit {
       for (let hora of this.horariosList) {
         newData[hora] = {};
         for (let dia of this.listService.diasSemana) {
-          newData[hora][dia.id] = dataSemanaSelect[dia.id][hora];
+          const buscarDia = dataSemanaSelect[dia.id];
+          if (!buscarDia) {
+            newData[hora][dia.id] = 'bloqueado';
+          } else if (buscarDia[hora]) {
+            newData[hora][dia.id] = buscarDia[hora];
+          } else {
+            newData[hora][dia.id] = 'bloqueado';
+          }
         }
       }
 
@@ -250,27 +423,6 @@ export class ReservasComponent implements OnInit {
 
   actualizarHorario([dia, hora, estatus]: [string, string, string]): void {
     this.data[this.semanaCalendar][dia][hora] = estatus;
-  }
-
-  changeTipo(tipo: string) { // recompensa - paquete
-    this.clasesReservadas = 0;
-
-    if (tipo == 'recompensa') {
-      this.precio = 0;
-      this.clasesTotal = 1;
-    } else {
-      const searchPaquete = this.listBasePaqueteClase.filter((paquete: any) => paquete.name == this.paqueteClase);
-
-      if (searchPaquete.length > 0) {
-        this.precio = Number(searchPaquete[0][this.tipoClase]);
-
-        const numeroEntero = parseInt(this.paqueteClase.split(' ')[0]);
-        this.clasesTotal = numeroEntero;
-      } else {
-        this.precio = 0;
-        this.clasesTotal = 0;
-      }
-    }
   }
 
   confirmar() {

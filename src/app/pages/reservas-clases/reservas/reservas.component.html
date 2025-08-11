@@ -2,10 +2,10 @@
     <div *ngIf="!isSmallScreen" class="w-[90%]">
         <div class="flex justify-between mb-6">
             <span class="text-[30px] text-[#002B3E] font-bold">Reserva tus clases aquí</span>
-            <button (click)="confirmar()" class="w-[300px] bg-[#008C4B] text-[#FFFFFF] text-[14px] font-bold !rounded-lg">
+            <button (click)="confirmar()" class="w-[300px] bg-[#008C4B] text-[#FFFFFF] text-[14px] font-bold !rounded-lg"
+                [disabled]="curso == '' || colegio == '' || gradoCiclo  == '' || tema  == '' || tipoClase == '' || recompensa == '' || paqueteClase == '' || profesor == ''">
                 CONFIRMAR
             </button>
-            <!-- [disabled]="curso == '' || colegio == '' || gradoCiclo  == '' || tema  == '' || tipoClase == '' || recompensa == '' || paqueteClase == '' || profesor == ''" -->
         </div>
         <div class="flex justify-between w-full bg-[#F5F5F5] p-4">
             <div class="flex flex-col justify-between w-[35%]">
@@ -166,7 +166,8 @@
             </mat-step>
             <mat-step label="Resumen">
                 <div class="flex justify-end mt-4">
-                    <button (click)="confirmar()" class="w-[200px] h-[35px] bg-[#008C4B] text-[#FFFFFF] text-[12px] font-bold !rounded-lg">
+                    <button (click)="confirmar()" class="w-[200px] h-[35px] bg-[#008C4B] text-[#FFFFFF] text-[12px] font-bold !rounded-lg"
+                        [disabled]="curso == '' || colegio == '' || gradoCiclo  == '' || tema  == '' || tipoClase == '' || recompensa == '' || paqueteClase == '' || profesor == ''">
                         CONFIRMAR
                     </button>
                 </div>

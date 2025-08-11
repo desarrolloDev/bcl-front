@@ -9,5 +9,6 @@ export const environment = {
         appId: "1:961121153987:web:a42812a707afadad6d4376",
         measurementId: "G-TS785WSPF3"
     },
-    apiUrl: "https://tu-api.execute-api.us-east-1.amazonaws.com/Prod"
+    apiUrl: "https://tu-api.execute-api.us-east-1.amazonaws.com/Prod",
+    apiUrlLocal: "https://fqk069two4.execute-api.us-east-1.amazonaws.com/dev/"
 };
