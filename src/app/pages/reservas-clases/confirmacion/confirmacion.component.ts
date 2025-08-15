@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { BreakpointObserver } from '@angular/cdk/layout';
@@ -12,7 +12,8 @@ import { BreakpointObserver } from '@angular/cdk/layout';
   templateUrl: './confirmacion.component.html',
   styleUrl: './confirmacion.component.scss'
 })
-export class ConfirmacionComponent {
+export class ConfirmacionComponent implements OnInit {
+  @Input() detalleReserva: any = {};
   isSmallScreen: boolean = false;
 
   constructor(
@@ -24,6 +25,10 @@ export class ConfirmacionComponent {
       .subscribe(result => {
         this.isSmallScreen = result.matches;
       });
+  }
+
+  ngOnInit() {
+    
   }
 
   volverMenu() {

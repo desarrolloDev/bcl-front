@@ -9,6 +9,7 @@ import { GetDataService } from '../../../services/getData.service';
 import { ListService } from '../../../services/list.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { AwsService } from '../../../services/aws.service';
+import { ModalService } from '../../../ui/modal/modal.service';
 
 @Component({
   selector: 'app-reservas',
@@ -26,6 +27,7 @@ import { AwsService } from '../../../services/aws.service';
 })
 export class ReservasComponent implements OnInit {
   @Output() cambiarVista = new EventEmitter<number>();
+  @Output() cambiarDetalleReserva = new EventEmitter<any>();
 
   isSmallScreen: boolean = false;
   isLinear = false;
@@ -39,6 +41,7 @@ export class ReservasComponent implements OnInit {
   paqueteClase: string = '';
   profesor: string = '';
   precio: number = 0; // ***********************
+  stringClasesReservadas: string = '';
 
   listBasePaqueteClase: any = [];
   listBaseProfesores: any = [];
@@ -78,12 +81,14 @@ export class ReservasComponent implements OnInit {
     }
   } = {};
 
+  loadChange: boolean = false;
+
   constructor(
     public listService: ListService,
     private getDataService: GetDataService,
     private breakpointObserver: BreakpointObserver,
-    private awsService: AwsService
-
+    private awsService: AwsService,
+    private modalService: ModalService
   ) {
     this.breakpointObserver
       .observe([`(max-width: 1364px)`])
@@ -178,25 +183,24 @@ export class ReservasComponent implements OnInit {
             // **************************************************************************
             // VALIDACIÓN PARA RESERVAR
             // 'disponible' | 'reservado' | 'seleccionado' | 'bloqueado'
-            const alumnosReserva = horarios[clave].alumno;
+            const alumnosReserva = horarios[clave].alumnos;
             
             let status = '';
 
             if (alumnosReserva.length > 0) {
-              const alumnosReservaSplit = alumnosReserva.split('|');
               
               if (((horarios[clave].tipo == 'Individual' || 
                 horarios[clave].tipo == 'Promo Primera Clase' ||
                 horarios[clave].tipo == 'Clase Individual Gratuita'
-              ) && alumnosReservaSplit.length == 1) 
+              ) && alumnosReserva.length == 1) 
               ||
               ((horarios[clave].tipo == 'Grupal hasta 5' ||
                 horarios[clave].tipo == 'Clase Grupal Gratuita'
-              ) && alumnosReservaSplit.length == 5)) {
+              ) && alumnosReserva.length == 5)) {
                 status = 'reservado';
               } else if ((horarios[clave].tipo == 'Grupal hasta 5' ||
                 horarios[clave].tipo == 'Clase Grupal Gratuita'
-              ) && alumnosReservaSplit.length > 1 && alumnosReservaSplit.length < 5) {
+              ) && alumnosReserva.length > 1 && alumnosReserva.length < 5) {
                 status = 'disponible';
               }
             } else {
@@ -268,7 +272,7 @@ export class ReservasComponent implements OnInit {
         }   
       }
     }
-    console.log('dataNewHorarios', JSON.stringify(dataNewHorarios));
+
     this.dataBase = dataNewHorarios;
 
     // ----------------------------------------------------------------------------------------------------
@@ -284,6 +288,11 @@ export class ReservasComponent implements OnInit {
     const grados = await this.getDataService.getPaquetes(this.curso, 'ciclo_grado');
     this.listGradoCiclo = grados.length > 0 ? grados.map((item: any) => ({ nombre: item.name, id: item.name })) : [];
 
+    const paquetes = await this.getDataService.getPaquetes(this.curso, 'paquete_clase');
+    this.listBasePaqueteClase = paquetes;
+
+    // ----------------------------------------------------------------------------------------------------
+
     this.gradoCiclo = ''; this.tipoClase = ''; this.recompensa = 'no'; this.paqueteClase = ''; this.profesor = ''; this.precio = 0;
   }
 
@@ -294,7 +303,6 @@ export class ReservasComponent implements OnInit {
       const searchProf = this.listBaseProfesores.filter((item: any) => item.id == profesor);
       if (searchProf.length > 0) ListaProfesores.push(searchProf[0]);
     }
-    console.log('ListaTipoClaseProfesores', ListaProfesores);
     this.listProfesor = ListaProfesores;
 
     // ----------------------------------------------------------------------------------------------------
@@ -310,28 +318,28 @@ export class ReservasComponent implements OnInit {
 
     // ----------------------------------------------------------------------------------------------------
 
-    if (this.tipoClase == 'Promo Primera Clase' || this.tipoClase == 'Clase Individual Gratuita' || this.tipoClase == 'Clase Grupal Gratuita') {
-      this.listPaqueteClase = [{ nombre: '1 clase', id: '1 clase'}]
-    } else if (this.tipoClase == 'Individual' || this.tipoClase == 'Grupal hasta 5') {
-      const tipo = this.tipoClase == 'Individual' ? 'individual' : 'grupal';
+    this.listPaqueteClase = [];
+    this.actualizarPaqueteClase();
 
-      const paquetes = await this.getDataService.getPaquetes(this.curso, 'paquete_clase');
-      this.listBasePaqueteClase = paquetes;
-
-      this.listPaqueteClase = paquetes.length > 0
-      ? paquetes.filter((item) => Number(item[tipo]) > 0).map((item: any) => ({ nombre: item.name, id: item.name }))
-      : [];
-    }
-
-    this.paqueteClase = ''; this.profesor = ''; this.precio = 0;
+    this.paqueteClase = ''; this.profesor = ''; this.precio = 0; this.clasesReservadas = 0; this.clasesTotal = 0;
+    this.data = {};
+    this.semanaBloqueado();
   }
 
   changeTipo(tipo: string) { // recompensa - paquete
     this.clasesReservadas = 0;
 
     if (tipo == 'recompensa') {
-      this.clasesTotal = 1;
-      this.precio = 0;
+      if (this.recompensa == 'si') {
+        this.clasesTotal = 1;
+        this.precio = 0;
+      } else if (this.recompensa == 'no') {
+        this.clasesTotal = 0;
+        this.precio = 0;
+      }
+      this.paqueteClase = '';
+      this.listPaqueteClase = [];
+      this.actualizarPaqueteClase();
     } else {
       if (this.tipoClase == 'Promo Primera Clase') {
         this.clasesTotal = 1;
@@ -340,17 +348,39 @@ export class ReservasComponent implements OnInit {
         this.clasesTotal = 1;
         this.precio = 0;
       } else if (this.tipoClase == 'Individual' || this.tipoClase == 'Grupal hasta 5') {
-        const searchPaquete = this.listBasePaqueteClase.filter((paquete: any) => paquete.name == this.paqueteClase);
-
-        if (searchPaquete.length > 0) {
-          this.precio = Number(searchPaquete[0][this.tipoClase]);
-
-          const numeroEntero = parseInt(this.paqueteClase.split(' ')[0]);
-          this.clasesTotal = numeroEntero;
-        } else {
+        if (this.recompensa == 'si') {
           this.precio = 0;
-          this.clasesTotal = 0;
+          this.clasesTotal = 1;
+        } else {
+          const searchPaquete = this.listBasePaqueteClase.filter((paquete: any) => paquete.name == this.paqueteClase);
+
+          if (searchPaquete.length > 0) {
+            const tipo = this.tipoClase == 'Individual' ? 'individual' : 'grupal';
+            this.precio = Number(searchPaquete[0][tipo]);
+
+            const numeroEntero = parseInt(this.paqueteClase.split(' ')[0]);
+            this.clasesTotal = numeroEntero;
+          } else {
+            this.precio = 0;
+            this.clasesTotal = 0;
+          }
         }
+      }
+    }
+  }
+
+  actualizarPaqueteClase(): void {
+    if (this.tipoClase == 'Promo Primera Clase' || this.tipoClase == 'Clase Individual Gratuita' || this.tipoClase == 'Clase Grupal Gratuita') {
+      this.listPaqueteClase = [{ nombre: '1 clase', id: '1 clase'}]
+    } else if (this.tipoClase == 'Individual' || this.tipoClase == 'Grupal hasta 5') {
+      if (this.recompensa == 'si') {
+        this.listPaqueteClase = [{ nombre: '1 clase', id: '1 clase'}];
+      } else if (this.recompensa == 'no') {
+        const tipo = this.tipoClase == 'Individual' ? 'individual' : 'grupal';
+
+        this.listPaqueteClase = this.listBasePaqueteClase.length > 0
+        ? this.listBasePaqueteClase.filter((item: any) => Number(item[tipo]) > 0).map((item: any) => ({ nombre: item.name, id: item.name }))
+        : [];
       }
     }
   }
@@ -423,39 +453,92 @@ export class ReservasComponent implements OnInit {
 
   actualizarHorario([dia, hora, estatus]: [string, string, string]): void {
     this.data[this.semanaCalendar][dia][hora] = estatus;
+    if (estatus == 'seleccionado') {
+      this.stringClasesReservadas += `${dia}|${hora}|`;
+    } else if (estatus == 'disponible' || estatus == 'reservado' || estatus == 'bloqueado') {
+      const regex = new RegExp(`${dia}\\|${hora}|?`, 'g');
+      this.stringClasesReservadas = this.stringClasesReservadas.replace(regex, '');
+    }
   }
 
-  confirmar() {
-    console.log('this.data', this.data);
+  async confirmar() {
     console.log('this.selectedSlots', this.selectedSlots);
-    // const correo = localStorage.getItem('correo');
 
-    // const horariosSeleccionados = [];
+    const confirmed = await this.modalService.openConfirmDialog({ 
+      titulo: '¿Está seguro de reservar este horario?',
+      mensaje: '',
+      type: '',
+      load: this.loadChange,
+      msgBtnAceptar: 'Sí, Guardar',
+      msgBtCerrar: 'Cancelar'
+    }).toPromise();
 
-    // for (let semana of this.semanasList) {
-    //   for (let dia of this.listService.diasSemana) {
-    //     for (let hora of this.horariosList) {
-    //       const horario = this.data[semana.id][dia.id][hora];
+    if (confirmed) {
+      const loadingRef = this.modalService.openLoadingDialog('Guardando...');
 
-    //       if (horario == 'seleccionado') horariosSeleccionados.push(`${semana.id}|${dia.id}|${hora}`)
-    //     }
-    //   }
-    // }
+      this.loadChange = true;
 
-    // this.getDataService.saveReservation({
-    //   fecha_reserva: new Date(),
-    //   curso: this.curso,
-    //   colegio: this.colegio,
-    //   gradoCiclo: this.gradoCiclo,
-    //   tema: this.tema,
-    //   tipoClase: this.tipoClase,
-    //   recompensa: this.recompensa,
-    //   paqueteClase: this.paqueteClase,
-    //   profesor: this.profesor,
-    //   precio: this.precio,
-    //   alumno: correo,
-    //   horarios: horariosSeleccionados
-    // });
-    this.cambiarVista.emit(3);
+      const horariosSeleccionados = [];
+      for (let semana of this.semanasList) {
+        for (let dia of this.listService.diasSemana) {
+          for (let hora of this.horariosList) {
+            if (!this.data[semana.id] || !this.data[semana.id][dia.id]) continue; // Validar si la semana y el día existen
+            if (!this.data[semana.id][dia.id][hora]) continue; // Validar si la hora existe
+
+            const horario = this.data[semana.id][dia.id][hora];
+
+            if (horario == 'seleccionado') horariosSeleccionados.push(`${semana.id}|${dia.id}|${hora}`)
+          }
+        }
+      }
+      console.log('horariosSeleccionados', horariosSeleccionados);
+
+      const buscarProf = this.listProfesor.filter((item: any) => item.id == this.profesor);
+
+      const dataReserva = {
+        tipo: 'guardarReservas',
+        fecha_reserva: new Date().toISOString(),
+        colegio: this.colegio,
+        tema: this.tema,
+        curso: this.curso,
+        gradoCiclo: this.gradoCiclo,
+        tipoClase: this.tipoClase,
+        recompensa: this.recompensa,
+        paqueteClase: this.paqueteClase,
+        clasesReservadas: this.clasesReservadas,
+        clasesTotal: this.clasesTotal,
+        precio: this.precio,
+        profesor: this.profesor,
+        profesor_nombre: buscarProf.length > 0 ? buscarProf[0].nombre : '', // (**)
+        alumno: localStorage.getItem('correo'),
+        alumno_nombre: `${localStorage.getItem('nombre')} ${localStorage.getItem('apellido')}`, // (**)
+        horarios: horariosSeleccionados
+      };
+      console.log('dataReserva', dataReserva);
+
+      this.awsService.post('items', dataReserva)
+        .then((response) => {
+          loadingRef.close();
+          this.modalService.openResultDialog(true, 'Tu data fue guardada');
+          
+          this.cambiarDetalleReserva.emit({
+            curso: this.curso,
+            colegio: this.colegio,
+            tema: this.tema,
+            paqueteClase: this.paqueteClase,
+            stringClasesReservadas: this.stringClasesReservadas,
+            tipoClase: this.tipoClase,
+            profesor: this.profesor,
+            precio: this.precio
+          });
+
+          this.cambiarVista.emit(3);
+        })
+        .catch((error) => {
+          console.error('Error al guardar cursos', error);
+          loadingRef.close();
+          this.modalService.openResultDialog(false, 'Error al registrar reserva, intenta nuevamente más tarde.');
+        });
+    }
   }
 }

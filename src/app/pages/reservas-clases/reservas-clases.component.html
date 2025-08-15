@@ -1,5 +1,5 @@
 <div class="w-full py-8">
   <app-terminos-condiciones *ngIf="pageView == 1" class="flex justify-center" (cambiarVista)="cambiarVista($event)"></app-terminos-condiciones>
-  <app-reservas *ngIf="pageView == 2" class="flex justify-center" (cambiarVista)="cambiarVista($event)"></app-reservas>
-  <app-confirmacion *ngIf="pageView == 3" class="flex justify-center"></app-confirmacion>
+  <app-reservas *ngIf="pageView == 2" class="flex justify-center" (cambiarVista)="cambiarVista($event)" (cambiarDetalleReserva)="cambiarDetalleReserva($event)"></app-reservas>
+  <app-confirmacion *ngIf="pageView == 3" class="flex justify-center" [detalleReserva]="detalleReserva"></app-confirmacion>
 </div>

@@ -170,7 +170,7 @@ export class RegistroHorariosComponent implements OnInit {
               checked = true;
               tipo = searchHorario.tipo;
 
-              if (searchHorario.alumno !== '') { // Si hay un alumno asignado, no se puede eliminar el horario
+              if (searchHorario.alumnos.length > 0) { // Si hay un alumno asignado, no se puede eliminar el horario
                 puedeReservar = false;
               }
             }

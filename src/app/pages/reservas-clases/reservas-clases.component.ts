@@ -18,8 +18,13 @@ import { ConfirmacionComponent } from './confirmacion/confirmacion.component';
 })
 export class ReservasClasesComponent {
   pageView: number = 2;
-
   cambiarVista(nroVista: number) {
     this.pageView = nroVista;
   }
+
+  detalleReserva: any = {};
+  cambiarDetalleReserva(data: any) {
+    this.detalleReserva = data;
+  }
+  
 }

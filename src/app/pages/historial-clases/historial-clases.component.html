@@ -51,14 +51,14 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let usuario of usuarios" class="border-[1px] border-solid border-[#D9D9D9]">
-                        <td class="text-[13px] text-[#000000] text-center bg-[#F5F5F5]">{{ usuario.fecha }}</td>
-                        <td class="text-[13px] text-[#000000] text-center bg-[#F5F5F5]">{{ usuario.hora }}</td>
-                        <td class="text-[13px] text-[#000000] text-center bg-[#F5F5F5]">{{ usuario.tipo }}</td>
-                        <td class="text-[13px] text-[#000000] text-center bg-[#F5F5F5]">{{ usuario.paquete }}</td>
-                        <td class="text-[13px] text-[#000000] text-center bg-[#F5F5F5]">{{ usuario.profesor }}</td>
-                        <td class="text-[13px] text-[#000000] text-center bg-[#F5F5F5]">{{ usuario.curso }}</td>
-                        <td class="text-[13px] text-[#000000] text-center bg-[#F5F5F5]">{{ usuario.tema }}</td>
-                        <td class="text-[13px] text-[#000000] text-center bg-[#F5F5F5]">{{ usuario.colegio }}</td>
+                        <td class="text-[13px] text-[#000000] text-center bg-[#F5F5F5]">{{ usuario.fecha ?? '' }}</td>
+                        <td class="text-[13px] text-[#000000] text-center bg-[#F5F5F5]">{{ usuario.hora ?? '' }}</td>
+                        <td class="text-[13px] text-[#000000] text-center bg-[#F5F5F5]">{{ usuario.tipo ?? '' }}</td>
+                        <td class="text-[13px] text-[#000000] text-center bg-[#F5F5F5]">{{ usuario.paquete ?? '' }}</td>
+                        <td class="text-[13px] text-[#000000] text-center bg-[#F5F5F5]">{{ usuario.profesor ?? '' }}</td>
+                        <td class="text-[13px] text-[#000000] text-center bg-[#F5F5F5]">{{ usuario.curso ?? '' }}</td>
+                        <td class="text-[13px] text-[#000000] text-center bg-[#F5F5F5]">{{ usuario.tema ?? '' }}</td>
+                        <td class="text-[13px] text-[#000000] text-center bg-[#F5F5F5]">{{ usuario.colegio ?? '' }}</td>
                         <td class="text-[13px] text-center bg-[#F5F5F5]" [ngClass]="{ 'text-gray-500': usuario.estatus === 'Pendiente', 'text-green-600': usuario.estatus === 'Confirmado', 'text-red-500': usuario.estatus === 'Cancelado' }">
                             {{ usuario.estatus }}
                         </td>
@@ -112,47 +112,47 @@
         <div *ngFor="let usuario of usuarios"
         class="flex flex-col gap-2 border-[2px] border-solid border-[#D9D9D9] rounded-lg p-2 mb-4">
             <div class="flex">
-                <span class="text-[14px] text-[#000000] font-bold">{{ usuario.fecha }}</span>&nbsp;&nbsp;&nbsp;
-                <span class="text-[14px] text-[#000000] font-bold">{{ usuario.hora }}</span>
+                <span class="text-[14px] text-[#000000] font-bold">{{ usuario.fecha ?? '' }}</span>&nbsp;&nbsp;&nbsp;
+                <span class="text-[14px] text-[#000000] font-bold">{{ usuario.hora ?? '' }}</span>
             </div>
             <div class="flex">
                 <span class="text-[13px] text-[#002B3E] font-bold">Tipo de clase:&nbsp;</span>
-                <span class="text-[13px] text-[#000000]">{{ usuario.tipo }}</span>
+                <span class="text-[13px] text-[#000000]">{{ usuario.tipo ?? '' }}</span>
             </div>
             <div class="flex">
                 <span class="text-[13px] text-[#002B3E] font-bold">Paquete:&nbsp;</span>
-                <span class="text-[13px] text-[#000000]">{{ usuario.paquete }}</span>
+                <span class="text-[13px] text-[#000000]">{{ usuario.paquete ?? '' }}</span>
             </div>
             <div class="flex">
                 <span class="text-[13px] text-[#002B3E] font-bold">Profesor:&nbsp;</span>
-                <span class="text-[13px] text-[#000000]">{{ usuario.profesor }}</span>
+                <span class="text-[13px] text-[#000000]">{{ usuario.profesor ?? '' }}</span>
             </div>
             <div class="flex">
                 <span class="text-[13px] text-[#002B3E] font-bold">Curso:&nbsp;</span>
-                <span class="text-[13px] text-[#000000]">{{ usuario.curso }}</span>
+                <span class="text-[13px] text-[#000000]">{{ usuario.curso ?? '' }}</span>
             </div>
             <div class="flex">
                 <span class="text-[13px] text-[#002B3E] font-bold">Tema:&nbsp;</span>
-                <span class="text-[13px] text-[#000000]">{{ usuario.tema }}</span>
+                <span class="text-[13px] text-[#000000]">{{ usuario.tema ?? '' }}</span>
             </div>
             <div class="flex">
                 <span class="text-[13px] text-[#002B3E] font-bold">Colegio/Universidad:&nbsp;</span>
-                <span class="text-[13px] text-[#000000]">{{ usuario.colegio }}</span>
+                <span class="text-[13px] text-[#000000]">{{ usuario.colegio ?? '' }}</span>
             </div>
             <div class="flex">
                 <span class="text-[13px] text-[#002B3E] font-bold">Estatus:&nbsp;</span>
                 <span class="text-[13px]" [ngClass]="{ 'text-gray-500': usuario.estatus === 'Pendiente', 'text-green-600': usuario.estatus === 'Confirmado', 'text-red-500': usuario.estatus === 'Cancelado' }">
-                    {{ usuario.estatus }}
+                    {{ usuario.estatus ?? '' }}
                 </span>
             </div>
             <div class="flex items-center">
                 <span class="text-[13px] text-[#002B3E] font-bold">Completar Reserva</span>&nbsp;&nbsp;&nbsp;
                 <mat-icon class="!text-[14px] !w-[14px] !h-[14px] !color-[#002B3E]" aria-hidden="false" aria-label="flecha" fontIcon="arrow_right_alt"></mat-icon>&nbsp;&nbsp;&nbsp;
-                <span *ngIf="usuario.estatusCompleto == 'No disponible'" class="text-[13px] text-[#000000]">{{ usuario.estatusCompleto }}</span>
+                <span *ngIf="usuario.estatusCompleto == 'No disponible'" class="text-[13px] text-[#000000]">{{ usuario.estatusCompleto ?? '' }}</span>
                 <button *ngIf="usuario.estatusCompleto !== 'No disponible'" (click)="actualizarReserva()"
                 class="flex items-center border-[2px] border-solid border-[#002B3E] bg-[#002B3E] rounded-lg p-2 gap-2"
                 >
-                    <span class="text-[13px] text-[#FAFAFA]">{{ usuario.estatusCompleto }}</span>
+                    <span class="text-[13px] text-[#FAFAFA]">{{ usuario.estatusCompleto ?? '' }}</span>
                     <mat-icon aria-hidden="false" aria-label="calendar_month" fontIcon="calendar_month" class="!text-[18px] !text-[#DABC62] !w-[18px] !h-[18px]"></mat-icon>
                 </button>
             </div>
