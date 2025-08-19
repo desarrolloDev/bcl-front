@@ -10,6 +10,7 @@ import { PaginationComponent } from '../../ui/pagination/pagination.component';
 import { ModalService } from '../../ui/modal/modal.service';
 import { ActualizarReservaComponent } from './actualizar-reserva/actualizar-reserva.component';
 import { AwsService } from '../../services/aws.service';
+import { ListService } from '../../services/list.service';
 
 @Component({
   selector: 'app-historial-clases',
@@ -54,7 +55,8 @@ export class HistorialClasesComponent implements OnInit {
     private modalService: ModalService,
     private breakpointObserver: BreakpointObserver,
     private router: Router,
-    private awsService: AwsService
+    private awsService: AwsService,
+    private listService: ListService
   ) {
     this.breakpointObserver
       .observe([`(max-width: 1364px)`])
@@ -66,47 +68,15 @@ export class HistorialClasesComponent implements OnInit {
   async ngOnInit() {
     const hoy = new Date();
 
-    const diaSemana = hoy.getDay();
-    const lunes = new Date(hoy);
-    lunes.setDate(hoy.getDate() - ((diaSemana + 6) % 7));
-
-    const domingo = new Date(lunes);
-    domingo.setDate(lunes.getDate() + 6);
+    const haceUnaSemana = new Date(hoy);
+    haceUnaSemana.setDate(hoy.getDate() - 7);
 
     this.form.patchValue({
-      fecha_inicio: lunes,
-      fecha_fin: domingo
+      fecha_inicio: haceUnaSemana,
+      fecha_fin: hoy
     });
 
     await this.buscar();
-  }
-
-  formatearFechaPeru(utcString: string) {
-    const fechaUTC = new Date(utcString);
-
-    // Opciones para formatear fecha y hora en español y zona horaria Perú
-    const fecha = fechaUTC.toLocaleDateString('es-PE', {
-      timeZone: 'America/Lima',
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric' as const
-    });
-
-    return fecha;
-  }
-
-  formatearHoraPeru(utcString: string) {
-    const fechaUTC = new Date(utcString);
-
-    const hora = fechaUTC.toLocaleTimeString('es-PE', {
-      timeZone: 'America/Lima',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      hour12: false // pon true si quieres formato 12h
-    });
-
-    return hora;
   }
 
   async buscar() {
@@ -114,20 +84,20 @@ export class HistorialClasesComponent implements OnInit {
     const desde = this.form.value.fecha_inicio;
     const hasta = this.form.value.fecha_fin;
 
-    await this.awsService.get(`items?tipo=reservas_fecha&desde=${desde}&hasta=${hasta}`)
+    await this.awsService.get(`items?tipo=reservas_fecha&alumno=${localStorage.getItem('correo')}&desde=${desde}&hasta=${hasta}`)
       .then((response: any) => {
         console.log('Response:', response);
         const reservas = JSON.parse(response.body);
         this.usuarios = reservas.map((usuario: any) => ({
-          fecha: this.formatearFechaPeru(usuario.fecha_reserva),
-          hora: this.formatearHoraPeru(usuario.fecha_reserva),
+          fecha: this.listService.formatearFechaPeru(usuario.fecha_reserva),
+          hora: this.listService.formatearHoraPeru(usuario.fecha_reserva),
           tipo: usuario.tipoClase,
           paquete: usuario.paqueteClase,
           profesor: usuario.profesor_nombre,
           curso: usuario.curso,
           tema: usuario.tema,
           colegio: usuario.colegio,
-          estatus: 'Pendiente', /// usuario.estatus,
+          estatus: usuario.status,
           estatusCompleto: 'No disponible'// usuario.estatusCompleto
         }));
       })

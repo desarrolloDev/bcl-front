@@ -198,7 +198,7 @@ export class ListService {
 
   modulosDashboard(rol: string): any {
     const newModulos = [];
-    newModulos.push({ image: 'assets/modulo_confirmacion.PNG', title: 'Historial de paquetes', redirect: '/historial_clases' });
+    newModulos.push({ image: 'assets/modulo_confirmacion.PNG', title: 'Historial de clases', redirect: '/historial_clases' });
     newModulos.push({ image: 'assets/modulo_horarios.PNG', title: 'Reserva de clases', redirect: '/reservar_clases' });
     newModulos.push({ image: 'assets/modulo_horarios.PNG', title: 'Clases a dictar (P)', redirect: '/clases_dictar' });
     newModulos.push({ image: 'assets/modulo_horarios.PNG', title: 'Registro de Horarios (P)', redirect: '/registro_horarios' });
@@ -221,5 +221,111 @@ export class ListService {
     //   newModulos.push({ image: 'assets/modulo_horarios.PNG', title: 'Reserva de clases', redirect: '/reservar_clases' });
     // }
     return newModulos;
+  }
+
+  formatearFechaPeru(utcString: string) {
+    const fechaUTC = new Date(utcString);
+
+    // Opciones para formatear fecha y hora en español y zona horaria Perú
+    const fecha = fechaUTC.toLocaleDateString('es-PE', {
+      timeZone: 'America/Lima',
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric' as const
+    });
+
+    return fecha;
+  }
+
+  formatearHoraPeru(utcString: string) {
+    const fechaUTC = new Date(utcString);
+
+    const hora = fechaUTC.toLocaleTimeString('es-PE', {
+      timeZone: 'America/Lima',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false // pon true si quieres formato 12h
+    });
+
+    return hora;
+  }
+
+  parseFecha(fechaStr: string) {
+    const [dia, mes, anio] = fechaStr.split("/").map(Number);
+    return new Date(anio, mes - 1, dia);
+  }
+
+  parseHora(horaStr: string, baseDate: Date) {
+    let [time, meridian] = horaStr.split(/(am|pm)/i).filter(Boolean);
+    let [h, m] = time.trim().split(":").map(Number);
+
+    if (meridian.toLowerCase() === "pm" && h < 12) h += 12;
+    if (meridian.toLowerCase() === "am" && h === 12) h = 0;
+
+    const date = new Date(baseDate);
+    date.setHours(h, m, 0, 0);
+    return date;
+  }
+
+  estadoReserva(cadena: string) {
+    const [rango, diaSemana, horario] = cadena.split("|");
+    const [inicioStr, finStr] = rango.split(" - ");
+    const [horaInicioStr, horaFinStr] = horario.split(" - ");
+
+    const inicioSemana = this.parseFecha(inicioStr.trim());
+    const finSemana = this.parseFecha(finStr.trim());
+
+    const diasMap: Record<string, number> = {
+      DOMINGO: 0,
+      LUNES: 1,
+      MARTES: 2,
+      MIÉRCOLES: 3,
+      MIERCOLES: 3,
+      JUEVES: 4,
+      VIERNES: 5,
+      SÁBADO: 6,
+      SABADO: 6,
+    };
+
+    let fechaClase = new Date(inicioSemana);
+    while (fechaClase <= finSemana && fechaClase.getDay() !== diasMap[diaSemana]) {
+      fechaClase.setDate(fechaClase.getDate() + 1);
+    }
+
+    if (fechaClase > finSemana) return "No encontrado en ese rango";
+
+    const fechaInicio = this.parseHora(horaInicioStr, fechaClase);
+    const fechaFin = this.parseHora(horaFinStr, fechaClase);
+
+    const ahora = new Date();
+
+    if (ahora < fechaInicio) return "Aún no empieza";
+    if (ahora > fechaFin) return "Ya pasó";
+    return "En curso";
+  }
+
+  resumenReservas(reservas: string[]) {
+    let yaPasaron = 0;
+
+    for (const r of reservas) {
+      const estado = this.estadoReserva(r);
+
+      if (estado === "Ya pasó") yaPasaron++;
+    }
+
+    return yaPasaron;
+  }
+
+  reservasPendientes(reservas: string[]) {
+    const aunNoEmpiezan = [];
+
+    for (const r of reservas) {
+      const estado = this.estadoReserva(r);
+
+      if (estado === "Aún no empieza") aunNoEmpiezan.push(r);
+    }
+
+    return aunNoEmpiezan;
   }
 }

@@ -21,6 +21,7 @@ export class SelectComponent {
   @Input() padding: string = '8px';
   @Input() textSize: string = '12px';
   @Input() heightSelect: string = '38';
+  @Input() isDisabled: boolean = false;
 
   @Input() typeControl: string = 'form'; // 'model'
   @Input() control = new FormControl<string | number>('', []);

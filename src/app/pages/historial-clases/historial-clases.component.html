@@ -60,11 +60,11 @@
                         <td class="text-[13px] text-[#000000] text-center bg-[#F5F5F5]">{{ usuario.tema ?? '' }}</td>
                         <td class="text-[13px] text-[#000000] text-center bg-[#F5F5F5]">{{ usuario.colegio ?? '' }}</td>
                         <td class="text-[13px] text-center bg-[#F5F5F5]" [ngClass]="{ 'text-gray-500': usuario.estatus === 'Pendiente', 'text-green-600': usuario.estatus === 'Confirmado', 'text-red-500': usuario.estatus === 'Cancelado' }">
-                            {{ usuario.estatus }}
+                            {{ usuario.estatus ?? '' }}
                         </td>
                         <td class="text-[13px] text-[#000000] text-center bg-[#F5F5F5]">
                             <div class="flex items-center justify-center gap-2">
-                                {{ usuario.estatusCompleto }}
+                                {{ usuario.estatusCompleto ?? '' }}
                                 <button  *ngIf="usuario.estatusCompleto !== 'No disponible'" (click)="actualizarReserva()" class="">
                                     <mat-icon aria-hidden="false" aria-label="calendar_month" fontIcon="calendar_month" class="!text-[18px] !text-[#DABC62] !w-[18px] !h-[18px]"></mat-icon>
                                 </button>

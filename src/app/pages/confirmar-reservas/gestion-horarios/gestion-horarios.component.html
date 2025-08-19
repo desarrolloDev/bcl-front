@@ -18,8 +18,9 @@
 
                 <div *ngFor="let horario of horariosList" class="flex justify-between items-center mb-1">
                     <app-checkbox [label]="horario" typeControl="model"
-                        [(controlModel)]="checked"
-                        (changeSelect)="actualizarHorarios()"></app-checkbox>
+                            [(controlModel)]="data[selectedSemana][selectedtDia][horario].checked"
+                            (changeSelect)="actualizarHorarios()"
+                            [isDisabled]="data[selectedSemana][selectedtDia][horario].isDisabled"></app-checkbox>
                 </div>
             </div>
             <div class="flex flex-col justify-between w-[60%]">
@@ -59,8 +60,9 @@
 
                     <div *ngFor="let horario of horariosList" class="flex justify-between items-center mb-1">
                         <app-checkbox [label]="horario" typeControl="model"
-                            [(controlModel)]="checked"
-                            (changeSelect)="actualizarHorarios()"></app-checkbox>
+                            [(controlModel)]="data[selectedSemana][selectedtDia][horario].checked"
+                            (changeSelect)="actualizarHorarios()"
+                            [isDisabled]="data[selectedSemana][selectedtDia][horario].isDisabled"></app-checkbox>
                     </div>
                 </div>
             </mat-step>
