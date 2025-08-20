@@ -18,21 +18,28 @@
 
                 <div *ngFor="let horario of horariosList" class="flex justify-between items-center mb-1">
                     <app-checkbox [label]="horario" typeControl="model"
-                            [(controlModel)]="data[selectedSemana][selectedtDia][horario].checked"
-                            (changeSelect)="actualizarHorarios()"
-                            [isDisabled]="data[selectedSemana][selectedtDia][horario].isDisabled"></app-checkbox>
+                        [(controlModel)]="data[selectedSemana][selectedtDia][horario].checked"
+                        (changeSelect)="actualizarHorarios(selectedSemana, selectedtDia, horario)"
+                        [isDisabled]="data[selectedSemana][selectedtDia][horario].isDisabled"></app-checkbox>
                 </div>
             </div>
             <div class="flex flex-col justify-between w-[60%]">
                 <div class="flex flex-col">
-                    <div class="flex justify-start mb-4 week-selector">
-                        <button (click)="changeWeek(-1)" [disabled]="semanaOffset === 0" class="flex !pl-[12px]">
-                            <mat-icon aria-hidden="false" aria-label="arrow_back_ios" fontIcon="arrow_back_ios" class="!text-[18px] !text-[#FFFFFF] !w-[18px] !h-[18px]"></mat-icon>
-                        </button>
-                        <span class="text-[16px] text-[#002B3E] font-bold">Semana {{ semanaCalendar }}</span>
-                        <button (click)="changeWeek(1)" [disabled]="semanaOffset === 3" class="flex !pl-[8px] !pr-[8px]">
-                            <mat-icon aria-hidden="false" aria-label="arrow_forward_ios" fontIcon="arrow_forward_ios" class="!text-[18px] !text-[#FFFFFF] !w-[18px] !h-[18px]"></mat-icon>
-                        </button>
+                    <div class="flex justify-between mb-4">
+                        <div class="flex justify-start week-selector">
+                            <button (click)="changeWeek(-1)" [disabled]="semanaOffset === 0" class="flex !pl-[12px]">
+                                <mat-icon aria-hidden="false" aria-label="arrow_back_ios" fontIcon="arrow_back_ios" class="!text-[18px] !text-[#FFFFFF] !w-[18px] !h-[18px]"></mat-icon>
+                            </button>
+                            <span class="text-[16px] text-[#002B3E] font-bold">Semana {{ semanaCalendar }}</span>
+                            <button (click)="changeWeek(1)" [disabled]="semanaOffset === 3" class="flex !pl-[8px] !pr-[8px]">
+                                <mat-icon aria-hidden="false" aria-label="arrow_forward_ios" fontIcon="arrow_forward_ios" class="!text-[18px] !text-[#FFFFFF] !w-[18px] !h-[18px]"></mat-icon>
+                            </button>
+                        </div>
+                        
+                        <div class="flex">
+                            <span class="text-[16px] text-[#D01E21] font-bold">Clases reservadas:</span>
+                            <span class="text-[16px] text-[#002B3E] font-bold ml-2"> {{clasesReservadas}} de {{clasesTotal}} clases </span>
+                        </div>
                     </div>
                     <app-calendar [hours]="horariosList" [selectedSlots]="selectedSlots"></app-calendar>
                 </div>
@@ -61,21 +68,29 @@
                     <div *ngFor="let horario of horariosList" class="flex justify-between items-center mb-1">
                         <app-checkbox [label]="horario" typeControl="model"
                             [(controlModel)]="data[selectedSemana][selectedtDia][horario].checked"
-                            (changeSelect)="actualizarHorarios()"
+                            (changeSelect)="actualizarHorarios(selectedSemana, selectedtDia, horario)"
                             [isDisabled]="data[selectedSemana][selectedtDia][horario].isDisabled"></app-checkbox>
                     </div>
                 </div>
             </mat-step>
             <mat-step label="Calendario">
                 <div class="flex flex-col">
-                    <div class="flex justify-start mt-4 mb-6 week-selector">
-                        <button (click)="changeWeek(-1)" [disabled]="semanaOffset === 0" class="flex !pl-[12px]">
-                            <mat-icon aria-hidden="false" aria-label="arrow_back_ios" fontIcon="arrow_back_ios" class="!text-[18px] !text-[#FFFFFF] !w-[18px] !h-[18px]"></mat-icon>
-                        </button>
-                        <span class="text-[12px] text-[#002B3E] font-bold">{{ semanaCalendar }}</span>
-                        <button (click)="changeWeek(1)" [disabled]="semanaOffset === 3" class="flex !pl-[8px] !pr-[8px]">
-                            <mat-icon aria-hidden="false" aria-label="arrow_forward_ios" fontIcon="arrow_forward_ios" class="!text-[18px] !text-[#FFFFFF] !w-[18px] !h-[18px]"></mat-icon>
-                        </button>
+                    <div class="flex justify-between mt-4 mb-6">
+                        <div class="flex justify-start week-selector">
+                            <button (click)="changeWeek(-1)" [disabled]="semanaOffset === 0" class="flex !pl-[12px]">
+                                <mat-icon aria-hidden="false" aria-label="arrow_back_ios" fontIcon="arrow_back_ios" class="!text-[18px] !text-[#FFFFFF] !w-[18px] !h-[18px]"></mat-icon>
+                            </button>
+                            <span class="text-[12px] text-[#002B3E] font-bold">{{ semanaCalendar }}</span>
+                            <button (click)="changeWeek(1)" [disabled]="semanaOffset === 3" class="flex !pl-[8px] !pr-[8px]">
+                                <mat-icon aria-hidden="false" aria-label="arrow_forward_ios" fontIcon="arrow_forward_ios" class="!text-[18px] !text-[#FFFFFF] !w-[18px] !h-[18px]"></mat-icon>
+                            </button>
+                        </div>
+                        
+                        <div class="flex">
+                            <span class="text-[16px] text-[#D01E21] font-bold">Clases reservadas:</span>
+                            <span class="text-[16px] text-[#002B3E] font-bold ml-2"> {{clasesReservadas}} de {{clasesTotal}} clases </span>
+                        </div>
+                        
                     </div>
                     <app-calendar [hours]="horariosList" [selectedSlots]="selectedSlots" tipo="mobile" fontSize="10px"></app-calendar>
                 </div>

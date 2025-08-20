@@ -111,6 +111,7 @@ private _fb = inject(NonNullableFormBuilder);
           colegio: usuario.colegio,
           estatus: usuario.status,
           clasesTotal: usuario.clasesTotal,
+          clasesReservadas: usuario.clasesReservadas,
           horarios: usuario.horarios
         }));
       })

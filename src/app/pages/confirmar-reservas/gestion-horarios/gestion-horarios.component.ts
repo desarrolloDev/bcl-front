@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input  } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { BreakpointObserver } from '@angular/cdk/layout';
@@ -31,6 +31,9 @@ import { ModalService } from '../../../ui/modal/modal.service';
 })
 export class GestionHorariosComponent implements OnInit {
   @Input() usuarioSelect: any = {};
+
+  clasesReservadas: number = 0;
+  clasesTotal: number = 0;
   
   isSmallScreen = false;
   isLinear = false;
@@ -80,19 +83,29 @@ export class GestionHorariosComponent implements OnInit {
   }
 
   async ngOnInit() {
-    console.log('usuarioSelect', this.usuarioSelect);
+    console.log('this.usuarioSelect', this.usuarioSelect);
+    this.clasesReservadas = this.usuarioSelect.clasesReservadas;
+    this.clasesTotal = this.usuarioSelect.clasesTotal;
 
     this.semanasList = this.listService.intervaloSemana();
     this.semanaCalendar = this.semanasList[0].id;
+    this.selectedSemana = this.semanasList[0].id;
 
     this.selectedtDia = this.diaSemanasList[0].id;
-
-    this.horariosList = await this.getDataService.horariosList();
 
     await this.dataHorarios();
   }
 
   async dataHorarios() {
+    const listaHorarios = await this.getDataService.horariosList();
+
+    const semana_posterior = this.listService.obtenerSemanaSiguiente(this.semanaCalendar);
+    const matrizAccesos = this.listService.obtenerCondicional();
+    const dia_actual = this.listService.obtenerDiaActual();
+    const ahora = new Date();
+    const ahoraHora = ahora.getHours();
+    const horaLimite = 9;
+
     const semanaString = this.semanasList.map((item: any) => item.id).join(',');
 
     let dataHorariosProfesor: any[] = [];
@@ -103,242 +116,110 @@ export class GestionHorariosComponent implements OnInit {
       .catch((error) => {
         console.error('Error al guardar cursos', error);
       });
+    console.log('dataHorariosProfesor', dataHorariosProfesor);
+    console.log('this.usuarioSelect.horarios', this.usuarioSelect.horarios);
 
-    // LISTA DE HORARIOS PARA EL CALENDARIO
+    // LISTA DE HORARIOS PARA EL CALENDARIO --------------------------------------------------------------------
     const newSlots: boolean[][] = [];
-    for (let j = 0; j < this.horariosList.length; j++) {
+    for (let j = 0; j < listaHorarios.length; j++) {
       newSlots[j] = [];
       for (let i = 0; i < this.diasList.length; i++) {
-        const searchHorario = this.usuarioSelect.horarios.find((h: any) => h === `${this.semanaCalendar}|${this.diasList[i].id}|${this.horariosList[j]}`);
+        const searchHorario = this.usuarioSelect.horarios.find((h: any) => h === `${this.semanaCalendar}|${this.diasList[i].id}|${listaHorarios[j]}`);
 
         if (searchHorario) newSlots[j][i] = true;
         else newSlots[j][i] = false;
       }
     }
     this.selectedSlots = newSlots;
+    console.log('newSlots', newSlots);
 
-    // LISTA DE HORARIOS PARA EL SELECT
+    // LISTA DE HORARIOS PARA EL SELECT -------------------------------------------------------------------------
     let newData: any = {};
 
-    // const reservasPendientes = this.listService.reservasPendientes(this.usuarioSelect.horarios);
+    const reservasPendientes = this.listService.reservasPendientes(this.usuarioSelect.horarios);
+    console.log('reservasPendientes', reservasPendientes);
 
-    // for (let i = 0; i < this.semanasList.length; i++) { // 12|05|2025 - 18|05|2025
-    //   const semana = this.semanasList[i].id;
-    //   newData[semana] = {};
+    for (let i = 0; i < this.semanasList.length; i++) { // 12|05|2025 - 18|05|2025
+      const semana = this.semanasList[i].id;
+      newData[semana] = {};
 
-    //   const buscarSemana = dataHorariosProfesor.filter((item: any) => {
-    //     if (!item?.semana_profesor) return false;
-    //     return item.semana_profesor.includes(semana);
-    //   });
+      const buscarSemana = dataHorariosProfesor.filter((item: any) => {
+        if (!item?.semana_profesor) return false;
+        return item.semana_profesor.includes(semana);
+      });
+      console.log('buscarSemana', buscarSemana);
 
-    //   for (let j = 0; j < this.diaSemanasList.length; j++) { // LUNES
-    //     newData[semana][this.diaSemanasList[j].id] = {};
+      for (let j = 0; j < this.diaSemanasList.length; j++) { // LUNES
+        const dia = this.diaSemanasList[j].id;
 
-    //     for (let k = 0; k < this.horariosList.length; k++) { // 8:00am - 9:25am
-    //       const horario = this.horariosList[k];
+        newData[semana][dia] = {};
 
-    //       // Validar si se puede seleccionar el horario ---------------------------------------
-    //       let puedeReservar = true;
-    //       let checked = false;
+        for (let k = 0; k < listaHorarios.length; k++) { // 8:00am - 9:25am
+          const horario = listaHorarios[k];
 
-    //       const searchHorario = this.usuarioSelect.horarios.find((h: any) => h === `${semana}|${this.diaSemanasList[j].id}|${horario}`);
+          // Validar si se puede seleccionar el horario ---------------------------------------
+          let puedeReservar = true;
+          let checked = false;
 
-    //       if (searchHorario) {
-    //         checked = true;
+          const searchHorario = this.usuarioSelect.horarios.find((h: any) => h === `${semana}|${dia}|${horario}`);
 
-    //         const searchReservaPaso= reservasPendientes.find((r: any) => r.horario === `${semana}|${this.diaSemanasList[j].id}|${horario}`);
-            
-    //         if (searchReservaPaso) puedeReservar = false;
+          if (searchHorario) {
+            checked = true;
 
-    //       } else {
-    //         const searchHorarioPro = dataHorariosProfesor.find((item: any) => {
-    //           if (!item?.semana_profesor) return false;
-    //         })
+            const searchReservaPendiente = reservasPendientes.find((r: any) => r.horario === `${semana}|${dia}|${horario}`);
 
-    //         const alumnosReserva = horarios[clave].alumnos;
+            if (!searchReservaPendiente) puedeReservar = false;
 
-    //           if (alumnosReserva.length > 0) {
+          } else {
+            const alumnosReserva = buscarSemana.length > 0 ? (buscarSemana[0].horarios[`${dia}|${horario}`] ? buscarSemana[0].horarios[`${dia}|${horario}`].alumnos : []) : [];
+
+            if (alumnosReserva.length > 0) {
+              const itemHorario = buscarSemana[0].horarios[`${dia}|${horario}`];
+
+              if (((itemHorario.tipo == 'Individual' || itemHorario.tipo == 'Promo Primera Clase' || itemHorario.tipo == 'Clase Individual Gratuita') && alumnosReserva.length == 1) 
+                ||
+                ((itemHorario.tipo == 'Grupal hasta 5' || itemHorario.tipo == 'Clase Grupal Gratuita') && alumnosReserva.length == 5)) {
                 
-    //             if (((horarios[clave].tipo == 'Individual' || 
-    //               horarios[clave].tipo == 'Promo Primera Clase' ||
-    //               horarios[clave].tipo == 'Clase Individual Gratuita'
-    //             ) && alumnosReserva.length == 1) 
-    //             ||
-    //             ((horarios[clave].tipo == 'Grupal hasta 5' ||
-    //               horarios[clave].tipo == 'Clase Grupal Gratuita'
-    //             ) && alumnosReserva.length == 5)) {
-    //               status = 'reservado';
-    //             } else if ((horarios[clave].tipo == 'Grupal hasta 5' ||
-    //               horarios[clave].tipo == 'Clase Grupal Gratuita'
-    //             ) && alumnosReserva.length > 1 && alumnosReserva.length < 5) {
-    //               status = 'disponible';
-    //             }
-    //           } else {
-    //             let puedeReservar = true;
+                puedeReservar = false;
 
-    //             // Validar si se puede reservar
-    //             const esSemanaActual = semana === semana_actual;
+              }
 
-    //             if (esSemanaActual) {
-    //               const valorMatriz = matrizAccesos[this.listService.diasIndice(dia_actual)][this.listService.diasIndice(dia)];
+            } else {
+              // Validar si se puede reservar
+              const esSemanaActual = semana === this.semanaCalendar;
 
-    //               if (valorMatriz == 'NO') puedeReservar = false;
-    //               else if (valorMatriz == 'CONSULTAR') puedeReservar = ahoraHora < horaLimite;
-    //             }
+              if (esSemanaActual) {
+                const valorMatriz = matrizAccesos[this.listService.diasIndice(dia_actual)][this.listService.diasIndice(dia)];
 
-    //             const esSemanaPosterior = semana === semana_posterior;
-    //             if (esSemanaPosterior && dia_actual == 'DOMINGO' && dia == 'LUNES') puedeReservar = ahoraHora < horaLimite;
+                if (valorMatriz == 'NO') puedeReservar = false;
+                else if (valorMatriz == 'CONSULTAR') puedeReservar = ahoraHora < horaLimite;
+              }
 
-    //             if (!puedeReservar) {
-    //               status = 'bloqueado';
-    //             } else {
-    //               status = 'disponible';
-    //             }
-    //           }
-    //       } 
+              const esSemanaPosterior = semana === semana_posterior;
+              if (esSemanaPosterior && dia_actual == 'DOMINGO' && dia == 'LUNES') puedeReservar = ahoraHora < horaLimite;
 
+              if (!puedeReservar) {
+                puedeReservar = false;
+              }
+            }
+          } 
 
+          // ---------------------------------------------------------------------------------
 
+          newData[semana][dia][horario] = {
+            checked: checked,
+            isDisabled: !puedeReservar ? true : false
+          };
+        }
+      }
+    }
 
+    console.log('newData', newData);
+    this.dataBase = newData;
+    this.data = newData;
 
-
-
-          
-
-    //       if (semana === semana_actual) {
-    //         puedeReservar = false;
-    //       } else if (semana === semana_posterior) {
-            
-    //         if (diaActualNombre == 'LUNES') {
-    //           puedeReservar = ahoraHora < horaLimite;
-    //         } else puedeReservar = false;
-    //       }
-
-    //       // ----------------------------------------------------------------------------------
-
-          
-    //       let tipo = 'Individual';
-
-    //       if (buscarSemana.length > 0 && Object.keys(buscarSemana[0].horarios).length > 0) {
-    //         const searchHorario = buscarSemana[0].horarios[`${diaSemana[j].id}|${horario}`] ?? null;
-            
-    //         if (searchHorario !== null) {
-    //           checked = true;
-    //           tipo = searchHorario.tipo;
-
-    //           if (searchHorario.alumnos.length > 0) { // Si hay un alumno asignado, no se puede eliminar el horario
-    //             puedeReservar = false;
-    //           }
-    //         }
-    //       }
-
-    //       newData[semana][diaSemana[j].id][horario] = {
-    //         checked: checked,
-    //         isDisabled: !puedeReservar ? true : false,
-    //         type: tipo
-    //       };
-    //     }
-    //   }
-    // }
-
-    // const semana_actual = this.listService.obtenerRangoActual();
-    // const semana_posterior = this.listService.obtenerSemanaSiguiente(semana_actual);
-    // const dia_actual = this.listService.obtenerDiaActual();
-    // const ahora = new Date();
-    // const ahoraHora = ahora.getHours();
-    // const horaLimite = 9;
-    // const matrizAccesos = this.listService.obtenerCondicional();
-
-    
-
-    // const dataNewHorarios: any = {};
-    // for (let itemProfHorario of dataHorariosProfesor) {
-
-    //   if (itemProfHorario.semana_profesor) {
-    //     const semana = itemProfHorario.semana_profesor.split('#')[0];
-    //     const profesor = itemProfHorario.semana_profesor.split('#')[1];
-            
-    //     if (itemProfHorario.horarios) {
-    //       const horarios = itemProfHorario.horarios;
-    //       for (const clave of Object.keys(horarios)) {
-      
-    //         const dia = clave.split('|')[0];
-    //         const hora = clave.split('|')[1];
-            
-    //         // **************************************************************************
-    //         // VALIDACIÓN PARA RESERVAR
-    //         // 'disponible' | 'reservado' | 'seleccionado' | 'bloqueado'
-
-    //         let status = '';
-
-    //         const searchHorario = this.usuarioSelect.horarios.find((h: any) => h === `${semana}|${dia}|${hora}`);
-
-    //         if (searchHorario) {
-    //           const searchReservaPaso= statusReservas.find((r: any) => r.horario === `${semana}|${dia}|${hora}`);
-    //           if (searchReservaPaso) {
-    //             status = 'reservado';
-    //           } else {
-    //             status = 'seleccionado';
-    //           }
-
-    //         } else {
-              
-    //         }
-            
-    //         // console.log('status', status);
-    //         // **************************************************************************
-      
-    //         if (!dataNewHorarios[horarios[clave].tipo]) {
-    //           dataNewHorarios[horarios[clave].tipo] = {  
-    //             [profesor]: {}
-    //           };
-    //           dataNewHorarios[horarios[clave].tipo][profesor][semana] = {};
-    //           dataNewHorarios[horarios[clave].tipo][profesor][semana][dia] = {};
-    //           dataNewHorarios[horarios[clave].tipo][profesor][semana][dia][hora] = status;
-    //         } else {
-    //           const buscandoProf = dataNewHorarios[horarios[clave].tipo][profesor];
-
-    //           if (typeof buscandoProf !== 'object' || Object.keys(buscandoProf).length == 0) {
-    //             dataNewHorarios[horarios[clave].tipo][profesor] = {};
-    //             dataNewHorarios[horarios[clave].tipo][profesor][semana] = {};
-    //             dataNewHorarios[horarios[clave].tipo][profesor][semana][dia] = {};
-    //             dataNewHorarios[horarios[clave].tipo][profesor][semana][dia][hora] = status;
-    //           } else {
-    //             const buscandoSemana = dataNewHorarios[horarios[clave].tipo][profesor][semana];
-                
-    //             if (typeof buscandoSemana !== 'object' || Object.keys(buscandoSemana).length == 0) {
-    //               dataNewHorarios[horarios[clave].tipo][profesor][semana] = {};
-    //               dataNewHorarios[horarios[clave].tipo][profesor][semana][dia] = {};
-    //               dataNewHorarios[horarios[clave].tipo][profesor][semana][dia][hora] = status;
-    //             } else {
-    //               const buscandoDia = dataNewHorarios[horarios[clave].tipo][profesor][semana][dia];
-                  
-    //               if (typeof buscandoDia !== 'object') {
-    //                 dataNewHorarios[horarios[clave].tipo][profesor][semana][dia] = {};
-    //                 dataNewHorarios[horarios[clave].tipo][profesor][semana][dia][hora] = status;
-    //               } else {
-    //                 const buscadoHorario = dataNewHorarios[horarios[clave].tipo][profesor][semana][dia][hora];
-                    
-    //                 if (typeof buscadoHorario !== 'string') {
-    //                   dataNewHorarios[horarios[clave].tipo][profesor][semana][dia][hora] = status;
-    //                 }
-    //               }
-    //             }
-    //           }
-    //         }
-
-    //       }
-    //     }   
-    //   }
-    // }
-
-    // this.data = dataNewHorarios;
-
-
-
-    
-
-    // this.data = newData;
+    this.horariosList = listaHorarios;
+    console.log('this.horariosList', this.horariosList);
   }
 
   changeWeek(offset: number) {
@@ -346,18 +227,49 @@ export class GestionHorariosComponent implements OnInit {
     if (newOffset >= 0 && newOffset <= 3) {
       this.semanaOffset = newOffset;
       this.semanaCalendar = this.semanasList[newOffset].id;
-      this.actualizarHorarios();
+      this.actualizarHorarios('', '', '');
     }
   }
 
-  actualizarHorarios(): void {
+  actualizarHorarios(semana: string, dia: string,  horario: string): void {
+    if (semana === '' && dia === '' && horario === '') {
+      this.actualizarSlots();
+    } else {
+      const buscarChecked = this.data[semana][dia][horario].checked;
+
+      if (buscarChecked === true && this.clasesReservadas === this.clasesTotal) {
+        // this.data[semana][dia][horario].checked = false;
+        this.data[semana][dia][horario] = {
+          ...this.data[semana][dia][horario],
+          checked: false
+        };
+        this.modalService.openResultDialog(false, 'Límite de clases alcanzado, No puedes reservar más clases.');
+      }
+      
+      if (buscarChecked === true && this.clasesReservadas < this.clasesTotal) {
+        this.clasesReservadas += 1;
+        this.actualizarSlots();
+      }
+
+      if (buscarChecked === false && this.clasesReservadas < this.clasesTotal) {
+        this.clasesReservadas -= 1;
+        this.actualizarSlots();
+      }
+      
+    }
+
+  }
+
+  actualizarSlots() {
     const newData: any[] = [];
+
     for (let j = 0; j < this.horariosList.length; j++) {
       newData[j] = [];
       for (let i = 0; i < this.diasList.length; i++) {
         newData[j][i] = this.data[this.semanaCalendar][this.diasList[i].id][this.horariosList[j]].checked
       }
     }
+
     this.selectedSlots = newData;
   }
 
