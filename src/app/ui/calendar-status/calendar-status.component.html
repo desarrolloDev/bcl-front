@@ -11,6 +11,9 @@
       <tr *ngFor="let hour of hours; let i = index">
         <td class="bg-[#FFFFFF]" [ngStyle]="{ 'width': widthHora, 'font-size': fontSize }">{{ hour }}</td>
         <td class="bg-[#E0E0E0]" *ngFor="let day of listService.diasSemana; let j = index"
-            [class.selected]="selectedSlots.length > 0 ? selectedSlots[i][j] : false"></td>      </tr>
+            [class.selected]="obtenerChecked(i, j)">
+            <span class="text-[10px] text-[#002B3E]">{{ obtenerText(i, j) }}</span>
+        </td>
+      </tr>
     </tbody>
-  </table>
+</table>

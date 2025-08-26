@@ -10,4 +10,7 @@ input {
         outline: none;
         border-color: #949090;
     }
+    &:disabled {
+        color:  #949090;
+    }
 }

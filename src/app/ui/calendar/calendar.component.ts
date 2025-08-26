@@ -19,8 +19,4 @@ export class CalendarComponent {
   @Input() fontSize: string = '14px';
 
   constructor(public listService: ListService) {}
-
-  // toggleSlot(row: number, col: number) {
-  //   this.selectedSlots[row][col] = !this.selectedSlots[row][col];
-  // }
 }

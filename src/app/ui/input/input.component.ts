@@ -32,6 +32,8 @@ export class InputComponent {
   @Input() control = new FormControl<string | number>('', []);
   @Input() controlModel: string = '';
 
+  @Input() isDisabled: boolean = false;
+
   @Output() controlModelChange = new EventEmitter<any>();
 
   internalModel: any = '';
