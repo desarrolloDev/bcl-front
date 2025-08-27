@@ -46,6 +46,7 @@
                         <th class="text-[16px] text-[#002B3E] font-semibold !bg-[#D9D9D9]">Tema</th>
                         <th class="text-[16px] text-[#002B3E] font-semibold !bg-[#D9D9D9]">Colegio/Universidad</th>
                         <th class="text-[16px] text-[#002B3E] font-semibold !bg-[#D9D9D9]">Estatus</th>
+                        <th class="text-[16px] text-[#002B3E] font-semibold !bg-[#D9D9D9]">Clases dictadas</th>
                         <th class="text-[16px] text-[#002B3E] font-semibold !bg-[#D9D9D9]">Completar Reserva</th>
                     </tr>
                 </thead>
@@ -63,11 +64,14 @@
                             {{ usuario.estatus ?? '' }}
                         </td>
                         <td class="text-[13px] text-[#000000] text-center bg-[#F5F5F5]">
+                            {{ listService.resumenReservas(usuario.horarios) }}
+                            de
+                            {{ usuario.clasesTotal ?? '' }}
+                        </td>
+                        <td class="text-[13px] text-[#000000] text-center bg-[#F5F5F5]">
                             <div class="flex items-center justify-center gap-2">
                                 <span class="text-[13px] text-[#000000]" *ngIf="usuario.estatus === 'Confirmado'">
-                                    {{ listService.resumenReservas(usuario.horarios) }}
-                                    de
-                                    {{ usuario.clasesTotal ?? '' }}
+                                    {{ usuario.clasesReservadas ?? '' }} de {{ usuario.clasesTotal ?? '' }}
                                 </span>
                                 <span *ngIf="usuario.estatus !== 'Confirmado'">No disponible</span>
 
@@ -151,14 +155,20 @@
                     {{ usuario.estatus ?? '' }}
                 </span>
             </div>
+            <div class="flex">
+                <span class="text-[13px] text-[#002B3E] font-bold">Clases dictadas:&nbsp;</span>
+                <span class="text-[13px] text-[#000000]">
+                    {{ listService.resumenReservas(usuario.horarios) }}
+                    de
+                    {{ usuario.clasesTotal ?? '' }}
+                </span>
+            </div>
             <div class="flex items-center">
                 <span class="text-[13px] text-[#002B3E] font-bold">Completar Reserva</span>&nbsp;&nbsp;&nbsp;
                 <mat-icon class="!text-[14px] !w-[14px] !h-[14px] !color-[#002B3E]" aria-hidden="false" aria-label="flecha" fontIcon="arrow_right_alt"></mat-icon>&nbsp;&nbsp;&nbsp;
                 
                 <span class="text-[13px] text-[#000000]" *ngIf="usuario.estatus === 'Confirmado'">
-                    {{ listService.resumenReservas(usuario.horarios) }}
-                    de
-                    {{ usuario.clasesTotal ?? '' }}
+                    {{ usuario.clasesReservadas ?? '' }} de {{ usuario.clasesTotal ?? '' }}
                 </span>
                 <span *ngIf="usuario.estatus !== 'Confirmado'">No disponible</span>
                 &nbsp;&nbsp;
