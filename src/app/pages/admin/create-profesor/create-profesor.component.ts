@@ -7,6 +7,7 @@ import { FirestoreService } from '../../../services/firestore.service';
 import { AuthService } from '../../../services/auth.service';
 import { ListService } from '../../../services/list.service';
 import { ModalService } from '../../../ui/modal/modal.service';
+import { ButtonBackComponent } from '../../../ui/button-back/button-back.component';
 
 @Component({
   selector: 'app-create-profesor',
@@ -14,7 +15,8 @@ import { ModalService } from '../../../ui/modal/modal.service';
   imports: [
     CommonModule,
     InputComponent,
-    SelectComponent
+    SelectComponent,
+    ButtonBackComponent
   ],
   templateUrl: './create-profesor.component.html',
   styleUrl: './create-profesor.component.scss'

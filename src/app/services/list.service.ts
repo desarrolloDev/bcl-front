@@ -197,38 +197,31 @@ export class ListService {
   ]
 
   modulosDashboard(rol: string): any {
-    const newModulos = [];
-    // newModulos.push({ image: 'assets/modulo_confirmacion.PNG', title: 'Historial de clases', redirect: '/historial_clases' });
-    // newModulos.push({ image: 'assets/modulo_horarios.PNG', title: 'Reserva de clases', redirect: '/reservar_clases' });
-    // newModulos.push({ image: 'assets/modulo_horarios.PNG', title: 'Clases a dictar (P)', redirect: '/clases_dictar' });
-    // newModulos.push({ image: 'assets/modulo_horarios.PNG', title: 'Registro de Horarios (P)', redirect: '/registro_horarios' });
-    // newModulos.push({ image: 'assets/modulo_confirmacion.PNG', title: 'Confirmación de Reservas (A)', redirect: '/confirmacion_reservas' });
-    // newModulos.push({ image: 'assets/modulo_horarios.PNG', title: 'Horario de Profesores (A)', redirect: '/horarios_profesor' });
-    // newModulos.push({ image: 'assets/modulo_crear_usuario.png', title: 'Crear Usuario (A)', redirect: '/createProfesorAdmin' });
-    // newModulos.push({ image: 'assets/modulo_gestion.PNG', title: 'Gestión de web (A)', redirect: '/gestion_web' });
-    
-    newModulos.push({ image: 'assets/Registro de clases.jpg', title: 'Historial de clases', redirect: '/historial_clases' });
-    newModulos.push({ image: 'assets/Registro de clases.jpg', title: 'Reserva de clases', redirect: '/reservar_clases' });
-    newModulos.push({ image: 'assets/Clases a dictar.jpg', title: 'Clases a dictar (P)', redirect: '/clases_dictar' });
-    newModulos.push({ image: 'assets/Registro de horarios.jpg', title: 'Registro de Horarios (P)', redirect: '/registro_horarios' });
-    newModulos.push({ image: 'assets/Confirmación de reservas.jpg', title: 'Confirmación de Reservas (A)', redirect: '/confirmacion_reservas' });
-    newModulos.push({ image: 'assets/Horario de profesores.jpg', title: 'Horario de Profesores (A)', redirect: '/horarios_profesor' });
-    newModulos.push({ image: 'assets/Crear usuario.jpg', title: 'Crear Usuario (A)', redirect: '/createProfesorAdmin' });
-    newModulos.push({ image: 'assets/Gestión web.jpg', title: 'Gestión de web (A)', redirect: '/gestion_web' });
+    const newModulos = [];    
 
-    // if (rol == 'ADMIN') {
-    //   newModulos.push({ image: 'assets/modulo_horarios.PNG', title: 'Horario de Profesores', redirect: '/horarios_profesor' });
-    //   newModulos.push({ image: 'assets/modulo_crear_usuario.png', title: 'Crear Usuario', redirect: '/createProfesorAdmin' });
-    //   newModulos.push({ image: 'assets/modulo_confirmacion.PNG', title: 'Confirmación de Reservas', redirect: '/confirmacion_reservas' });
-    //   newModulos.push({ image: 'assets/modulo_reporte.PNG', title: 'Reportes', redirect: '' });
-    //   newModulos.push({ image: 'assets/modulo_gestion.PNG', title: 'Gestión de web', redirect: '/gestion_web' });
-    // } else if (rol == 'PROFESOR') {
-    //   newModulos.push({ image: 'assets/modulo_horarios.PNG', title: 'Registro de Horarios', redirect: '/registro_horarios' });
-    //   newModulos.push({ image: 'assets/modulo_horarios.PNG', title: 'Clases a dictar', redirect: '/clases_dictar' });
-    // } else if (rol == 'ESTUDIANTE') {
-    //   newModulos.push({ image: 'assets/modulo_confirmacion.PNG', title: 'Historial de paquetes', redirect: '/historial_clases' });
-    //   newModulos.push({ image: 'assets/modulo_horarios.PNG', title: 'Reserva de clases', redirect: '/reservar_clases' });
-    // }
+    // const newModulos = [
+    //   { image: 'assets/Confirmación de reservas.jpg', title: 'Confirmación de Reservas', redirect: '/confirmacion_reservas' },
+    //   { image: 'assets/Horario de profesores.jpg', title: 'Horario de Profesores', redirect: '/horarios_profesor' },
+    //   { image: 'assets/Crear usuario.jpg', title: 'Crear Usuario', redirect: '/createProfesorAdmin' },
+    //   { image: 'assets/Gestión web.jpg', title: 'Gestión de web', redirect: '/gestion_web' },
+    //   { image: 'assets/Clases a dictar.jpg', title: 'Clases a dictar', redirect: '/clases_dictar' },
+    //   { image: 'assets/Registro de horarios.jpg', title: 'Registro de Horarios', redirect: '/registro_horarios' },
+    //   { image: 'assets/Historial de clases.jpg', title: 'Historial de clases', redirect: '/historial_clases' },
+    //   { image: 'assets/Registro de clases.jpg', title: 'Reserva de clases', redirect: '/reservar_clases' }
+    // ];
+
+    if (rol == 'ADMIN') {
+      newModulos.push({ image: 'assets/Confirmación de reservas.jpg', title: 'Confirmación de Reservas', redirect: '/confirmacion_reservas' });
+      newModulos.push({ image: 'assets/Horario de profesores.jpg', title: 'Horario de Profesores', redirect: '/horarios_profesor' });
+      newModulos.push({ image: 'assets/Crear usuario.jpg', title: 'Crear Usuario', redirect: '/createProfesorAdmin' });
+      newModulos.push({ image: 'assets/Gestión web.jpg', title: 'Gestión de web', redirect: '/gestion_web' });
+    } else if (rol == 'PROFESOR') {
+      newModulos.push({ image: 'assets/Clases a dictar.jpg', title: 'Clases a dictar', redirect: '/clases_dictar' });
+      newModulos.push({ image: 'assets/Registro de horarios.jpg', title: 'Registro de Horarios', redirect: '/registro_horarios' });
+    } else if (rol == 'ESTUDIANTE') {
+      newModulos.push({ image: 'assets/Historial de clases.jpg', title: 'Historial de clases', redirect: '/historial_clases' });
+      newModulos.push({ image: 'assets/Registro de clases.jpg', title: 'Reserva de clases', redirect: '/reservar_clases' });
+    }
     return newModulos;
   }
 

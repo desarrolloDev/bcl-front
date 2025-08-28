@@ -10,6 +10,7 @@ import { GetDataService } from '../../../../services/getData.service';
 import { ListService } from '../../../../services/list.service';
 import { AwsService } from '../../../../services/aws.service';
 import { ModalService } from '../../../../ui/modal/modal.service';
+import { ButtonBackComponent } from '../../../../ui/button-back/button-back.component';
 
 @Component({
   selector: 'app-actualizar-reserva',
@@ -20,7 +21,8 @@ import { ModalService } from '../../../../ui/modal/modal.service';
     SelectComponent,
     InputComponent,
     CalendarAlumnoComponent,
-    MatStepperModule
+    MatStepperModule,
+    ButtonBackComponent
   ],
   templateUrl: './actualizar-reserva.component.html',
   styleUrl: './actualizar-reserva.component.scss'

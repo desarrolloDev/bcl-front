@@ -12,6 +12,7 @@ import { AwsService } from '../../../services/aws.service';
 import { ListService } from '../../../services/list.service';
 import { SelectComponent } from '../../../ui/select/select.component';
 import { ModalService } from '../../../ui/modal/modal.service';
+import { ButtonBackComponent } from '../../../ui/button-back/button-back.component';
 
 @Component({
   selector: 'app-confirmar-reservas',
@@ -23,7 +24,8 @@ import { ModalService } from '../../../ui/modal/modal.service';
     PaginationComponent,
     MatIconModule,
     GestionHorariosComponent,
-    SelectComponent
+    SelectComponent,
+    ButtonBackComponent
   ],
   templateUrl: './confirmar-reservas.component.html',
   styleUrl: './confirmar-reservas.component.scss'
@@ -153,9 +155,5 @@ private _fb = inject(NonNullableFormBuilder);
 
   cambiarVista(nroVista: any) {
     this.pageView = nroVista;
-  }
-
-  home() {
-    this.router.navigate(['/dashboard'])
   }
 }

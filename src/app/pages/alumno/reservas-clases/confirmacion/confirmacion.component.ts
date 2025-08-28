@@ -2,12 +2,14 @@ import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { ButtonBackComponent } from '../../../../ui/button-back/button-back.component';
 
 @Component({
   selector: 'app-confirmacion',
   standalone: true,
   imports: [
-    CommonModule
+    CommonModule,
+    ButtonBackComponent
   ],
   templateUrl: './confirmacion.component.html',
   styleUrl: './confirmacion.component.scss'

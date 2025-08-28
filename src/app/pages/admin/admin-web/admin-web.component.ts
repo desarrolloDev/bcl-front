@@ -4,6 +4,7 @@ import { TabComponent } from '../../../ui/tab/tab.component';
 import { CreateDataComponent } from './create-data/create-data.component';
 import { FirestoreService } from '../../../services/firestore.service';
 import { DataService } from '../../../services/data.service';
+import { ButtonBackComponent } from '../../../ui/button-back/button-back.component';
 
 @Component({
   selector: 'app-admin-web',
@@ -11,7 +12,8 @@ import { DataService } from '../../../services/data.service';
   imports: [
     TabsComponent,
     TabComponent,
-    CreateDataComponent
+    CreateDataComponent,
+    ButtonBackComponent
   ],
   templateUrl: './admin-web.component.html',
   styleUrl: './admin-web.component.scss'

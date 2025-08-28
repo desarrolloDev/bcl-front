@@ -3,13 +3,15 @@ import { CommonModule } from '@angular/common';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { CheckboxComponent } from '../../../../ui/checkbox/checkbox.component';
 import { FirestoreService } from '../../../../services/firestore.service';
+import { ButtonBackComponent } from '../../../../ui/button-back/button-back.component';
 
 @Component({
   selector: 'app-terminos-condiciones',
   standalone: true,
   imports: [
     CommonModule,
-    CheckboxComponent
+    CheckboxComponent,
+    ButtonBackComponent
   ],
   templateUrl: './terminos-condiciones.component.html',
   styleUrl: './terminos-condiciones.component.scss'

@@ -11,6 +11,7 @@ import { PaginationComponent } from '../../../ui/pagination/pagination.component
 import { CalendarioHorariosComponent } from './calendario-horarios/calendario-horarios.component';
 import { ListService } from '../../../services/list.service';
 import { AwsService } from '../../../services/aws.service';
+import { ButtonBackComponent } from '../../../ui/button-back/button-back.component';
 
 @Component({
   selector: 'app-clases-dictar',
@@ -22,7 +23,8 @@ import { AwsService } from '../../../services/aws.service';
     PaginationComponent,
     MatIconModule,
     CalendarioHorariosComponent,
-    MatStepperModule
+    MatStepperModule,
+    ButtonBackComponent
 ],
   templateUrl: './clases-dictar.component.html',
   styleUrl: './clases-dictar.component.scss'

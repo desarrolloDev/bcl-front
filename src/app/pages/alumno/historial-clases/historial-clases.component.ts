@@ -11,6 +11,7 @@ import { ModalService } from '../../../ui/modal/modal.service';
 import { ActualizarReservaComponent } from './actualizar-reserva/actualizar-reserva.component';
 import { AwsService } from '../../../services/aws.service';
 import { ListService } from '../../../services/list.service';
+import { ButtonBackComponent } from '../../../ui/button-back/button-back.component';
 
 @Component({
   selector: 'app-historial-clases',
@@ -21,7 +22,8 @@ import { ListService } from '../../../services/list.service';
     CalendarInputComponent,
     PaginationComponent,
     MatIconModule,
-    ActualizarReservaComponent
+    ActualizarReservaComponent,
+    ButtonBackComponent
   ],
   templateUrl: './historial-clases.component.html',
   styleUrl: './historial-clases.component.scss'
@@ -136,9 +138,5 @@ export class HistorialClasesComponent implements OnInit {
 
   cambiarVista(nroVista: number) {
     this.pageView = nroVista;
-  }
-
-  home() {
-    this.router.navigate(['/dashboard'])
   }
 }

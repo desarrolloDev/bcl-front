@@ -13,6 +13,7 @@ import { DataService } from '../../../../services/data.service';
 import { FirestoreService } from '../../../../services/firestore.service';
 import { ModalService } from '../../../../ui/modal/modal.service';
 import { AwsService } from '../../../../services/aws.service';
+import { ButtonBackComponent } from '../../../../ui/button-back/button-back.component';
 
 @Component({
   selector: 'app-calendario-horarios',
@@ -25,6 +26,7 @@ import { AwsService } from '../../../../services/aws.service';
     CheckboxComponent,
     MatStepperModule,
     CalendarAlumnoComponent,
+    ButtonBackComponent
   ],
   templateUrl: './calendario-horarios.component.html',
   styleUrl: './calendario-horarios.component.scss'

@@ -1,5 +1,6 @@
 <div class="w-[90%]">
     <div *ngIf="!isSmallScreen" class="w-full flex flex-col mt-8 px-4 py-2">
+        <app-button-back text="si"></app-button-back>
         <div class="flex mb-4">
             <span class="w-1/2 text-[20px] text-[#002B3E] font-bold">Gestión de Horarios y Cursos</span>
             <div class="w-1/2 flex justify-end"><button (click)="guardarHorarios()"
@@ -52,6 +53,7 @@
         <mat-stepper orientation="vertical" [linear]="isLinear" #stepper>
             <mat-step label="Horarios">
                 <div class="flex flex-col">
+                    <app-button-back text="si"></app-button-back>
                     <span class="text-[16px] text-[#002B3E] font-bold">Gestión de Horarios y Cursos</span>
                     <div class="flex justify-end mt-4">
                         <button (click)="guardarHorarios()" class="w-[150px] h-[40px] bg-[#008C4B] text-[#FFFFFF] font-bold !rounded-lg py-2 px-4">GUARDAR</button>

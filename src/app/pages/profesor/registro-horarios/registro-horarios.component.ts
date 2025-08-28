@@ -13,6 +13,7 @@ import { DataService } from '../../../services/data.service';
 import { AwsService } from '../../../services/aws.service';
 import { GetDataService } from '../../../services/getData.service';
 import { ModalService } from '../../../ui/modal/modal.service';
+import { ButtonBackComponent } from '../../../ui/button-back/button-back.component';
 
 @Component({
   selector: 'app-registro-horarios',
@@ -25,7 +26,8 @@ import { ModalService } from '../../../ui/modal/modal.service';
     CalendarComponent,
     CheckboxComponent,
     MatStepperModule,
-    SpinnerComponent
+    SpinnerComponent,
+    ButtonBackComponent
   ],
   templateUrl: './registro-horarios.component.html',
   styleUrl: './registro-horarios.component.scss'

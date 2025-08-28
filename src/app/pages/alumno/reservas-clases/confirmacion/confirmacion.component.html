@@ -1,5 +1,6 @@
 <div class="flex justify-center w-screen">
     <div *ngIf="!isSmallScreen" class="w-[80%]">
+        <app-button-back text="si"></app-button-back>
         <div class="flex justify-between mb-6">
             <button (click)="volverMenu()" class="w-[150px] bg-[#002B3E] text-[#FFFFFF] text-[14px] font-bold !rounded-lg">
                 Volver a Menú 
@@ -70,6 +71,7 @@
         </div>
     </div>
     <div *ngIf="isSmallScreen" class="w-[90%]">
+        <app-button-back text="si"></app-button-back>
         <div class="flex justify-between mb-6">
             <button (click)="volverMenu()" class="w-[150px] bg-[#002B3E] text-[#FFFFFF] text-[14px] font-bold !rounded-lg">
                 Volver a Menú 

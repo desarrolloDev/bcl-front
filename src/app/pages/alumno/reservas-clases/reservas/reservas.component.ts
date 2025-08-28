@@ -10,6 +10,7 @@ import { ListService } from '../../../../services/list.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { AwsService } from '../../../../services/aws.service';
 import { ModalService } from '../../../../ui/modal/modal.service';
+import { ButtonBackComponent } from '../../../../ui/button-back/button-back.component';
 
 @Component({
   selector: 'app-reservas',
@@ -20,7 +21,8 @@ import { ModalService } from '../../../../ui/modal/modal.service';
     SelectComponent,
     InputComponent,
     CalendarAlumnoComponent,
-    MatStepperModule
+    MatStepperModule,
+    ButtonBackComponent
   ],
   templateUrl: './reservas.component.html',
   styleUrl: './reservas.component.scss'

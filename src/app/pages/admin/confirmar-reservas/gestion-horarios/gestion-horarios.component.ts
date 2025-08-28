@@ -13,6 +13,7 @@ import { GetDataService } from '../../../../services/getData.service';
 import { ListService } from '../../../../services/list.service';
 import { AwsService } from '../../../../services/aws.service';
 import { ModalService } from '../../../../ui/modal/modal.service';
+import { ButtonBackComponent } from '../../../../ui/button-back/button-back.component';
 
 @Component({
   selector: 'app-gestion-horarios',
@@ -27,7 +28,8 @@ import { ModalService } from '../../../../ui/modal/modal.service';
     MatStepperModule,
     MatCheckbox,
     MatCheckboxModule,
-    FormsModule
+    FormsModule,
+    ButtonBackComponent
   ],
   templateUrl: './gestion-horarios.component.html',
   styleUrl: './gestion-horarios.component.scss'

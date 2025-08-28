@@ -9,6 +9,7 @@ import { DataService } from '../../../services/data.service';
 import { FirestoreService } from '../../../services/firestore.service';
 import { AwsService } from '../../../services/aws.service';
 import { GetDataService } from '../../../services/getData.service';
+import { ButtonBackComponent } from '../../../ui/button-back/button-back.component';
 
 @Component({
   selector: 'app-horarios-prof',
@@ -18,6 +19,7 @@ import { GetDataService } from '../../../services/getData.service';
     SelectComponent,
     CalendarStatusComponent,
     CheckboxComponent,
+    ButtonBackComponent
   ],
   templateUrl: './horarios-prof.component.html',
   styleUrl: './horarios-prof.component.scss'

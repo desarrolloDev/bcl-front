@@ -1,10 +1,8 @@
 <div *ngIf="pageView == 1" class="flex justify-center">
     <div *ngIf="!isSmallScreen" class="w-full flex flex-col gap-4 px-6 py-6">
+        <app-button-back text="si"></app-button-back>
         <div class="flex items-center">
-            <button (click)="home()" class="flex items-center">
-                <mat-icon aria-hidden="false" aria-label="arrow_back" fontIcon="arrow_back" class="!text-[18px] !text-[#DABC62] !w-[18px] !h-[18px]"></mat-icon>
-            </button>
-            &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-[20px] text-[#002B3E] font-bold">Historial de clases</span>
+            <span class="text-[20px] text-[#002B3E] font-bold">Historial de clases</span>
         </div>
         <div class="flex justify-between items-center">
             <div class="flex items-end gap-4 mb-4">
@@ -20,18 +18,18 @@
                     [control]="form.controls['fecha_fin']"
                     [maxDate]="maxDate"
                 ></app-calendar-input>
-                <app-input color="#6C6C6C" bg="#FAFAFA" borderColor="#B3B3B3" label="Profesor" placeholder="" type="string" [control]="form.controls['profesor']" ></app-input>
-                <app-input color="#6C6C6C" bg="#FAFAFA" borderColor="#B3B3B3" label="Curso" placeholder="" type="string" [control]="form.controls['profesor']" ></app-input>
+                <!-- <app-input color="#6C6C6C" bg="#FAFAFA" borderColor="#B3B3B3" label="Profesor" placeholder="" type="string" [control]="form.controls['profesor']" ></app-input>
+                <app-input color="#6C6C6C" bg="#FAFAFA" borderColor="#B3B3B3" label="Curso" placeholder="" type="string" [control]="form.controls['profesor']" ></app-input> -->
                 <button (click)="buscar()" class="w-[65px] h-[38.71px] bg-[#008C4B] text-[#FFFFFF] !rounded-lg py-1 px-1">Buscar</button>
             </div>
-            <div>
+            <!-- <div>
                 <app-pagination
                     [totalItems]="totalItems"
                     [pageSize]="pageSize"
                     [currentPage]="currentPage"
                     (pageChange)="onPageChange($event)">
                 </app-pagination>
-            </div>
+            </div> -->
         </div>
         <div class="overflow-x-auto">
             <table>
@@ -86,11 +84,9 @@
         </div>
     </div>
     <div *ngIf="isSmallScreen" class="w-[90%] pt-4">
+        <app-button-back text="si"></app-button-back>
         <div class="flex items-center">
-            <button (click)="home()" class="flex items-center">
-                <mat-icon aria-hidden="false" aria-label="arrow_back" fontIcon="arrow_back" class="!text-[18px] !text-[#DABC62] !w-[18px] !h-[18px]"></mat-icon>
-            </button>
-            &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-[20px] text-[#002B3E] font-bold">Historial de clases</span>
+            <span class="text-[20px] text-[#002B3E] font-bold">Historial de clases</span>
         </div>
 
         <div class="flex flex-col gap-4 mt-4">
@@ -110,14 +106,14 @@
                     maxWidth="160px"
                 ></app-calendar-input>
             </div>
-            <app-input color="#6C6C6C" bg="#FAFAFA" borderColor="#B3B3B3" label="Profesor" placeholder="" type="string" [control]="form.controls['profesor']" ></app-input>
-            <app-input color="#6C6C6C" bg="#FAFAFA" borderColor="#B3B3B3" label="Curso" placeholder="" type="string" [control]="form.controls['profesor']" ></app-input>
+            <!-- <app-input color="#6C6C6C" bg="#FAFAFA" borderColor="#B3B3B3" label="Profesor" placeholder="" type="string" [control]="form.controls['profesor']" ></app-input>
+            <app-input color="#6C6C6C" bg="#FAFAFA" borderColor="#B3B3B3" label="Curso" placeholder="" type="string" [control]="form.controls['profesor']" ></app-input> -->
             <button (click)="buscar()" class="w-full h-[38.71px] bg-[#008C4B] text-[#FFFFFF] !rounded-lg py-1 px-1">Buscar</button>
         </div>
 
-        <div class="flex justify-end mt-4 mb-4">
+        <!-- <div class="flex justify-end mt-4 mb-4">
             <app-pagination [totalItems]="totalItems" [pageSize]="pageSize" [currentPage]="currentPage" (pageChange)="onPageChange($event)"></app-pagination>
-        </div>
+        </div> -->
 
         <div *ngFor="let usuario of usuarios"
         class="flex flex-col gap-2 border-[2px] border-solid border-[#D9D9D9] rounded-lg p-2 mb-4">

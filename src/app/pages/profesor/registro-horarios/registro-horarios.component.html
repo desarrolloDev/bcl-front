@@ -1,5 +1,6 @@
 <div class="px-4 py-2">
     <div *ngIf="!isSmallScreen">
+        <app-button-back text="si"></app-button-back>
         <mat-stepper [linear]="isLinear" #stepper>
             <mat-step label="Seleccionar horarios">
                 <div class="flex mb-4">
@@ -80,6 +81,7 @@
     </div>
 
     <div *ngIf="isSmallScreen">
+        <app-button-back text="si"></app-button-back>
         <mat-stepper orientation="vertical" [linear]="isLinear" #stepper>
             <mat-step label="Horarios">
                 <div class="flex flex-col">
