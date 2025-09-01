@@ -119,7 +119,7 @@ export class HorariosProfComponent implements OnInit {
     const semanaString = this.semanasList.map((item: any) => item.id).join(',');
 
     let dataHorariosProfesor: any[] = [];
-    await this.awsService.get(`items?tipo=horario_profesor&profesor=${localStorage.getItem('correo')}&semanas=${semanaString}`)
+    await this.awsService.get(`items?tipo=horario_profesor&profesor=${this.selectedProf}&semanas=${semanaString}`)
       .then((response: any) => {
         dataHorariosProfesor = JSON.parse(response.body);
       })
@@ -149,7 +149,7 @@ export class HorariosProfComponent implements OnInit {
           const horario = this.horariosList[k];
 
           const itemHorario = buscarSemana.length > 0 ? buscarSemana[0].horarios[`${dia}|${horario}`] : {};
-          console.log('itemHorario', dia, horario, itemHorario);
+          // console.log('itemHorario', dia, horario, itemHorario);
 
           if (itemHorario == undefined || Object.keys(itemHorario).length === 0) {
             newData[semana][dia][horario] = { checked: false, text: '' };

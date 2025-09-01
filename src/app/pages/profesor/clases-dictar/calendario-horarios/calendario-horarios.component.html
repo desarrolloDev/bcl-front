@@ -1,19 +1,23 @@
 <div class="w-full px-4 py-4 bg-[#F5F5F5]">
+
+    <app-button-back text="si"></app-button-back>
+
     <div class="flex justify-between" *ngIf="!isSmallScreen">
-        <app-button-back text="si"></app-button-back>
         <div class="flex flex-col w-[35%] border-[2px] border-solid border-[#002B3E] rounded-lg mt-[18px] p-4">
             <app-select class="mb-4" label="Selecciona la semana" [items]="semanasList"
             typeControl="model" [(controlModel)]="semanaCalendar" color="#002B3E" (changeSelect)="changeSemana()" textSize="15px" heightSelect="45px"></app-select>            
 
             <div class="mb-4">
                 <div class="text-[16px] text-[#002B3E] font-bold">Selecciona los alumnos</div>
-                <div *ngFor="let curso of alumnos">
-                    <app-checkbox [label]="curso.name" typeControl="model" [(controlModel)]="curso.select" (changeSelect)="changeAlumnoCurso()"></app-checkbox>
+                <span *ngIf="alumnos.length == 0">Sin alumnos en la lista</span>
+                <div *ngFor="let alumno of alumnos">
+                    <app-checkbox [label]="alumno.name" typeControl="model" [(controlModel)]="alumno.select" (changeSelect)="changeAlumnoCurso()"></app-checkbox>
                 </div>
             </div>
             
             <div>
                 <div class="text-[16px] text-[#002B3E] font-bold">Selecciona los cursos</div>
+                <span *ngIf="cursos.length == 0">Sin cursos en la lista</span>
                 <div *ngFor="let curso of cursos">
                     <app-checkbox [label]="curso.name" typeControl="model" [(controlModel)]="curso.select" (changeSelect)="changeAlumnoCurso()"></app-checkbox>
                 </div>
@@ -32,20 +36,21 @@
     </div>
 
     <div class="flex flex-col" *ngIf="isSmallScreen">
-        <app-button-back text="si"></app-button-back>
         <div class="flex flex-col mb-4">
             <app-select class="mb-4" label="Selecciona la semana" [items]="semanasList"
             typeControl="model" [(controlModel)]="semanaCalendar" color="#002B3E" (changeSelect)="changeSemana()" textSize="13px" heightSelect="35px"></app-select>            
 
             <div class="mb-4">
                 <div class="text-[13px] text-[#002B3E] font-bold">Selecciona los alumnos</div>
-                <div *ngFor="let curso of alumnos">
-                    <app-checkbox [label]="curso.name" typeControl="model" [(controlModel)]="curso.select" (changeSelect)="changeAlumnoCurso()"></app-checkbox>
+                <span *ngIf="alumnos.length == 0">Sin alumnos en la lista</span>
+                <div *ngFor="let alumno of alumnos">
+                    <app-checkbox [label]="alumno.name" typeControl="model" [(controlModel)]="alumno.select" (changeSelect)="changeAlumnoCurso()"></app-checkbox>
                 </div>
             </div>
             
             <div>
                 <div class="text-[13px] text-[#002B3E] font-bold">Selecciona los cursos</div>
+                <span *ngIf="cursos.length == 0">Sin cursos en la lista</span>
                 <div *ngFor="let curso of cursos">
                     <app-checkbox [label]="curso.name" typeControl="model" [(controlModel)]="curso.select" (changeSelect)="changeAlumnoCurso()"></app-checkbox>
                 </div>

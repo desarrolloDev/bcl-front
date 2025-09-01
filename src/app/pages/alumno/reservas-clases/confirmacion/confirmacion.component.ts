@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { ButtonBackComponent } from '../../../../ui/button-back/button-back.component';
+import { ListService } from '../../../../services/list.service';
 
 @Component({
   selector: 'app-confirmacion',
@@ -20,7 +21,8 @@ export class ConfirmacionComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private breakpointObserver: BreakpointObserver
+    private breakpointObserver: BreakpointObserver,
+    public listService: ListService
   ) {
     this.breakpointObserver
       .observe([`(max-width: 1364px)`])

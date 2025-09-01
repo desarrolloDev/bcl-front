@@ -76,6 +76,10 @@ export class ListService {
     return `${formatear(siguienteLunes)} - ${formatear(siguienteDomingo)}`;
   }
 
+  diasSemanaString() {
+    return ["DOMINGO", "LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES", "SABADO"];
+  }
+
   obtenerDiaActual() {
     const hoy = new Date();
     const diaSemana = hoy.getDay();
@@ -329,5 +333,36 @@ export class ListService {
     }
 
     return aunNoEmpiezan;
+  }
+
+  ordenarReservasString(reservas: string) {
+    if (reservas === '') return [];
+
+    const semanas = this.intervaloSemana();
+    const dias = this.diasSemanaString();
+
+    const reservasArray = reservas.split('#');
+
+    let nuevasReservas: string[] = [];
+
+    for (const semana of semanas) {
+      for (const dia of dias) {
+        const searchHorario = reservasArray.filter((r) => r.includes(`${semana.id}|${dia}|`));
+
+        if (searchHorario.length > 0) {
+          if (nuevasReservas.length > 0) {
+            nuevasReservas = nuevasReservas.concat(searchHorario[0]);
+          } else {
+            nuevasReservas = searchHorario;
+          }
+        }
+      }
+    }
+
+        for(const reserva of reservasArray) {
+
+    }
+
+    return nuevasReservas;
   }
 }

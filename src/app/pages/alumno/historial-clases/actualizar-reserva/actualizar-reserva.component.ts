@@ -274,9 +274,9 @@ export class ActualizarReservaComponent implements OnInit {
   actualizarHorario([dia, hora, estatus]: [string, string, string]): void {
     this.data[this.semanaCalendar][dia][hora] = estatus;
     if (estatus == 'seleccionado') {
-      this.stringClasesReservadas += `${dia}|${hora}|`;
+      this.stringClasesReservadas += ` ${this.semanaCalendar}|${dia}|${hora}#`;
     } else if (estatus == 'disponible' || estatus == 'reservado' || estatus == 'bloqueado') {
-      const regex = new RegExp(`${dia}\\|${hora}|?`, 'g');
+      const regex = new RegExp(`${this.semanaCalendar}\\|${dia}\\|${hora}#?`, 'g');
       this.stringClasesReservadas = this.stringClasesReservadas.replace(regex, '');
     }
   }

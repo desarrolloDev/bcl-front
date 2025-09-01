@@ -1,11 +1,6 @@
 <div class="flex justify-center w-screen">
     <div *ngIf="!isSmallScreen" class="w-[80%]">
         <app-button-back text="si"></app-button-back>
-        <div class="flex justify-between mb-6">
-            <button (click)="volverMenu()" class="w-[150px] bg-[#002B3E] text-[#FFFFFF] text-[14px] font-bold !rounded-lg">
-                Volver a Menú 
-            </button>
-        </div>
         <span class="text-[30px] text-[#002B3E] font-bold">Para confirmar tu reserva por favor realiza los siguientes pasos:</span>
         <div class="flex w-full mt-6">
             <div class="flex flex-col w-1/2">
@@ -23,7 +18,7 @@
                 </div>
             </div>
             <div class="w-1/2 flex justify-end">
-                <img src="assets/cuenta_bancaria.png" alt="" class="w-[450px] h-[300px]">
+                <img src="assets/cuenta_bancaria.jpeg" alt="" class="w-[450px] h-[300px]">
             </div>
         </div>
         <div class="flex flex-col mt-4 py-2 px-4 bg-[#F5F5F5] border-[2px] border-solid border-[#002B3E] rounded-lg">
@@ -31,40 +26,42 @@
             <div class="flex">
                 <div class="w-1/3 flex flex-col">
                     <div class="flex mb-2">
-                        <span class="text-[12px] text-[#002B3E] font-bold">Curso:&nbsp;</span>
+                        <span class="text-[14px] text-[#002B3E] font-bold">Curso:&nbsp;&nbsp;</span>
                         <span class="text-[12px] text-[#002B3E]">{{ detalleReserva.curso ?? '' }}</span>
                     </div>
                     <div class="flex mb-2">
-                        <span class="text-[12px] text-[#002B3E] font-bold">Colegio:&nbsp;</span>
+                        <span class="text-[14px] text-[#002B3E] font-bold">Colegio:&nbsp;&nbsp;</span>
                         <span class="text-[12px] text-[#002B3E]">{{ detalleReserva.colegio ?? '' }}</span>
                     </div>
                     <div class="flex mb-2">
-                        <span class="text-[12px] text-[#002B3E] font-bold">Tema:&nbsp;</span>
+                        <span class="text-[14px] text-[#002B3E] font-bold">Tema:&nbsp;&nbsp;</span>
                         <span class="text-[12px] text-[#002B3E]">{{ detalleReserva.tema ?? '' }}</span>
                     </div>
                     <div class="flex">
-                        <span class="text-[12px] text-[#002B3E] font-bold">Paquete:&nbsp;</span>
+                        <span class="text-[14px] text-[#002B3E] font-bold">Paquete:&nbsp;&nbsp;</span>
                         <span class="text-[12px] text-[#002B3E]">{{ detalleReserva.paqueteClase ?? '' }}</span>
                     </div>
                 </div>
                 <div class="w-1/3 flex flex-col">
                     <div class="flex mb-2">
-                        <span class="text-[12px] text-[#002B3E] font-bold">Tipo de clase:&nbsp;</span>
+                        <span class="text-[14px] text-[#002B3E] font-bold">Tipo de clase:&nbsp;&nbsp;</span>
                         <span class="text-[12px] text-[#002B3E]">{{ detalleReserva.tipoClase ?? '' }}</span>
                     </div>
                     <div class="flex mb-2">
-                        <span class="text-[12px] text-[#002B3E] font-bold">Profesor:&nbsp;</span>
+                        <span class="text-[14px] text-[#002B3E] font-bold">Profesor:&nbsp;&nbsp;</span>
                         <span class="text-[12px] text-[#002B3E]">{{ detalleReserva.profesor ?? '' }}</span>
                     </div>
                     <div class="flex">
-                        <span class="text-[12px] text-[#002B3E] font-bold">Precio:&nbsp;</span>
+                        <span class="text-[14px] text-[#002B3E] font-bold">Precio:&nbsp;&nbsp;</span>
                         <span class="text-[12px] text-[#002B3E]">{{ detalleReserva.precio ?? '' }}</span>
                     </div>
                 </div>
                 <div class="w-1/3">
                     <div class="flex">
-                        <span class="text-[12px] text-[#002B3E] font-bold">Clases:&nbsp;</span>
-                        <span class="text-[12px] text-[#002B3E]">{{ detalleReserva.stringClasesReservadas ?? '' }}</span>
+                        <span class="text-[14px] text-[#002B3E] font-bold">Clases:&nbsp;&nbsp;</span>
+                        <div *ngFor="let horario of listService.ordenarReservasString(detalleReserva.stringClasesReservadas ?? '')">
+                            <span class="text-[12px] text-[#002B3E] font-light">{{horario}}</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -72,11 +69,6 @@
     </div>
     <div *ngIf="isSmallScreen" class="w-[90%]">
         <app-button-back text="si"></app-button-back>
-        <div class="flex justify-between mb-6">
-            <button (click)="volverMenu()" class="w-[150px] bg-[#002B3E] text-[#FFFFFF] text-[14px] font-bold !rounded-lg">
-                Volver a Menú 
-            </button>
-        </div>
         <span class="text-[16px] text-[#002B3E] font-bold">Para confirmar tu reserva por favor realiza los siguientes pasos:</span>
         <div class="flex flex-col w-full mt-6">
             <div class="flex flex-col mb-2">
@@ -84,7 +76,7 @@
                 <span class="text-[12px] text-[#002B3E] mb-2">2. Envía la confirmación de transferencia a nuestra Coordinadora Académica vía WhatsApp (986 664 761).</span>
                 <span class="text-[12px] text-[#002B3E] mb-2">3. Nuestra Coordinadora Académica confirmará la recepción del pago y la reserva de tus clases.</span>
             </div>
-            <img src="assets/cuenta_bancaria.png" alt="" class="w-[450px] h-[300px]">
+            <img src="assets/cuenta_bancaria.jpeg" alt="" class="w-[450px] h-[300px]">
             <div class="flex flex-col mt-2">
                 <span class="text-[16px] text-[#DABC62] font-bold">Importante:</span>
                 <span class="text-[12px] text-[#002B3E] font-bold">En caso no pudiste reservar todos tus sesiones

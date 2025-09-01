@@ -139,7 +139,7 @@ export class GestionHorariosComponent implements OnInit {
     let newData: any = {};
 
     const reservasPendientes = this.listService.reservasPendientes(this.usuarioSelect.horarios);
-    console.log('reservasPendientes', reservasPendientes);
+    // console.log('reservasPendientes', reservasPendientes);
 
     for (let i = 0; i < this.semanasList.length; i++) { // 12|05|2025 - 18|05|2025
       const semana = this.semanasList[i].id;
@@ -149,7 +149,7 @@ export class GestionHorariosComponent implements OnInit {
         if (!item?.semana_profesor) return false;
         return item.semana_profesor.includes(semana);
       });
-      console.log('buscarSemana', buscarSemana);
+      // console.log('buscarSemana', buscarSemana);
 
       for (let j = 0; j < this.diasList.length; j++) { // LUNES
         const dia = this.diasList[j].id;
@@ -164,25 +164,25 @@ export class GestionHorariosComponent implements OnInit {
           let checked = false;
 
           const searchHorario = this.usuarioSelect.horarios.find((h: any) => h === `${semana}|${dia}|${horario}`);
-          console.log('***************searchHorario', searchHorario, '-', `${semana}|${dia}|${horario}`);
+          // console.log('***************searchHorario', searchHorario, '-', `${semana}|${dia}|${horario}`);
 
           if (searchHorario) {
             checked = true;
 
             const searchReservaPendiente = reservasPendientes.find((r: any) => r === `${semana}|${dia}|${horario}`);
-            console.log('searchReservaPendiente', searchReservaPendiente);
+            // console.log('searchReservaPendiente', searchReservaPendiente);
 
             if (!searchReservaPendiente) puedeReservar = false;
 
           } else {
 
             const itemHorario = buscarSemana.length > 0 ? buscarSemana[0].horarios[`${dia}|${horario}`] : {};
-            console.log('itemHorario', itemHorario);
+            // console.log('itemHorario', itemHorario);
 
             if (itemHorario?.tipo === this.usuarioSelect.tipo) { // verificamos si el horario del profesor es del mismo tipo de clase
 
               const alumnosReserva =  itemHorario.alumnos || [];
-              console.log('alumnosReserva', alumnosReserva);
+              // console.log('alumnosReserva', alumnosReserva);
 
               if (alumnosReserva.length > 0) {
 

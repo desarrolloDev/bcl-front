@@ -348,7 +348,7 @@ export class ReservasComponent implements OnInit {
     } else {
       if (this.tipoClase == 'Promo Primera Clase') {
         this.clasesTotal = 1;
-        this.precio = 70;
+        this.precio = 90;
       } else if (this.tipoClase == 'Clase Individual Gratuita' || this.tipoClase == 'Clase Grupal Gratuita') {
         this.clasesTotal = 1;
         this.precio = 0;
@@ -459,9 +459,9 @@ export class ReservasComponent implements OnInit {
   actualizarHorario([dia, hora, estatus]: [string, string, string]): void {
     this.data[this.semanaCalendar][dia][hora] = estatus;
     if (estatus == 'seleccionado') {
-      this.stringClasesReservadas += `${dia}|${hora}|`;
+      this.stringClasesReservadas += ` ${this.semanaCalendar}|${dia}|${hora}#`;
     } else if (estatus == 'disponible' || estatus == 'reservado' || estatus == 'bloqueado') {
-      const regex = new RegExp(`${dia}\\|${hora}|?`, 'g');
+      const regex = new RegExp(`${this.semanaCalendar}\\|${dia}\\|${hora}#?`, 'g');
       this.stringClasesReservadas = this.stringClasesReservadas.replace(regex, '');
     }
   }
@@ -517,7 +517,8 @@ export class ReservasComponent implements OnInit {
         profesor_nombre: buscarProf.length > 0 ? buscarProf[0].nombre : '', // (**)
         alumno: localStorage.getItem('correo'),
         alumno_nombre: `${localStorage.getItem('nombre')} ${localStorage.getItem('apellido')}`, // (**)
-        horarios: horariosSeleccionados
+        horarios: horariosSeleccionados,
+        stringClasesReservadas: this.stringClasesReservadas
       };
       console.log('dataReserva', dataReserva);
 
