@@ -1,9 +1,15 @@
-<header>
-    <nav>
-      <img src="assets/LOGO BCL WEB.jpg" alt="">
+<header class="bg-[#002B3E] py-[10px] px-[24px]">
+    <nav class="flex items-center justify-between">
+      <div class="flex items-center">
+        <img src="assets/LOGO BCL WEB.jpg" alt="" (click)="home()" class="cursor-pointer"/>
+        <button (click)="dashboard()" class="!text-[16px]" *ngIf="nombre$ | async as nombre;">
+          <mat-icon aria-hidden="false" aria-label="home" fontIcon="home" class="!text-[22px] !text-[#F5F5F5] !w-[22px] !h-[22px] ml-[8px]"></mat-icon>
+        </button> 
+      </div>
+      
       <div>
         <div *ngIf="nombre$ | async as nombre; else noLogin" class="flex">
-          <span class="text-[#FAFAFA] text-[22px] font-semibold">{{nombre}}</span>
+          <span class="text-[#FAFAFA] text-[20px] font-semibold">{{nombre}}</span>
           <div>
             <button mat-button [matMenuTriggerFor]="menu">
               <mat-icon aria-hidden="false" aria-label="person" fontIcon="person"
@@ -15,7 +21,7 @@
           </div>
         </div>
         <ng-template #noLogin>
-          <button (click)="iniciarSesion()" class="!text-[16px]">Iniciar Sesión</button>
+          <button (click)="iniciarSesion()" class="!text-[14px] w-[82px]">Iniciar Sesión</button>
         </ng-template>
       </div>
     </nav>

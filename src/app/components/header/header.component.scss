@@ -1,16 +1,6 @@
-header {
-    background-color: #002B3E;
-    padding: 10px 24px;
-}
-
-nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    img {
-        width: 132px;
-        height: 44px;
-    }
+img {
+    width: 132px;
+    height: 44px;
 }
 
 button {
@@ -42,14 +32,9 @@ a {
 }
 
 @media screen and (max-width:768px) {
-    header {
-        max-height: 50px;
-        nav {
-            img {
-                width: 10%;
-                height: 10%;
-                object-fit: cover;
-            }
-        }
+    img {
+        width: 50%;
+        height: 10%;
+        object-fit: cover;
     }
 }

@@ -5,8 +5,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import { FirestoreService } from '../../services/firestore.service';
 import { DialogService } from '../../pages/login/dialog.service';
 @Component({
   selector: 'app-header',
@@ -29,7 +29,8 @@ export class HeaderComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -43,5 +44,13 @@ export class HeaderComponent implements OnInit {
     this.authService.logout();
     this.authService.clearNombre();
     localStorage.clear();
+  }
+
+  home() {
+    this.router.navigate([''])
+  }
+
+  dashboard() {
+    this.router.navigate(['/dashboard'])
   }
 }

@@ -218,11 +218,11 @@ export class ReservasComponent implements OnInit {
                 const valorMatriz = matrizAccesos[this.listService.diasIndice(dia_actual)][this.listService.diasIndice(dia)];
 
                 if (valorMatriz == 'NO') puedeReservar = false;
-                else if (valorMatriz == 'CONSULTAR') puedeReservar = ahoraHora < horaLimite;
+                // else if (valorMatriz == 'CONSULTAR') puedeReservar = ahoraHora < horaLimite;
               }
 
-              const esSemanaPosterior = semana === semana_posterior;
-              if (esSemanaPosterior && dia_actual == 'DOMINGO' && dia == 'LUNES') puedeReservar = ahoraHora < horaLimite;
+              // const esSemanaPosterior = semana === semana_posterior;
+              // if (esSemanaPosterior && dia_actual == 'DOMINGO' && dia == 'LUNES') puedeReservar = ahoraHora < horaLimite;
 
               if (!puedeReservar) {
                 status = 'bloqueado';
