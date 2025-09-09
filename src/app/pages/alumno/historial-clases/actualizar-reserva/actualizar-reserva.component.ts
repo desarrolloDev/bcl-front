@@ -67,6 +67,8 @@ export class ActualizarReservaComponent implements OnInit {
     }
   } = {};
 
+  clasesPasadas: string[] = [];
+
   constructor(
     private getDataService: GetDataService,
     public listService: ListService,
@@ -83,7 +85,7 @@ export class ActualizarReservaComponent implements OnInit {
   }
 
   async ngOnInit() {
-    console.log('Usuario seleccionado:', this.usuarioSelect);
+    // console.log('Usuario seleccionado:', this.usuarioSelect);
     this.curso = this.usuarioSelect.curso;
     this.colegio = this.usuarioSelect.colegio;
     this.gradoCiclo = this.usuarioSelect.gradoCiclo;
@@ -128,6 +130,11 @@ export class ActualizarReservaComponent implements OnInit {
     // console.log('dataHorariosProfesor', dataHorariosProfesor);
     // console.log('this.usuarioSelect.horarios', this.usuarioSelect.horarios);
 
+    // BUSCAR CLASES PASADAS -----------------------------------------------------------------------------------
+    this.clasesPasadas = this.listService.buscarClasesPasadas(this.usuarioSelect.horarios);
+    // console.log('clasesPasadas', this.clasesPasadas);
+    // ---------------------------------------------------------------------------------------------------------
+
     // LISTA DE HORARIOS PARA EL SELECT -------------------------------------------------------------------------
     let newData: any = {};
 
@@ -169,7 +176,7 @@ export class ActualizarReservaComponent implements OnInit {
             if (itemHorario?.tipo === this.usuarioSelect.tipo) { // verificamos si el horario del profesor es del mismo tipo de clase
 
               const alumnosReserva =  itemHorario.alumnos || [];
-              console.log('alumnosReserva', alumnosReserva);
+              // console.log('alumnosReserva', alumnosReserva);
 
               if (alumnosReserva.length > 0) {
 
@@ -223,7 +230,7 @@ export class ActualizarReservaComponent implements OnInit {
       }
     }
 
-    console.log('newData', newData);
+    // console.log('newData', newData);
     this.data = newData;
 
     // LISTA DE HORARIOS PARA EL CALENDARIO --------------------------------------------------------------------
@@ -298,8 +305,8 @@ export class ActualizarReservaComponent implements OnInit {
       }
     }
 
-    console.log("Agregados:", agregados);
-    console.log("final:", final);
+    // console.log("Agregados:", agregados);
+    // console.log("final:", final);
 
     const confirmed = await this.modalService.openConfirmDialog({ 
       titulo: '¿Está seguro de guardar estos horarios?',
@@ -322,7 +329,7 @@ export class ActualizarReservaComponent implements OnInit {
         curso: this.usuarioSelect.curso,
         fechasNuevas: agregados,
         fechasEliminadas: [],
-        fechasTotal: final,
+        fechasTotal: [...this.clasesPasadas, ...final],
         tema: this.tema
       };
 

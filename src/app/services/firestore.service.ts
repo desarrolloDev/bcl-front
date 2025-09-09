@@ -11,8 +11,9 @@ export class FirestoreService {
 
   // Añadir Usuario
   addUser(data: any) {
+    const { contraseña, rep_contraseña, ...filteredData } = data;
     const itemRef = doc(this.firestore, 'user', data.correo);
-    return setDoc(itemRef, data);
+    return setDoc(itemRef, filteredData);
   }
 
   // data de un usuario

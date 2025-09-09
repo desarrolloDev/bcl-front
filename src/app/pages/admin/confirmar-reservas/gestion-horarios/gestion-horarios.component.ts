@@ -70,6 +70,8 @@ export class GestionHorariosComponent implements OnInit {
     }
   } = {};
 
+  clasesPasadas: string[] = [];
+
   constructor(
     private getDataService: GetDataService,
     public listService: ListService,
@@ -85,7 +87,7 @@ export class GestionHorariosComponent implements OnInit {
   }
 
   async ngOnInit() {
-    console.log('this.usuarioSelect', this.usuarioSelect);
+    // console.log('this.usuarioSelect', this.usuarioSelect);
     this.clasesReservadas = this.usuarioSelect.clasesReservadas;
     this.clasesTotal = this.usuarioSelect.clasesTotal;
 
@@ -118,8 +120,8 @@ export class GestionHorariosComponent implements OnInit {
       .catch((error) => {
         console.error('Error al guardar cursos', error);
       });
-    console.log('dataHorariosProfesor', dataHorariosProfesor);
-    console.log('this.usuarioSelect.horarios', this.usuarioSelect.horarios);
+    // console.log('dataHorariosProfesor', dataHorariosProfesor);
+    // console.log('this.usuarioSelect.horarios', this.usuarioSelect.horarios);
 
     // LISTA DE HORARIOS PARA EL CALENDARIO --------------------------------------------------------------------
     const newSlots: boolean[][] = [];
@@ -133,7 +135,12 @@ export class GestionHorariosComponent implements OnInit {
       }
     }
     this.selectedSlots = newSlots;
-    console.log('newSlots', newSlots);
+    // console.log('newSlots', newSlots);
+
+    // BUSCAR CLASES PASADAS -----------------------------------------------------------------------------------
+    this.clasesPasadas = this.listService.buscarClasesPasadas(this.usuarioSelect.horarios);
+    // console.log('clasesPasadas', this.clasesPasadas);
+    // ---------------------------------------------------------------------------------------------------------
 
     // LISTA DE HORARIOS PARA EL SELECT -------------------------------------------------------------------------
     let newData: any = {};
@@ -228,12 +235,12 @@ export class GestionHorariosComponent implements OnInit {
       }
     }
 
-    console.log('newData', newData);
+    // console.log('newData', newData);
     this.dataBase = JSON.parse(JSON.stringify(newData));
     this.data = newData;
 
     this.horariosList = listaHorarios;
-    console.log('this.horariosList', this.horariosList);
+    // console.log('this.horariosList', this.horariosList);
   }
 
   changeWeek(offset: number) {
@@ -246,8 +253,8 @@ export class GestionHorariosComponent implements OnInit {
   }
 
   actualizarHorarios(checked: boolean, semana: string, dia: string,  horario: string): void {
-    console.log('............ checked', checked);
-    console.log(semana, dia, horario);
+    // console.log('............ checked', checked);
+    // console.log(semana, dia, horario);
 
     if (checked) {
       if (this.clasesReservadas == this.clasesTotal - 1) { // deshabilitamos para que ya no se pueda seleccionar más
@@ -348,8 +355,8 @@ export class GestionHorariosComponent implements OnInit {
     // elementos eliminados (están en inicial pero no en final)
     const eliminados = inicial.filter(x => !final.includes(x));
 
-    console.log("Agregados:", agregados);
-    console.log("Eliminados:", eliminados);
+    // console.log("Agregados:", agregados);
+    // console.log("Eliminados:", eliminados);
 
     const confirmed = await this.modalService.openConfirmDialog({ 
       titulo: '¿Está seguro de guardar estos horarios?',
@@ -372,7 +379,7 @@ export class GestionHorariosComponent implements OnInit {
         curso: this.usuarioSelect.curso,
         fechasNuevas: agregados,
         fechasEliminadas: eliminados,
-        fechasTotal: final
+        fechasTotal: [...this.clasesPasadas, ...final],
       };
 
       this.awsService.post('items', body)

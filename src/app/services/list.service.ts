@@ -365,4 +365,21 @@ export class ListService {
 
     return nuevasReservas;
   }
+
+  buscarClasesPasadas(reservas: string[]) {
+    let semanas = (this.intervaloSemana()).map(s => s.id);
+
+    const clasesSemanasPasadas: string[] = [];
+    
+    for (const reserva of reservas) {
+      const reservaSplit = reserva.split('|');
+      const semana = reservaSplit[0];
+
+      if (!semanas.includes(semana)) {
+        clasesSemanasPasadas.push(reserva);
+      }
+    }
+
+    return clasesSemanasPasadas;
+  }
 }
