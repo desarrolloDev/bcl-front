@@ -101,13 +101,22 @@ export class ListService {
   }
 
   obtenerCondicional() {
+    // return [
+    //   ['NO', 'CONSULTAR', 'SI', 'SI', 'SI', 'SI', 'SI'],
+    //   ['NO', 'NO', 'CONSULTAR', 'SI', 'SI', 'SI', 'SI'],
+    //   ['NO', 'NO', 'NO', 'CONSULTAR', 'SI', 'SI', 'SI'],
+    //   ['NO', 'NO', 'NO', 'NO', 'CONSULTAR', 'SI', 'SI'],
+    //   ['NO', 'NO', 'NO', 'NO', 'NO', 'CONSULTAR', 'SI'],
+    //   ['NO', 'NO', 'NO', 'NO', 'NO', 'NO', 'CONSULTAR'],
+    //   ['NO', 'NO', 'NO', 'NO', 'NO', 'NO', 'NO'],
+    // ];
     return [
-      ['NO', 'CONSULTAR', 'SI', 'SI', 'SI', 'SI', 'SI'],
-      ['NO', 'NO', 'CONSULTAR', 'SI', 'SI', 'SI', 'SI'],
-      ['NO', 'NO', 'NO', 'CONSULTAR', 'SI', 'SI', 'SI'],
-      ['NO', 'NO', 'NO', 'NO', 'CONSULTAR', 'SI', 'SI'],
-      ['NO', 'NO', 'NO', 'NO', 'NO', 'CONSULTAR', 'SI'],
-      ['NO', 'NO', 'NO', 'NO', 'NO', 'NO', 'CONSULTAR'],
+      ['NO', 'SI', 'SI', 'SI', 'SI', 'SI', 'SI'],
+      ['NO', 'NO', 'SI', 'SI', 'SI', 'SI', 'SI'],
+      ['NO', 'NO', 'NO', 'SI', 'SI', 'SI', 'SI'],
+      ['NO', 'NO', 'NO', 'NO', 'SI', 'SI', 'SI'],
+      ['NO', 'NO', 'NO', 'NO', 'NO', 'SI', 'SI'],
+      ['NO', 'NO', 'NO', 'NO', 'NO', 'NO', 'SI'],
       ['NO', 'NO', 'NO', 'NO', 'NO', 'NO', 'NO'],
     ];
   }
@@ -381,5 +390,31 @@ export class ListService {
     }
 
     return clasesSemanasPasadas;
+  }
+
+  changeFechasInicio(fechaInicio: Date | null | undefined) {
+    let desde: string = '';
+    
+    if (fechaInicio) {
+      // Fecha de inicio siempre a las 05:00:00 UTC
+      const fechaDesde = new Date(fechaInicio);
+      fechaDesde.setUTCHours(5, 0, 0, 0); // 05:00:00 UTC
+      desde = fechaDesde.toISOString();
+    }
+
+    return desde;
+  }
+
+  changeFechasFin(fechaFin: Date | null | undefined) {
+    let hasta: string = '';
+    
+    if (fechaFin) {
+      // Fecha fin + 1 día a las 05:00:00 UTC
+      const fechaHasta = new Date(fechaFin);
+      fechaHasta.setUTCDate(fechaHasta.getUTCDate() + 1); // Agregar 1 día
+      fechaHasta.setUTCHours(5, 0, 0, 0); // 05:00:00 UTC
+      hasta = fechaHasta.toISOString();
+    }
+    return hasta;
   }
 }

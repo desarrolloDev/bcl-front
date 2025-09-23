@@ -68,11 +68,11 @@ export class HistorialClasesComponent implements OnInit {
   async ngOnInit() {
     const hoy = new Date();
 
-    const haceUnaSemana = new Date(hoy);
-    haceUnaSemana.setDate(hoy.getDate() - 7);
+    const haceUnMes = new Date(hoy);
+    haceUnMes.setMonth(hoy.getMonth() - 1);
 
     this.form.patchValue({
-      fecha_inicio: haceUnaSemana,
+      fecha_inicio: haceUnMes,
       fecha_fin: hoy
     });
 
@@ -81,8 +81,15 @@ export class HistorialClasesComponent implements OnInit {
 
   async buscar() {
     const profesor = this.form.value.profesor;
-    const desde = this.form.value.fecha_inicio;
-    const hasta = this.form.value.fecha_fin;
+    const fechaInicio = this.form.value.fecha_inicio;
+    const fechaFin = this.form.value.fecha_fin;
+    
+    // Ajustar fechas antes de enviar
+    const desde = this.listService.changeFechasInicio(fechaInicio);
+    const hasta = this.listService.changeFechasFin(fechaFin);
+
+    console.log('desde', desde);
+    console.log('hasta', hasta);
 
     await this.awsService.get(`items?tipo=reservas_fecha&alumno=${localStorage.getItem('correo')}&desde=${desde}&hasta=${hasta}`)
       .then((response: any) => {

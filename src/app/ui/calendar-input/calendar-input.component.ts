@@ -48,10 +48,19 @@ export class CalendarInputComponent implements OnInit, ControlValueAccessor {
     this.currentMonth = this.currentDate.getMonth();
     this.currentYear = this.currentDate.getFullYear();
     this.generateCalendar();
+    
+    // Sincronizar con el control si existe
+    if (this.control && this.control.value) {
+      this.selectedDate = this.control.value;
+    }
   }
 
   writeValue(value: Date | null): void {
     this.selectedDate = value;
+    // También actualizar el control si existe
+    if (this.control && value !== this.control.value) {
+      this.control.setValue(value, { emitEvent: false });
+    }
   }
 
   registerOnChange(fn: (value: Date | null) => void): void {
@@ -71,6 +80,10 @@ export class CalendarInputComponent implements OnInit, ControlValueAccessor {
       this.isOpen = !this.isOpen;
       if (this.isOpen) {
         this.onTouched();
+        // Marcar el control como touched cuando se abre el calendario
+        if (this.control) {
+          this.control.markAsTouched();
+        }
       }
     }
   }
@@ -83,7 +96,14 @@ export class CalendarInputComponent implements OnInit, ControlValueAccessor {
     if (this.maxDate && selected > this.maxDate) return;
 
     this.selectedDate = selected;
+    
+    // Actualizar tanto el ControlValueAccessor como el FormControl
     this.onChange(selected);
+    if (this.control) {
+      this.control.setValue(selected);
+      this.control.markAsTouched();
+    }
+    
     this.dateSelected.emit(selected);
     this.isOpen = false;
   }

@@ -21,7 +21,7 @@
                     <app-input class="w-[60%]" color="#6C6C6C" bg="#FAFAFA" borderColor="#B3B3B3" label="Número de documento del responsable de pago" placeholder="Coloca tu documento" type="string" [control]="form.controls['nro_documento']"></app-input>
                 </ng-template>
             </div>
-            <app-input color="#6C6C6C" bg="#FAFAFA" borderColor="#B3B3B3" label="Celular" placeholder="Ingresa tu celular" type="number" [control]="form.controls['celular']" [maxlength]="9"></app-input>
+            <app-input color="#6C6C6C" bg="#FAFAFA" borderColor="#B3B3B3" label="Celular" placeholder="Ingresa tu celular" type="string" [control]="form.controls['celular']"></app-input>
             <div class="grid gap-4 pt-4">
                 <span class="text-[#000000] text-[14px] font-inter">Con estos datos podrás ingresar a tu cuenta</span>
                 <app-input color="#6C6C6C" bg="#FAFAFA" borderColor="#B3B3B3" label="Correo" placeholder="Ingresa tu correo" type="email" [control]="form.controls['correo']" ></app-input>

@@ -376,10 +376,10 @@ export class ReservasComponent implements OnInit {
 
   actualizarPaqueteClase(): void {
     if (this.tipoClase == 'Promo Primera Clase' || this.tipoClase == 'Clase Individual Gratuita' || this.tipoClase == 'Clase Grupal Gratuita') {
-      this.listPaqueteClase = [{ nombre: '1 clase', id: '1 clase'}]
+      this.listPaqueteClase = [{ nombre: '', id: ''}, { nombre: '1 clase', id: '1 clase'}]
     } else if (this.tipoClase == 'Individual' || this.tipoClase == 'Grupal hasta 5') {
       if (this.recompensa == 'si') {
-        this.listPaqueteClase = [{ nombre: '1 clase', id: '1 clase'}];
+        this.listPaqueteClase = [{ nombre: '', id: ''}, { nombre: '1 clase', id: '1 clase'}];
       } else if (this.recompensa == 'no') {
         const tipo = this.tipoClase == 'Individual' ? 'individual' : 'grupal';
 
@@ -429,7 +429,9 @@ export class ReservasComponent implements OnInit {
       this.selectedSlots = newData;
 
     } else this.semanaBloqueado();
-
+    console.log('curso', this.curso);
+    console.log('colegio', this.colegio);
+    console.log('gradoCiclo', this.gradoCiclo, 'tema', this.tema, 'tipoClase', this.tipoClase, 'recompensa', this.recompensa, 'paqueteClase', this.paqueteClase, 'profesor', this.profesor);
   }
 
   actualizarSemana(): void {
