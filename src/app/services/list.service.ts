@@ -228,6 +228,7 @@ export class ListService {
       newModulos.push({ image: 'assets/Horario de profesores.jpg', title: 'Horario de Profesores', redirect: '/horarios_profesor' });
       newModulos.push({ image: 'assets/Crear usuario.jpg', title: 'Crear Usuario', redirect: '/createProfesorAdmin' });
       newModulos.push({ image: 'assets/Gestión web.jpg', title: 'Gestión de web', redirect: '/gestion_web' });
+      newModulos.push({ image: 'assets/Resportería.jpg', title: 'Reportes', redirect: '/reportes' });
     } else if (rol == 'PROFESOR') {
       newModulos.push({ image: 'assets/Clases a dictar.jpg', title: 'Clases a dictar', redirect: '/clases_dictar' });
       newModulos.push({ image: 'assets/Registro de horarios.jpg', title: 'Registro de Horarios', redirect: '/registro_horarios' });

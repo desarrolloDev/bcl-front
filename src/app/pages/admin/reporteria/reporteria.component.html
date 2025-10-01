@@ -1,0 +1,32 @@
+<div class="w-full p-4 
+    border-3 border-solid border-[#DABC62] bg-[#F5F5F5]
+    flex justify-between">
+    <div class="w-[39%] flex flex-col gap-4">
+        <div *ngFor="let item of data" (click)="selectItem(item.name, item.id)"
+        class="border-2 border-solid border-[#002B3E] rounded-sm px-2 py-3 flex justify-between items-center"
+        [ngStyle]="{ 'background-color': itemSelect == item.name ? '#002B3E' : '#FFFFFF', 'color': itemSelect == item.name ? '#FFFFFF' : '#002B3E' }">
+            <span class="text-[15px] font-normal">{{item.name}}</span>
+            <mat-icon class="!text-[14px] !w-[14px] !h-[14px]" aria-hidden="false" aria-label="Example home icon" fontIcon="arrow_forward_ios"
+            [ngStyle]="{ 'color': itemSelect == item.name ? '#FFFFFF' : '#002B3E' }"
+            ></mat-icon>
+        </div>
+    </div>
+    <div class="w-[60%] p-4
+    border-[2px] border-solid border-[#002B3E] rounded-lg 
+    flex flex-col justify-between">
+        <span class="text-[20px] font-semibold mb-4">Descargas</span>
+        <div class="flex flex-col gap-4 mb-4">
+            <app-calendar-input 
+                label="Fecha de inicio" 
+                placeholder="Selecciona fecha de inicio"
+                [control]="form.controls['fecha_inicio']"
+            ></app-calendar-input>
+            <app-calendar-input 
+                label="Fecha de fin" 
+                placeholder="Selecciona fecha de fin"
+                [control]="form.controls['fecha_fin']"
+            ></app-calendar-input>
+        </div>
+        <button (click)="descargar()" class="w-[150px] bg-[#008C4B] text-[#FFFFFF] !rounded-lg py-2 px-4">DESCARGAR</button>
+    </div>
+</div>

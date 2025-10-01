@@ -6,7 +6,7 @@
     </form>
     <div *ngIf="mensajeError.length > 0"><span class="text-[12px] text-[#D01E21] font-medium">{{mensajeError}}</span></div>
     <div class="flex justify-end mt-4">
-        <span class="text-[12px] text-[#DABC62] font-medium underline">¿Olvidaste tu contraseña?</span>
+        <span (click)="onForgotPassword()" class="text-[12px] text-[#DABC62] font-medium underline cursor-pointer hover:opacity-80">¿Olvidaste tu contraseña?</span>
     </div>
     <div class="mt-4">
         <button (click)="onLogin()" class="w-full bg-[#DABC62] text-[#002B3E] !rounded-lg py-2 px-3">Iniciar Sesión</button>

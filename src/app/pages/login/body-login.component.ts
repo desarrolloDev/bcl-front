@@ -33,25 +33,61 @@ export class BodyLoginComponent {
     private router: Router
   ) { }
 
-  onLogin() {
+  async onLogin() {
     this.loading = true;
     this.mensajeError = '';
 
-    this.authService.login(this.email, this.password)
-      .then(() => {
-        localStorage.setItem('correo', this.email);
-        this.dialogRef.close(true);
-        this.loading = false;
-      })
-      .catch((error) => {
-        console.error(error);
-        this.loading = false;
-        this.mensajeError = 'Credenciales incorrectas';
-      });
+    const result = await this.authService.login(this.email, this.password);
+    console.log('result', result);
+
+    if (result === undefined) {
+      this.loading = false;
+      this.mensajeError = 'Credenciales incorrectas';
+    } else {
+      localStorage.setItem('correo', this.email);
+      this.dialogRef.close(true);
+      this.loading = false;
+      this.router.navigate(['/dashboard']);
+    }
   }
 
   onCreateUser() {
     this.dialogRef.close(true);
     this.router.navigate(['/createUser']);
+  }
+
+  async onForgotPassword() {
+    // Validar que hay un email ingresado
+    if (!this.email || this.email.trim() === '') {
+      this.mensajeError = 'Por favor, ingresa tu correo electrónico antes de solicitar la recuperación';
+      return;
+    }
+
+    // Validar formato de email básico
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(this.email)) {
+      this.mensajeError = 'Por favor, ingresa un correo electrónico válido';
+      return;
+    }
+
+    this.loading = true;
+    this.mensajeError = '';
+
+    try {
+      const result = await this.authService.resetPassword(this.email);
+      
+      if (result.success) {
+        // Mostrar mensaje de éxito y cerrar el modal
+        alert(result.message);
+        this.dialogRef.close(false);
+      } else {
+        this.mensajeError = result.message;
+      }
+    } catch (error) {
+      console.error('Error al recuperar contraseña:', error);
+      this.mensajeError = 'Error inesperado. Intenta nuevamente más tarde';
+    } finally {
+      this.loading = false;
+    }
   }
 }

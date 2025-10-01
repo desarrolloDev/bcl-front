@@ -11,6 +11,7 @@ import { ReservasClasesComponent } from './pages/alumno/reservas-clases/reservas
 import { HistorialClasesComponent } from './pages/alumno/historial-clases/historial-clases.component';
 import { ClasesDictarComponent } from './pages/profesor/clases-dictar/clases-dictar.component';
 import { ConfirmarReservasComponent } from './pages/admin/confirmar-reservas/confirmar-reservas.component';
+import { ReporteriaComponent } from './pages/admin/reporteria/reporteria.component';
 import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
@@ -25,5 +26,6 @@ export const routes: Routes = [
     { path: 'reservar_clases', component: ReservasClasesComponent, canActivate: [AuthGuard] },
     { path: 'historial_clases', component: HistorialClasesComponent, canActivate: [AuthGuard] },
     { path: 'clases_dictar', component: ClasesDictarComponent, canActivate: [AuthGuard] },
-    { path: 'confirmacion_reservas', component: ConfirmarReservasComponent, canActivate: [AuthGuard] }
+    { path: 'confirmacion_reservas', component: ConfirmarReservasComponent, canActivate: [AuthGuard] },
+    { path: 'reportes', component: ReporteriaComponent, canActivate: [AuthGuard] }
 ];
