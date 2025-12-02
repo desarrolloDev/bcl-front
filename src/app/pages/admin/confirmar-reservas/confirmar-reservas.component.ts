@@ -136,7 +136,7 @@ private _fb = inject(NonNullableFormBuilder);
       fecha_reserva: usuario.fecha_reserva,
       params: 'status',
       value: usuario.estatus,
-      reservasPendientes: usuario.estatus === 'Cancelado' ? this.listService.reservasPendientes(usuario.horarios) : [],
+      reservasPendientes: usuario.estatus === 'Cancelado' ? this.listService.reservasPendientes(usuario.horarios) : this.listService.reservasArray(usuario.horarios),
       profesor: usuario.profesor_id,
       id_alumno: `${usuario.alumno}|${usuario.curso}|${usuario.alumno_id}`
     };

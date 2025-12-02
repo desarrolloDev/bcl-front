@@ -37,14 +37,16 @@ export class BodyLoginComponent {
     this.loading = true;
     this.mensajeError = '';
 
-    const result = await this.authService.login(this.email, this.password);
+    const correo = this.email.toLowerCase().trim();
+
+    const result = await this.authService.login(correo, this.password);
     console.log('result', result);
 
     if (result === undefined) {
       this.loading = false;
       this.mensajeError = 'Credenciales incorrectas';
     } else {
-      localStorage.setItem('correo', this.email);
+      localStorage.setItem('correo', correo);
       this.dialogRef.close(true);
       this.loading = false;
       this.router.navigate(['/dashboard']);

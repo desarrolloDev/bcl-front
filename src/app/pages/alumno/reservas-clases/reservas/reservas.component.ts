@@ -193,10 +193,10 @@ export class ReservasComponent implements OnInit {
 
             if (alumnosReserva.length > 0) {
               
-              if (((horarios[clave].tipo == 'Individual' || 
+              if ((horarios[clave].tipo == 'Individual' || 
                 horarios[clave].tipo == 'Promo Primera Clase' ||
                 horarios[clave].tipo == 'Clase Individual Gratuita'
-              ) && alumnosReserva.length == 1) 
+              ) 
               ||
               ((horarios[clave].tipo == 'Grupal hasta 5' ||
                 horarios[clave].tipo == 'Clase Grupal Gratuita'
@@ -205,7 +205,7 @@ export class ReservasComponent implements OnInit {
                 status = 'bloqueado';
               } else if ((horarios[clave].tipo == 'Grupal hasta 5' ||
                 horarios[clave].tipo == 'Clase Grupal Gratuita'
-              ) && alumnosReserva.length > 1 && alumnosReserva.length < 5) {
+              ) && alumnosReserva.length < 5) {
                 status = 'disponible';
               }
             } else {
@@ -221,8 +221,8 @@ export class ReservasComponent implements OnInit {
                 // else if (valorMatriz == 'CONSULTAR') puedeReservar = ahoraHora < horaLimite;
               }
 
-              // const esSemanaPosterior = semana === semana_posterior;
-              // if (esSemanaPosterior && dia_actual == 'DOMINGO' && dia == 'LUNES') puedeReservar = ahoraHora < horaLimite;
+              const esSemanaPosterior = semana === semana_posterior;
+              if (esSemanaPosterior && dia_actual == 'DOMINGO' && dia == 'LUNES') puedeReservar = true; // ahoraHora < horaLimite;
 
               if (!puedeReservar) {
                 status = 'bloqueado';

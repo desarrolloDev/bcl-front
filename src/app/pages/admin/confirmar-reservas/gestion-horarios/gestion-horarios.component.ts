@@ -193,7 +193,7 @@ export class GestionHorariosComponent implements OnInit {
 
               if (alumnosReserva.length > 0) {
 
-                if (((itemHorario.tipo == 'Individual' || itemHorario.tipo == 'Promo Primera Clase' || itemHorario.tipo == 'Clase Individual Gratuita') && alumnosReserva.length == 1) 
+                if ((itemHorario.tipo == 'Individual' || itemHorario.tipo == 'Promo Primera Clase' || itemHorario.tipo == 'Clase Individual Gratuita') 
                   ||
                   ((itemHorario.tipo == 'Grupal hasta 5' || itemHorario.tipo == 'Clase Grupal Gratuita') && alumnosReserva.length == 5)) {
                   
@@ -212,7 +212,8 @@ export class GestionHorariosComponent implements OnInit {
                 }
 
                 const esSemanaPosterior = semana === semana_posterior;
-                if (esSemanaPosterior && dia_actual == 'DOMINGO' && dia == 'LUNES') puedeReservar = ahoraHora < horaLimite;
+                // if (esSemanaPosterior && dia_actual == 'DOMINGO' && dia == 'LUNES') puedeReservar = ahoraHora < horaLimite;
+                if (esSemanaPosterior && dia_actual == 'DOMINGO' && dia == 'LUNES') puedeReservar = true;
 
                 if (!puedeReservar) {
                   puedeReservar = false;

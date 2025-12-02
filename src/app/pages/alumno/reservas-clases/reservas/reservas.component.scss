@@ -29,3 +29,11 @@
     width: 300px;
   }
 }
+
+.btnConfirmar {
+  background: #008C4B;
+}
+
+.btnConfirmar[disabled] {
+  background: #cccccc;
+}

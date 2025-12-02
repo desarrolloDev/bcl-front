@@ -233,8 +233,8 @@ export class ListService {
       newModulos.push({ image: 'assets/Clases a dictar.jpg', title: 'Clases a dictar', redirect: '/clases_dictar' });
       newModulos.push({ image: 'assets/Registro de horarios.jpg', title: 'Registro de Horarios', redirect: '/registro_horarios' });
     } else if (rol == 'ESTUDIANTE') {
-      newModulos.push({ image: 'assets/Historial de clases.jpg', title: 'Historial de clases', redirect: '/historial_clases' });
-      newModulos.push({ image: 'assets/Registro de clases.jpg', title: 'Reserva de clases', redirect: '/reservar_clases' });
+      newModulos.push({ image: 'assets/Historial de clases.jpg', title: 'Mis paquetes y clases', redirect: '/historial_clases' });
+      newModulos.push({ image: 'assets/Registro de clases.jpg', title: 'Nueva reserva', redirect: '/reservar_clases' });
     }
     return newModulos;
   }
@@ -343,6 +343,16 @@ export class ListService {
     }
 
     return aunNoEmpiezan;
+  }
+
+  reservasArray(reservas: string[]) {
+    const array = [];
+
+    for (const r of reservas) {
+      array.push(r);
+    }
+
+    return array;
   }
 
   ordenarReservasString(reservas: string) {

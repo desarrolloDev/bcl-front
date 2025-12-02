@@ -31,7 +31,7 @@ export class CalendarAlumnoComponent {
 
   clicSlot(hora: string, dia: string) {
     const estado = this.selectedSlots[hora][dia];
-    if (estado === 'disponible' && this.clicNumber < this.maxSelect) {
+    if (estado === 'disponible' && Number(this.clicNumber) < Number(this.maxSelect)) {
       this.updateReservas.emit('suma');
 
       this.selectedSlots[hora][dia] = 'seleccionado';

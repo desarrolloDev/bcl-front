@@ -69,10 +69,16 @@ export class CalendarioHorariosComponent {
       });
   }
 
+  parseFechaDMY(fecha: string): Date { // Asume formato 'dd/mm/yyyy'
+    const [dia, mes, anio] = fecha.split('/').map(Number);
+    return new Date(anio, mes - 1, dia);
+  }
+
   async ngOnInit() {
     this.dataHorarios();
 
     this.semanasList = this.listService.intervaloSemana();
+    // console.log('semanasList', this.semanasList);
     this.semanaCalendar = this.semanasList[0].id;
 
     await this.dataHorarios();
@@ -83,11 +89,23 @@ export class CalendarioHorariosComponent {
     this.horariosList = listaHorarios;
     this.semanaBloqueado();
 
+    // const fechaInicio = this.semanasList[0].id.split('-')[0];
+    // const fechaFin = this.semanasList[this.semanasList.length -1].id.split('-')[1];
+    // console.log('fechaInicio', fechaInicio);
+    // console.log('fechaFin', fechaFin);
+
+    // const desde = this.listService.changeFechasInicio(this.parseFechaDMY(fechaInicio));
+    // const hasta = this.listService.changeFechasFin(this.parseFechaDMY(fechaFin));
+
+    // console.log('desde', desde);
+    // console.log('hasta', hasta);
+
     const semanaString = this.semanasList.map((item: any) => item.id).join(',');
 
     let dataHorariosProfesor: any[] = [];
     await this.awsService.get(`items?tipo=horario_profesor&profesor=${localStorage.getItem('correo')}&semanas=${semanaString}`)
       .then((response: any) => {
+        // console.log('Response horarios profesor:', response.body);
         dataHorariosProfesor = JSON.parse(response.body);
       })
       .catch((error) => {
@@ -116,7 +134,7 @@ export class CalendarioHorariosComponent {
           const horario = listaHorarios[k];
 
           const itemHorario = buscarSemana.length > 0 ? buscarSemana[0].horarios[`${dia}|${horario}`] : {};
-          console.log('itemHorario', dia, horario, itemHorario);
+          // console.log('itemHorario', dia, horario, itemHorario);
 
           if (itemHorario == undefined || Object.keys(itemHorario).length === 0) {
             newData[semana][dia][horario] = { checked: false, text: '' };
@@ -127,14 +145,19 @@ export class CalendarioHorariosComponent {
               newData[semana][dia][horario] = { checked: true, text: alumnosReserva.map((al: string) => `${al.split('|')[0]}|${al.split('|')[1]}`).join(', ') };
 
               for (const alumno of alumnosReserva) {
-                const [nombreAlumno, cursoAlumno, correoAlumno] = alumno.split('|');
-                const searchAlumno = this.alumnos.filter(item => item.name === nombreAlumno);
-                if (searchAlumno.length === 0) {
-                  this.alumnos.push({ name: nombreAlumno, select: false });
-                }
-                const searchCurso = this.cursos.filter(item => item.name === cursoAlumno);
-                if (searchCurso.length === 0) {
-                  this.cursos.push({ name: cursoAlumno, select: false });
+                const [nombreAlumno, cursoAlumno, correoAlumno, confirmacion] = alumno.split('|');
+                console.log('***alumno--->', confirmacion);
+                if (confirmacion === 'CONFIRMADO' || confirmacion === undefined) {
+                  const searchAlumno = this.alumnos.filter(item => item.name === nombreAlumno);
+                  if (searchAlumno.length === 0) {
+                    this.alumnos.push({ name: nombreAlumno, select: false });
+                  }
+                  const searchCurso = this.cursos.filter(item => item.name === cursoAlumno);
+                  if (searchCurso.length === 0) {
+                    this.cursos.push({ name: cursoAlumno, select: false });
+                  }
+                } else {
+                  newData[semana][dia][horario] = { checked: true, text: '' };
                 }
               }
 
@@ -148,7 +171,7 @@ export class CalendarioHorariosComponent {
       }
     }
 
-    console.log('newData', newData);
+    console.log('***********newData', newData);
     this.data = newData;
 
     // LISTA DE HORARIOS PARA EL CALENDARIO --------------------------------------------------------------------
